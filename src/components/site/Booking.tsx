@@ -4,14 +4,14 @@ import { MAX_GUESTS, quote, seasonFor, SEASON_RATES } from "@/lib/pricing";
 
 const fmt = (d: Date) => d.toISOString().slice(0, 10);
 const parse = (s: string) => {
-  const [y, m, d] = s.split("-").map(Number);
+  const [y = 0, m = 1, d = 1] = s.split("-").map(Number);
   return new Date(y, m - 1, d);
 };
 // Demo occupancy until bookings are stored online
 const BOOKED = new Set<string>();
 (() => {
   const t = new Date();
-  for (const [o, len] of [[6, 5], [20, 7], [41, 4]]) for (let i = 0; i < len; i++) BOOKED.add(fmt(new Date(t.getFullYear(), t.getMonth(), t.getDate() + o + i)));
+  for (const [o, len] of [[6, 5], [20, 7], [41, 4]] as const) for (let i = 0; i < len; i++) BOOKED.add(fmt(new Date(t.getFullYear(), t.getMonth(), t.getDate() + o + i)));
 })();
 
 const SEASON_LABEL = { low: "Low", mid: "Mid", high: "High", peak: "Peak" } as const;
