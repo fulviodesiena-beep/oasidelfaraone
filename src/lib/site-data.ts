@@ -1,5 +1,5 @@
 export const OWNER_WHATSAPP = "393347328158";
-export const MINA_WHATSAPP = "393347328158"; // TODO: replace with Mina's real number
+export const MINA_WHATSAPP = "201501202025";
 
 export const wa = (num: string, text: string) => `https://wa.me/${num}?text=${encodeURIComponent(text)}`;
 
