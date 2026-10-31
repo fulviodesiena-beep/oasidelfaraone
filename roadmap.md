@@ -3,6 +3,7 @@
 - [ ] Correggere camera: 4 ospiti, balcone, niente Wi-Fi/caffè/spa inclusa né Corona.
 - [ ] Aggiornare tariffe e richieste WhatsApp.
 - [ ] Riscrivere Mina al maschile e inserire ritratto segnaposto.
+- [ ] Aggiornare ogni contatto Mina a +20 150 120 2025, senza cambiare Fulvio.
 - [ ] Foto reali per esperienze e luoghi, descrizioni sovrapposte accessibili anche da telefono.
 - [ ] Inserire tutti i nove ristoranti e verificare descrizioni senza inventare dettagli.
 - [ ] Servizi villaggio, MOOVY e investimento.
