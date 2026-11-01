@@ -15,7 +15,6 @@ import expSoukLanterns from "@/assets/exp-souk-lanterns.jpg.asset.json";
 import restPanorama from "@/assets/rest-panorama.jpg.asset.json";
 import restItalian from "@/assets/rest-italian.jpg.asset.json";
 import restPizza from "@/assets/rest-pizza.jpg.asset.json";
-import coast from "@/assets/coast.jpg.asset.json";
 import aptBedroomDaybed from "@/assets/apt-bedroom-daybed.jpg.asset.json";
 import aptRoomTowelArt from "@/assets/apt-room-towel-art.jpg.asset.json";
 import aptBedFlowers from "@/assets/apt-bed-flowers.jpg.asset.json";
