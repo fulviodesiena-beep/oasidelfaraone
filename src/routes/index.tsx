@@ -40,7 +40,7 @@ function Index() {
   const [scrolled, setScrolled] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
   useEffect(() => {
-    const io = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); } }), { threshold: 0.08 });
+    const io = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { e.target.setAttribute("data-revealed", "true"); io.unobserve(e.target); } }), { threshold: 0.08 });
     document.querySelectorAll(".reveal").forEach(el => io.observe(el));
     let last = window.scrollY, frame = 0;
     const canAnimate = window.matchMedia("(min-width: 1024px) and (prefers-reduced-motion: no-preference)").matches;
