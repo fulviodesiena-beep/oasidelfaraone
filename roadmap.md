@@ -9,3 +9,4 @@
 - [x] Servizi villaggio, MOOVY e investimento.
 - [x] Verificare preventivo, WhatsApp e visualizzazione a 375px; 17 test superati.
 - [x] Sostituire le foto segnaposto dell’appartamento con le dieci foto reali di Fulvio nel carousel Elisir d’Oriente; 19 test superati.
+- [x] Sostituire le foto illustrative del villaggio con le dieci foto reali di Fulvio (piscina, spiaggia, spa, palestra, immersioni, ristoranti); 21 test superati.

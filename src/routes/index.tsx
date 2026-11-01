@@ -1,18 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowDown, ArrowUpRight, Check, Menu, X, MessageCircle, Instagram, Waves, Umbrella, Theater, Sparkles, Diamond, Flower2, Fish, Bike, Volleyball, ChevronLeft, ChevronRight, Image as ImageIcon, UserRound } from "lucide-react";
-import beach from "@/assets/beach.jpg.asset.json";
 import heroAerial from "@/assets/hero-aerial.jpg.asset.json";
 import heroPool from "@/assets/hero-pool.jpg.asset.json";
 import heroRoom from "@/assets/hero-room.jpg.asset.json";
-import villageAerial from "@/assets/village-aerial.jpg.asset.json";
-import villagePool from "@/assets/village-pool.jpg.asset.json";
-import villageClub from "@/assets/village-club.jpg.asset.json";
 import moovyChild from "@/assets/moovy-child.jpg.asset.json";
 import { Button } from "@/components/ui/button";
 import { Booking } from "@/components/site/Booking";
 import { PhotoCard } from "@/components/site/PhotoCard";
-import { APARTMENT_PHOTOS, EXTRAS, MINA_WHATSAPP, OWNER_WHATSAPP, RESTAURANTS, ROOM_AMENITIES, SPOTS, wa } from "@/lib/site-data";
+import { APARTMENT_PHOTOS, EXTRAS, MINA_WHATSAPP, OWNER_WHATSAPP, RESTAURANTS, ROOM_AMENITIES, SPOTS, VILLAGE_PHOTOS, wa } from "@/lib/site-data";
 import { SEASONS } from "@/lib/pricing";
 const DESCRIPTION = "Oasi del Faraone — Elisir d’Oriente: appartamento con balcone per 4 persone al Domina Coral Bay, Sharm el-Sheikh. Tariffe, mare ed esperienze con Mina. Prenota direttamente con Fulvio.";
 export const Route = createFileRoute("/")({
@@ -31,7 +27,6 @@ function Placeholder({ label, portrait = false }: { label: string; portrait?: bo
 function Racket({ size = 27, strokeWidth = 1.2 }: { size?: number; strokeWidth?: number }) { return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} aria-hidden="true"><ellipse cx="14" cy="9" rx="6.5" ry="7" /><path d="M9.5 14 4 21.5M3 20.5l1.5 1.5" /><circle cx="12" cy="7" r=".6" /><circle cx="15.5" cy="7" r=".6" /><circle cx="13.5" cy="10.5" r=".6" /></svg>; }
 type Slide = { src: string; alt: string };
 const HERO: Slide[] = [{ src: heroAerial.url, alt: "Resort sul Mar Rosso visto dall’alto · foto illustrativa" }, { src: heroPool.url, alt: "Piscina infinity al tramonto · foto illustrativa" }, { src: heroRoom.url, alt: "Camera in stile orientale · foto illustrativa" }];
-const VILLAGE: Slide[] = [{ src: villageAerial.url, alt: "Resort sul mare visto dall’alto · foto illustrativa" }, { src: villagePool.url, alt: "Piscina di un resort a Sharm · foto illustrativa" }, { src: beach.url, alt: "Spiaggia privata del Domina Coral Bay" }, { src: villageClub.url, alt: "Beach club e intrattenimento · foto illustrativa" }];
 function Carousel({ slides, label, portrait = false }: { slides: Slide[]; label: string; portrait?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const go = (d: number) => ref.current?.scrollBy({ left: d * ref.current.clientWidth * .8, behavior: "smooth" });
@@ -87,7 +82,7 @@ function Index() {
       <p className="reveal room-note">Wi-Fi non disponibile in camera. Spa a pagamento separato, bambini non ammessi. Ristoranti e bar si vivono à la carte.</p>
     </Section>
     <Section id="resort" eyebrow="02 / Una destinazione nella destinazione" title={<>Il villaggio, <em>da vivere.</em></>} intro="Spiagge private, piscine, padel, beach volley e serate sotto le stelle. Il soggiorno ti dà accesso alle strutture del Domina Coral Bay; ristoranti, bar e attività a pagamento si scelgono separatamente." className="bg-secondary">
-      <Carousel slides={VILLAGE} label="Foto del villaggio" />
+      <Carousel slides={VILLAGE_PHOTOS} label="Foto del villaggio" />
       <div className="facilities-grid">{FACILITIES.map(f => <article key={f.name} className="reveal facility"><f.icon size={27} strokeWidth={1.2} /><h3>{f.name}</h3><p>{f.description}</p><span>{f.note}</span></article>)}</div>
     </Section>
     <section id="moovy" className="moovy-section site-section"><div className="site-container moovy-layout"><div className="reveal"><p className="eyebrow text-moovy">MOBILITÀ, CON UN’ENERGIA NUOVA</p><div className="moovy-logo" aria-label="Logo MOOVY">MOOVY</div><p className="moovy-soon">Coming Soon</p><p className="section-intro">Il progetto di mobilità elettrica di Domina Coral Bay arriva presto.</p><div className="mt-8 flex items-center gap-3 text-moovy"><Bike size={25} /><span className="text-sm">Elettrico. Leggero. Libero.</span></div></div><figure className="reveal moovy-photo"><img src={moovyChild.url} alt="Bambino sorridente in vacanza al mare · foto illustrativa" loading="lazy" width={900} height={1100} /><figcaption>Foto illustrativa</figcaption></figure></div></section>
