@@ -10,6 +10,16 @@ import restPanorama from "@/assets/rest-panorama.jpg.asset.json";
 import restItalian from "@/assets/rest-italian.jpg.asset.json";
 import restPizza from "@/assets/rest-pizza.jpg.asset.json";
 import coast from "@/assets/coast.jpg.asset.json";
+import aptBedroomDaybed from "@/assets/apt-bedroom-daybed.jpg.asset.json";
+import aptRoomTowelArt from "@/assets/apt-room-towel-art.jpg.asset.json";
+import aptBedFlowers from "@/assets/apt-bed-flowers.jpg.asset.json";
+import aptSofaBed from "@/assets/apt-sofa-bed.jpg.asset.json";
+import aptBedroomSofa from "@/assets/apt-bedroom-sofa.jpg.asset.json";
+import aptBathroomBathtub from "@/assets/apt-bathroom-bathtub.jpg.asset.json";
+import aptBathroomVanity from "@/assets/apt-bathroom-vanity.jpg.asset.json";
+import aptBalconyChairs from "@/assets/apt-balcony-chairs.jpg.asset.json";
+import aptPoolRocks from "@/assets/apt-pool-rocks.jpg.asset.json";
+import aptPoolWaterfall from "@/assets/apt-pool-waterfall.jpg.asset.json";
 export const OWNER_WHATSAPP = "393347328158";
 export const MINA_WHATSAPP = "393481804764";
 export const wa = (num: string, text: string) => `https://wa.me/${num}?text=${encodeURIComponent(text)}`;
@@ -45,3 +55,15 @@ export const SPOTS = [
  { name: "Sharm Vecchia", desc: "Il cuore autentico di Sharm: il vecchio porto dei pescatori, i vicoli bianchi, i ristoranti di pesce fresco e l’anima vera di questa città.", image: boat.url, photo: "Barca sul mare · foto illustrativa" },
 ];
 export const ROOM_AMENITIES = ["Aria condizionata", "TV satellitare", "Balcone", "Microonde", "Cassaforte", "Bollitore", "Asciugacapelli", "Accesso a piscine e spiagge"];
+export const APARTMENT_PHOTOS: { src: string; alt: string }[] = [
+  { src: aptBedroomDaybed.url, alt: "Camera con letto matrimoniale e lettino" },
+  { src: aptRoomTowelArt.url, alt: "Letto e divano letto con asciugamani e petali" },
+  { src: aptBedFlowers.url, alt: "Dettaglio del letto con petali" },
+  { src: aptSofaBed.url, alt: "Divano letto accanto al balcone" },
+  { src: aptBedroomSofa.url, alt: "Angolo riposo con divanetto" },
+  { src: aptBathroomBathtub.url, alt: "Bagno con vasca e doccia" },
+  { src: aptBathroomVanity.url, alt: "Bagno con lavandino e porta scorrevole" },
+  { src: aptBalconyChairs.url, alt: "Balcone con due poltrone in legno" },
+  { src: aptPoolRocks.url, alt: "Piscina del villaggio con rocce e ombrelloni" },
+  { src: aptPoolWaterfall.url, alt: "L’acqua della piscina con cascata di rocce" },
+];
