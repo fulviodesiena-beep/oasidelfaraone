@@ -1,16 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowDown, ArrowUpRight, Check, Menu, X, MessageCircle, Instagram, Waves, Umbrella, Theater, Sparkles, Diamond, Flower2, Fish, Bike, Volleyball, ChevronLeft, ChevronRight } from "lucide-react";
-import heroAerial from "@/assets/hero-aerial.jpg.asset.json";
-import heroPool from "@/assets/hero-pool.jpg.asset.json";
-import heroRoom from "@/assets/hero-room.jpg.asset.json";
 import moovyLogo from "@/assets/moovy-logo.png.asset.json";
 import moovyBoy from "@/assets/moovy-boy.jpg.asset.json";
 import minaPortrait from "@/assets/mina-portrait.png.asset.json";
 import { Button } from "@/components/ui/button";
 import { Booking } from "@/components/site/Booking";
 import { PhotoCard } from "@/components/site/PhotoCard";
-import { APARTMENT_PHOTOS, EXTRAS, MINA_WHATSAPP, OWNER_WHATSAPP, RESTAURANTS, ROOM_AMENITIES, SPOTS, VILLAGE_PHOTOS, wa } from "@/lib/site-data";
+import { APARTMENT_PHOTOS, EXTRAS, HERO_PHOTOS, MINA_WHATSAPP, OWNER_WHATSAPP, RESTAURANTS, ROOM_AMENITIES, SPOTS, VILLAGE_PHOTOS, wa } from "@/lib/site-data";
 import { SEASONS } from "@/lib/pricing";
 const DESCRIPTION = "Oasi del Faraone — Elisir d’Oriente: appartamento con balcone per 4 persone al Domina Coral Bay, Sharm el-Sheikh. Tariffe, mare ed esperienze con Mina. Prenota direttamente con Fulvio.";
 export const Route = createFileRoute("/")({

@@ -77,6 +77,11 @@ export const SPOTS = [
  { name: "Sharm Vecchia", desc: "Il cuore autentico di Sharm: il vecchio porto dei pescatori, i vicoli bianchi, i ristoranti di pesce fresco e l’anima vera di questa città.", image: boat.url, photo: "Barca sul mare · foto illustrativa" },
 ];
 export const ROOM_AMENITIES = ["Aria condizionata", "TV satellitare", "Balcone", "Microonde", "Cassaforte", "Bollitore", "Asciugacapelli", "Accesso a piscine e spiagge"];
+export const HERO_PHOTOS: { src: string; alt: string }[] = [
+  { src: heroPoolSunset.url, alt: "Piscina a sfioro al tramonto, con il Mar Rosso davanti" },
+  { src: heroCoastAerial.url, alt: "Veduta aerea del villaggio, della spiaggia e della barriera corallina" },
+  { src: heroOrientalSuite.url, alt: "Soggiorno in stile orientale affacciato sulla piscina, alla sera" },
+];
 export const APARTMENT_PHOTOS: { src: string; alt: string }[] = [
   { src: aptBedroomDaybed.url, alt: "Camera con letto matrimoniale e lettino" },
   { src: aptRoomTowelArt.url, alt: "Letto e divano letto con asciugamani e petali" },
