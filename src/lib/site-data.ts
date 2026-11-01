@@ -38,6 +38,10 @@ import villagePadelCourts from "@/assets/village-padel-courts.webp.asset.json";
 import villageGymWeights from "@/assets/village-gym-weights.webp.asset.json";
 import villageBeachClubNight from "@/assets/village-beach-club-night.webp.asset.json";
 import villageEveningShow from "@/assets/village-evening-show.webp.asset.json";
+// Real hero photos supplied by the owner (November 2026), in the order he sent them.
+import heroPoolSunset from "@/assets/hero-2.jpg.asset.json";
+import heroCoastAerial from "@/assets/hero-1.jpg.asset.json";
+import heroOrientalSuite from "@/assets/hero-3.jpg.asset.json";
 export const OWNER_WHATSAPP = "393347328158";
 export const MINA_WHATSAPP = "393481804764";
 export const wa = (num: string, text: string) => `https://wa.me/${num}?text=${encodeURIComponent(text)}`;
@@ -73,6 +77,11 @@ export const SPOTS = [
  { name: "Sharm Vecchia", desc: "Il cuore autentico di Sharm: il vecchio porto dei pescatori, i vicoli bianchi, i ristoranti di pesce fresco e l’anima vera di questa città.", image: boat.url, photo: "Barca sul mare · foto illustrativa" },
 ];
 export const ROOM_AMENITIES = ["Aria condizionata", "TV satellitare", "Balcone", "Microonde", "Cassaforte", "Bollitore", "Asciugacapelli", "Accesso a piscine e spiagge"];
+export const HERO_PHOTOS: { src: string; alt: string }[] = [
+  { src: heroPoolSunset.url, alt: "Piscina a sfioro al tramonto, con il Mar Rosso davanti" },
+  { src: heroCoastAerial.url, alt: "Veduta aerea del villaggio, della spiaggia e della barriera corallina" },
+  { src: heroOrientalSuite.url, alt: "Soggiorno in stile orientale affacciato sulla piscina, alla sera" },
+];
 export const APARTMENT_PHOTOS: { src: string; alt: string }[] = [
   { src: aptBedroomDaybed.url, alt: "Camera con letto matrimoniale e lettino" },
   { src: aptRoomTowelArt.url, alt: "Letto e divano letto con asciugamani e petali" },

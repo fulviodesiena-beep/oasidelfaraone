@@ -12,3 +12,4 @@
 - [x] Sostituire le foto illustrative del villaggio con le diciotto foto reali di Fulvio (mare, piscine, spiaggia, sport, spa, fondali, ristoranti, serate); 21 test superati.
 - [x] Sostituire il ritratto segnaposto di Mina con la foto reale fornita da Fulvio; 22 test superati.
 - [x] Inserire nella sezione MOOVY il logo reale e la foto del bambino con la sacca MOOVY, togliendo la scritta "MOOVY" e l'etichetta "foto illustrativa"; 23 test superati.
+- [x] Sostituire le tre foto dello slider hero con le foto reali di Fulvio, nell'ordine indicato (piscina al tramonto, veduta aerea, soggiorno orientale); 25 test superati.
