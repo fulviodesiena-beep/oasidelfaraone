@@ -1,15 +1,20 @@
-import coral from "@/assets/coral.jpg.asset.json";
 import boat from "@/assets/boat.jpg.asset.json";
-import pyramids from "@/assets/pyramids.jpg.asset.json";
-import mountain from "@/assets/mountain.jpg.asset.json";
-import sunset from "@/assets/sunset.jpg.asset.json";
-import camels from "@/assets/camels.jpg.asset.json";
+// Place photos chosen so each card shows that exact place (November 2026).
+import spotNaamaBay from "@/assets/spot-naama-bay.jpg.asset.json";
+import spotFarshaLanterns from "@/assets/spot-farsha-lanterns.jpg.asset.json";
+import spotSohoFountain from "@/assets/spot-soho-fountain.jpg.asset.json";
 import lanterns from "@/assets/lanterns-market.jpg.asset.json";
 import dahab from "@/assets/dahab-reef.jpg.asset.json";
+// Experience photos chosen so each card shows exactly what that experience is (November 2026).
+import expTransferNight from "@/assets/exp-transfer-night.jpg.asset.json";
+import expCoralReef from "@/assets/exp-coral-reef.jpg.asset.json";
+import expDesertCamp from "@/assets/exp-desert-camp.jpg.asset.json";
+import expPyramidsCamel from "@/assets/exp-pyramids-camel.jpg.asset.json";
+import expSinaiNight from "@/assets/exp-sinai-night.jpg.asset.json";
+import expSoukLanterns from "@/assets/exp-souk-lanterns.jpg.asset.json";
 import restPanorama from "@/assets/rest-panorama.jpg.asset.json";
 import restItalian from "@/assets/rest-italian.jpg.asset.json";
 import restPizza from "@/assets/rest-pizza.jpg.asset.json";
-import coast from "@/assets/coast.jpg.asset.json";
 import aptBedroomDaybed from "@/assets/apt-bedroom-daybed.jpg.asset.json";
 import aptRoomTowelArt from "@/assets/apt-room-towel-art.jpg.asset.json";
 import aptBedFlowers from "@/assets/apt-bed-flowers.jpg.asset.json";
@@ -47,12 +52,12 @@ export const MINA_WHATSAPP = "393481804764";
 export const wa = (num: string, text: string) => `https://wa.me/${num}?text=${encodeURIComponent(text)}`;
 export type Extra = { id: string; name: string; desc: string; image: string; photo: string };
 export const EXTRAS: Extra[] = [
-  { id: "transfer", name: "Transfer dall’aeroporto", desc: "Il tuo arrivo, senza pensieri. Transfer privato dall’aeroporto di Sharm al Domina, da concordare con Mina.", image: coast.url, photo: "Costa · foto illustrativa" },
-  { id: "rasmo", name: "Snorkeling a Ras Mohammed", desc: "Un incontro con i colori della barriera corallina. Itinerario e servizi da concordare con Mina.", image: coral.url, photo: "Fondali · foto illustrativa" },
+  { id: "transfer", name: "Transfer dall’aeroporto", desc: "Il tuo arrivo, senza pensieri. Transfer privato dall’aeroporto di Sharm al Domina, da concordare con Mina.", image: expTransferNight.url, photo: "Berlina nera di notte · foto illustrativa" },
+  { id: "rasmo", name: "Snorkeling a Ras Mohammed", desc: "Un incontro con i colori della barriera corallina. Itinerario e servizi da concordare con Mina.", image: expCoralReef.url, photo: "Banco di pesci e coralli · foto illustrativa" },
   { id: "tiran", name: "In barca verso Tiran", desc: "Il mare aperto, una sosta per nuotare e il tempo che rallenta. Uscita soggetta alle condizioni locali.", image: boat.url, photo: "Barca · foto illustrativa" },
-  { id: "safari", name: "Safari nel deserto", desc: "Esplora il deserto in quad, tra silenzio e luce del tramonto. Programma da concordare.", image: camels.url, photo: "Cammelli nel deserto · foto illustrativa" },
-  { id: "cairo", name: "Il Cairo e le piramidi", desc: "Una giornata nella storia dell’Egitto. Trasporto, ingressi e programma su richiesta.", image: pyramids.url, photo: "Egitto · foto illustrativa" },
-  { id: "sinai", name: "Monte Sinai di notte", desc: "Un cammino sotto le stelle verso l’alba. Partenza e accompagnamento da concordare con Mina.", image: mountain.url, photo: "Montagna · foto illustrativa" },
+  { id: "safari", name: "Safari nel deserto", desc: "Esplora il deserto in quad, tra silenzio e luce del tramonto. Programma da concordare.", image: expDesertCamp.url, photo: "Campo beduino tra le dune · foto illustrativa" },
+  { id: "cairo", name: "Il Cairo e le piramidi", desc: "Una giornata nella storia dell’Egitto. Trasporto, ingressi e programma su richiesta.", image: expPyramidsCamel.url, photo: "Piramide con cammello · foto illustrativa" },
+  { id: "sinai", name: "Monte Sinai di notte", desc: "Un cammino sotto le stelle verso l’alba. Partenza e accompagnamento da concordare con Mina.", image: expSinaiNight.url, photo: "Cielo stellato sulla montagna · foto illustrativa" },
 ];
 export const RESTAURANTS: { name: string; tag: string; cuisine: string; desc: string; image?: string }[] = [
  { name: "The Beach", tag: "Ristorante · Nel Domina · Sul mare", cuisine: "Piatti di mare", desc: "Il tavolo che scegliamo per un pranzo dopo la spiaggia: piatti freschi e il Mar Rosso davanti agli occhi." },
@@ -69,12 +74,12 @@ export const RESTAURANTS: { name: string; tag: string; cuisine: string; desc: st
  { name: "Arafa", tag: "Barbecue · Al Fanar", cuisine: "Griglia", desc: "Un indirizzo per una pausa alla griglia. Chiedi a Mina il menu e gli orari aggiornati." },
 ];
 export const SPOTS = [
- { name: "Caffè Farsha", desc: "Lanterne, cuscini e una serata affacciata sul mare: un luogo da vivere con calma.", image: sunset.url, photo: "Tramonto · foto illustrativa" },
- { name: "Baia di Naama", desc: "Una passeggiata sul lungomare, tra locali e luci della sera.", image: coast.url, photo: "Costa · foto illustrativa" },
+ { name: "Caffè Farsha", desc: "Lanterne, cuscini e una serata affacciata sul mare: un luogo da vivere con calma.", image: spotFarshaLanterns.url, photo: "Lanterne sull’acqua al tramonto · foto illustrativa" },
+ { name: "Baia di Naama", desc: "Una passeggiata sul lungomare, tra locali e luci della sera.", image: spotNaamaBay.url, photo: "Rocce e acqua turchese della baia · foto illustrativa" },
  { name: "Vecchio Mercato", desc: "Profumi di spezie, botteghe e la moschea Al Sahaba: il volto più vivace di Sharm.", image: lanterns.url, photo: "Lanterne al mercato · foto illustrativa" },
- { name: "Piazza Soho", desc: "Un incontro con la Sharm serale, tra fontane, locali e passeggiate.", image: sunset.url, photo: "Luce serale · foto illustrativa" },
+ { name: "Piazza Soho", desc: "Un incontro con la Sharm serale, tra fontane, locali e passeggiate.", image: spotSohoFountain.url, photo: "Fontana illuminata in piazza · foto illustrativa" },
  { name: "Blue Hole, Dahab", desc: "Un celebre sito sul mare. Escursioni e immersioni da organizzare con guide qualificate.", image: dahab.url, photo: "Fondali di Dahab · foto illustrativa" },
- { name: "Sharm Vecchia", desc: "Il cuore autentico di Sharm: il vecchio porto dei pescatori, i vicoli bianchi, i ristoranti di pesce fresco e l’anima vera di questa città.", image: boat.url, photo: "Barca sul mare · foto illustrativa" },
+ { name: "Sharm Vecchia", desc: "Il cuore autentico di Sharm: il vecchio porto dei pescatori, i vicoli bianchi, i ristoranti di pesce fresco e l’anima vera di questa città.", image: expSoukLanterns.url, photo: "Souk di lanterne e botteghe · foto illustrativa" },
 ];
 export const ROOM_AMENITIES = ["Aria condizionata", "TV satellitare", "Balcone", "Microonde", "Cassaforte", "Bollitore", "Asciugacapelli", "Accesso a piscine e spiagge"];
 export const HERO_PHOTOS: { src: string; alt: string }[] = [
