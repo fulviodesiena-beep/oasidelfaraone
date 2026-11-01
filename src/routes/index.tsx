@@ -1,316 +1,100 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState, type ReactNode } from "react";
-import hero1 from "@/assets/hero-1.jpg";
-import hero2 from "@/assets/hero-2.jpg";
-import hero3 from "@/assets/hero-3.jpg";
-import mina from "@/assets/mina.jpg";
-import desert from "@/assets/desert.jpg";
-import reef from "@/assets/reef.jpg";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { ArrowDown, ArrowUpRight, Check, Menu, X, MessageCircle, Instagram, Waves, Umbrella, Theater, Sparkles, Diamond, Flower2, Fish, Bike, Zap, QrCode, Image as ImageIcon, UserRound } from "lucide-react";
+import resort from "@/assets/resort.jpg.asset.json";
+import beach from "@/assets/beach.jpg.asset.json";
+import { Button } from "@/components/ui/button";
 import { Booking } from "@/components/site/Booking";
-import { EXTRAS, MINA_WHATSAPP, OWNER_WHATSAPP, RESTAURANTS, SPOTS, wa } from "@/lib/site-data";
-
+import { PhotoCard } from "@/components/site/PhotoCard";
+import { EXTRAS, MINA_WHATSAPP, OWNER_WHATSAPP, RESTAURANTS, ROOM_AMENITIES, SPOTS, wa } from "@/lib/site-data";
+import { SEASONS } from "@/lib/pricing";
+const DESCRIPTION = "Oasi del Faraone — Elisir d’Oriente: appartamento con balcone per 4 persone al Domina Coral Bay, Sharm el-Sheikh. Tariffe, mare ed esperienze con Mina. Prenota direttamente con Fulvio.";
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Oasi del Faraone — Elisir d'Oriente · Domina Coral Bay, Sharm el-Sheikh" },
-      { name: "description", content: "Book a 60m² pool-view apartment at Domina Coral Bay, Sharm el-Sheikh. Sleeps 5, free Spa Élisir, private beach, excursions with our local guide Mina." },
-      { property: "og:title", content: "Oasi del Faraone — Il tuo angolo d'Oriente sul Mar Rosso" },
-      { property: "og:description", content: "A premium apartment at Domina Coral Bay, Sharm el-Sheikh. Book direct." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
-  component: Index,
+  head: () => ({ meta: [
+    { title: "Oasi del Faraone | Elisir d’Oriente · Domina Coral Bay" },
+    { name: "description", content: DESCRIPTION },
+    { property: "og:title", content: "Oasi del Faraone — Il tuo soggiorno sul Mar Rosso" },
+    { property: "og:description", content: DESCRIPTION },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }), component: Index,
 });
-
-const HERO = [hero1, hero2, hero3];
-
-function useReveal() {
-  useEffect(() => {
-    const io = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && e.target.classList.add("is-visible")), { threshold: 0.12 });
-    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-}
-
-export function Cartouche({ className = "h-10 w-10" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 48 64" className={className} aria-hidden>
-      <rect x="4" y="2" width="40" height="56" rx="20" fill="none" stroke="currentColor" strokeWidth="2.5" />
-      <line x1="8" y1="61" x2="40" y2="61" stroke="currentColor" strokeWidth="2.5" />
-      <circle cx="24" cy="17" r="6" className="fill-terracotta" />
-      <path d="M20 48V28M28 48V28M17 30h14M17 35h14M17 40h14" stroke="currentColor" strokeWidth="2.2" />
-    </svg>
-  );
-}
-
-function Section({ id, eyebrow, title, intro, children, className = "" }: { id?: string; eyebrow: string; title: ReactNode; intro?: string; children: ReactNode; className?: string }) {
-  return (
-    <section id={id} className={`px-5 py-24 sm:px-8 md:py-32 ${className}`}>
-      <div className="mx-auto max-w-6xl">
-        <div className="reveal mb-14 max-w-2xl">
-          <p className="eyebrow">{eyebrow}</p>
-          <h2 className="mt-4 text-4xl leading-tight sm:text-6xl">{title}</h2>
-          {intro && <p className="mt-5 text-lg leading-relaxed text-muted-foreground">{intro}</p>}
-        </div>
-        {children}
-      </div>
-    </section>
-  );
-}
-
+export function Cartouche({ className = "h-10 w-8" }: { className?: string }) { return <svg viewBox="0 0 48 64" className={className} aria-hidden="true"><rect x="4" y="2" width="40" height="56" rx="20" fill="none" stroke="currentColor" strokeWidth="2" /><path d="M8 61h32M20 48V28m8 20V28m-11 2h14m-14 5h14m-14 5h14" fill="none" stroke="currentColor" strokeWidth="2" /><circle cx="24" cy="17" r="6" className="fill-terracotta" /></svg>; }
+function Section({ id, eyebrow, title, intro, children, className = "" }: { id?: string; eyebrow: string; title: ReactNode; intro?: string; children: ReactNode; className?: string }) { return <section id={id} className={`site-section ${className}`}><div className="site-container"><div className="reveal section-heading"><p className="eyebrow">{eyebrow}</p><h2>{title}</h2>{intro && <p className="section-intro">{intro}</p>}</div>{children}</div></section>; }
+function Placeholder({ label, portrait = false }: { label: string; portrait?: boolean }) { return <div className={`photo-placeholder ${portrait ? "portrait-placeholder" : ""}`}><span className="placeholder-corners" /><div>{portrait ? <UserRound size={40} strokeWidth={1} /> : <ImageIcon size={32} strokeWidth={1} />}<p className="mt-5 font-display text-3xl">{label}</p><p className="mt-2 text-xs text-muted-foreground">Foto reale in arrivo</p></div></div>; }
+const NAV = [["apartment", "Appartamento"], ["resort", "Villaggio"], ["tariffe", "Tariffe"], ["extras", "Esperienze"], ["mina", "Mina"]];
+const FACILITIES = [
+ { name: "Spiagge private", icon: Umbrella, description: "Accesso diretto al Mar Rosso, per lasciarti il mondo alle spalle.", note: "Accesso incluso" },
+ { name: "Piscine", icon: Waves, description: "Più piscine nel villaggio, ognuna con il suo ritmo.", note: "Accesso incluso" },
+ { name: "Lago salato", icon: Waves, description: "Un luogo speciale, tra acqua salata e quiete, nel cuore del Domina.", note: "Accesso incluso" },
+ { name: "Teatro", icon: Theater, description: "Spettacoli e serate da vivere dopo una giornata di mare.", note: "Programmi serali" },
+ { name: "Animazione", icon: Sparkles, description: "Attività quotidiane e intrattenimento per tutte le età.", note: "Nel villaggio" },
+ { name: "Casinò", icon: Diamond, description: "Il casinò del resort, per chi cerca una serata diversa.", note: "A pagamento · solo adulti" },
+ { name: "Spa Thalasso", icon: Flower2, description: "Benessere e trattamenti da prenotare separatamente.", note: "A pagamento · bambini non ammessi" },
+ { name: "Centro diving", icon: Fish, description: "Direttamente sul mare, per esplorare i fondali con professionisti.", note: "Attività a pagamento" },
+];
 function Index() {
-  useReveal();
-  const [slide, setSlide] = useState(0);
   const [extras, setExtras] = useState<string[]>([]);
+  const [menu, setMenu] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
   useEffect(() => {
-    const t = setInterval(() => setSlide((s) => (s + 1) % HERO.length), 6000);
-    const onS = () => setScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", onS);
-    return () => { clearInterval(t); window.removeEventListener("scroll", onS); };
+    const io = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { e.target.setAttribute("data-revealed", "true"); io.unobserve(e.target); } }), { threshold: 0.08 });
+    document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+    let last = window.scrollY, frame = 0;
+    const canAnimate = window.matchMedia("(min-width: 1024px) and (prefers-reduced-motion: no-preference)").matches;
+    const scroll = () => { if (frame) return; frame = requestAnimationFrame(() => {
+      const y = window.scrollY; setHidden(y > 160 && y > last); setScrolled(y > 40); last = y;
+      if (canAnimate) heroRef.current?.style.setProperty("--hero-y", `${Math.min(y * .22, 220)}px`); frame = 0;
+    }); };
+    const move = (e: PointerEvent) => { if (!canAnimate || e.pointerType !== "mouse") return; heroRef.current?.style.setProperty("--tilt-x", `${(e.clientX / window.innerWidth - .5) * 10}px`); heroRef.current?.style.setProperty("--tilt-y", `${(e.clientY / window.innerHeight - .5) * 6}px`); };
+    window.addEventListener("scroll", scroll, { passive: true }); window.addEventListener("pointermove", move, { passive: true });
+    return () => { io.disconnect(); window.removeEventListener("scroll", scroll); window.removeEventListener("pointermove", move); cancelAnimationFrame(frame); };
   }, []);
-  const toggleExtra = (id: string) => setExtras((x) => (x.includes(id) ? x.filter((i) => i !== id) : [...x, id]));
-
-  return (
-    <main className="overflow-x-hidden">
-      {/* NAV */}
-      <header className={`fixed inset-x-0 top-0 z-50 transition ${scrolled ? "bg-navy-deep/90 backdrop-blur border-b border-border" : ""}`}>
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
-          <a href="#top" className="flex items-center gap-3 text-gold">
-            <Cartouche className="h-9 w-7" />
-            <span className="font-display text-xl text-foreground">Oasi del Faraone</span>
-          </a>
-          <nav className="hidden gap-8 text-xs uppercase tracking-[0.2em] text-muted-foreground md:flex">
-            <a href="#apartment" className="hover:text-gold">Apartment</a>
-            <a href="#resort" className="hover:text-gold">Resort</a>
-            <a href="#extras" className="hover:text-gold">Experiences</a>
-            <a href="#info" className="hover:text-gold">Info</a>
-          </nav>
-          <a href="#book" className="border border-gold px-4 py-2 text-xs uppercase tracking-[0.2em] text-gold transition hover:bg-gold hover:text-primary-foreground">Book</a>
-        </div>
-      </header>
-
-      {/* HERO */}
-      <section id="top" className="relative h-[100svh] min-h-[600px] overflow-hidden">
-        {HERO.map((src, i) => (
-          <img key={src} src={src} alt="" width={1920} height={1088} className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[2000ms] ${i === slide ? "kenburns opacity-100" : "opacity-0"}`} />
-        ))}
-        <div className="absolute inset-0 bg-veil" />
-        <div className="relative z-10 flex h-full flex-col items-center justify-end px-5 pb-24 text-center sm:pb-32">
-          <Cartouche className="mb-6 h-16 w-12 text-gold" />
-          <p className="eyebrow">Elisir d'Oriente · Domina Coral Bay · Sharm el-Sheikh</p>
-          <h1 className="mt-6 max-w-4xl text-5xl leading-[1.05] sm:text-7xl md:text-8xl">
-            Il tuo angolo <em className="text-gradient-gold">d'Oriente</em> sul Mar Rosso
-          </h1>
-          <a href="#book" className="mt-10 bg-gradient-gold px-10 py-4 text-sm font-semibold uppercase tracking-[0.25em] text-primary-foreground shadow-gold transition hover:scale-105">Book Your Stay</a>
-          <div className="mt-10 flex gap-2">
-            {HERO.map((_, i) => <button key={i} aria-label={`Slide ${i + 1}`} onClick={() => setSlide(i)} className={`h-0.5 transition-all ${i === slide ? "w-10 bg-gold" : "w-5 bg-foreground/40"}`} />)}
-          </div>
-        </div>
-      </section>
-
-      {/* BOOKING */}
-      <Section id="book" eyebrow="Reserve direct · best price" title={<>Choose your <em className="text-gold">nights</em></>} intro="Pick your dates on the calendar, see the price for every night and build your stay — no booking fees." className="bg-navy">
-        <div className="reveal"><Booking extras={extras} toggleExtra={toggleExtra} /></div>
-      </Section>
-
-      {/* APARTMENT */}
-      <Section id="apartment" eyebrow="The apartment" title="60m² of quiet, steps from the pool" intro="A warm, oriental-inspired home with its own terrace overlooking the pool — made for slow breakfasts and long Red Sea evenings.">
-        <div className="reveal grid grid-cols-2 gap-3 md:grid-cols-4 md:grid-rows-2">
-          <img src={hero3} alt="Living room opening onto the pool-view terrace" loading="lazy" className="col-span-2 row-span-2 h-full min-h-72 w-full object-cover" />
-          <img src={hero2} alt="Resort pool at sunset" loading="lazy" className="aspect-square h-full w-full object-cover" />
-          <img src={hero1} alt="Domina Coral Bay from above" loading="lazy" className="aspect-square h-full w-full object-cover" />
-          <img src={reef} alt="Coral reef" loading="lazy" className="aspect-square h-full w-full object-cover" />
-          <img src={desert} alt="Sinai desert" loading="lazy" className="aspect-square h-full w-full object-cover" />
-        </div>
-        <div className="reveal mt-12 grid gap-10 md:grid-cols-3">
-          <div className="grid grid-cols-2 gap-6 md:col-span-1">
-            {[["60m²", "Living space"], ["5", "Guests max"], ["Pool", "View"], ["Private", "Terrace"]].map(([a, b]) => (
-              <div key={b}><p className="font-display text-4xl text-gold">{a}</p><p className="text-xs uppercase tracking-widest text-muted-foreground">{b}</p></div>
-            ))}
-          </div>
-          <ul className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm md:col-span-2">
-            {["Air conditioning", "WiFi", "Satellite TV", "Terrace", "Microwave", "Safe", "Kettle", "Coffee maker", "Hair dryer", "Daily housekeeping", "Spa Élisir — free daily", "All pools & beaches"].map((a) => (
-              <li key={a} className="flex items-center gap-3 border-b border-border pb-3"><span className="text-gold">◆</span>{a}</li>
-            ))}
-          </ul>
-        </div>
-      </Section>
-
-      {/* RESORT */}
-      <Section id="resort" eyebrow="Live the resort" title="Domina Coral Bay, all yours" className="bg-navy">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {[
-            ["Private beach", "A coral-fringed bay with its own jetty.", hero1],
-            ["Pools", "Lagoon, infinity and quiet pools.", hero2],
-            ["Spa Élisir", "Hammam & sauna, free for you daily.", hero3],
-            ["Entertainment", "Shows, music and the evening piazza.", desert],
-            ["Restaurants", "From buffet to à la carte fine dining.", reef],
-          ].map(([t, d, img], i) => (
-            <article key={t} className="reveal group relative h-80 overflow-hidden" style={{ transitionDelay: `${i * 90}ms` }}>
-              <img src={img} alt={t} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-110" />
-              <div className="absolute inset-0 bg-veil" />
-              <div className="absolute bottom-0 p-5"><h3 className="text-2xl">{t}</h3><p className="mt-1 text-sm text-muted-foreground">{d}</p></div>
-            </article>
-          ))}
-        </div>
-        <div className="reveal mt-12 grid gap-6 md:grid-cols-2">
-          <blockquote className="border-l-2 border-terracotta pl-6 font-display text-2xl italic leading-snug">
-            "We recommend experiencing local restaurants, not just the all-inclusive. Sharm's soul lives in its markets, cafés and kitchens."
-          </blockquote>
-          <div className="flex h-48 items-center justify-center border border-dashed border-gold/40 text-sm text-muted-foreground">Resort map — coming soon</div>
-        </div>
-      </Section>
-
-      {/* MINA */}
-      <section className="relative px-5 py-24 sm:px-8 md:py-32">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
-          <img src={mina} alt="Mina, your local guide" loading="lazy" width={1024} height={1280} className="reveal aspect-[4/5] w-full object-cover" />
-          <div className="reveal">
-            <p className="eyebrow">Mina · your guide</p>
-            <h2 className="mt-4 text-4xl leading-tight sm:text-6xl">Let Mina show you the <em className="text-gold">real</em> Sharm el-Sheikh</h2>
-            <p className="mt-6 text-lg text-muted-foreground">Our trusted friend on the ground. Mina knows every reef, every honest taxi driver and every family-run kitchen worth the trip.</p>
-            <ul className="mt-8 space-y-3">
-              {["Excursions on land and sea", "Airport & city transfers", "Local tips, prices, what to avoid", "Safety guide for exploring Sharm"].map((s) => (
-                <li key={s} className="flex gap-3"><span className="text-terracotta">✦</span>{s}</li>
-              ))}
-            </ul>
-            <a href={wa(MINA_WHATSAPP, "Ciao Mina! I'm staying at Oasi del Faraone and would love your help.")} target="_blank" rel="noreferrer" className="mt-10 inline-flex items-center gap-3 bg-whatsapp px-8 py-4 text-sm font-semibold uppercase tracking-[0.15em] text-navy-deep transition hover:opacity-90">Chat with Mina on WhatsApp</a>
-          </div>
-        </div>
-      </section>
-
-      {/* EXTRAS */}
-      <Section id="extras" eyebrow="Enhance your stay" title="Add unforgettable moments" intro="Add them to your booking now — Mina confirms every detail with you before you fly." className="bg-navy">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {EXTRAS.map((e, i) => {
-            const on = extras.includes(e.id);
-            return (
-              <article key={e.id} className={`reveal flex flex-col border p-6 transition ${on ? "border-gold bg-gold/10" : "border-border bg-card"}`} style={{ transitionDelay: `${i * 70}ms` }}>
-                <div className="flex items-start justify-between">
-                  <span className="text-4xl">{e.icon}</span>
-                  <span className="font-display text-3xl text-gold">€{e.price}</span>
-                </div>
-                <h3 className="mt-4 text-2xl">{e.name}</h3>
-                <p className="mt-2 flex-1 text-sm text-muted-foreground">{e.desc}</p>
-                <div className="mt-6 flex gap-2">
-                  <button onClick={() => toggleExtra(e.id)} className={`flex-1 py-3 text-xs font-semibold uppercase tracking-[0.15em] transition ${on ? "bg-gold text-primary-foreground" : "border border-gold text-gold hover:bg-gold/10"}`}>{on ? "✓ Added" : "Add to booking"}</button>
-                  <a href={wa(MINA_WHATSAPP, `Ciao Mina, info about: ${e.name}`)} target="_blank" rel="noreferrer" aria-label={`Ask Mina about ${e.name}`} className="border border-border px-4 py-3 text-xs text-whatsapp hover:border-whatsapp">Ask</a>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-        {extras.length > 0 && <a href="#book" className="reveal is-visible mt-8 block text-center text-sm text-gold underline">{extras.length} added · see your updated quote →</a>}
-      </Section>
-
-      {/* EXPLORE */}
-      <Section eyebrow="Explore Sharm" title="Beyond the resort gates">
-        <div className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-3">
-          {SPOTS.map((s, i) => (
-            <div key={s.name} className="reveal bg-background p-8" style={{ transitionDelay: `${i * 60}ms` }}>
-              <p className="font-display text-5xl text-gold/30">0{i + 1}</p>
-              <h3 className="mt-2 text-3xl">{s.name}</h3>
-              <p className="mt-2 text-muted-foreground">{s.desc}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      {/* EAT */}
-      <Section eyebrow="Where to eat" title="Our table, our tips" className="bg-navy">
-        <div className="divide-y divide-border border-y border-border">
-          {RESTAURANTS.map((r) => (
-            <div key={r.name} className="reveal grid gap-2 py-6 md:grid-cols-[1fr_1fr_2fr] md:items-baseline">
-              <h3 className="text-3xl">{r.name}</h3>
-              <p className="eyebrow !text-terracotta">{r.tag}</p>
-              <p className="text-muted-foreground">{r.desc}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      {/* INFO */}
-      <Section id="info" eyebrow="Practical info" title="Good to know">
-        <div className="reveal space-y-px">
-          {[
-            ["Check-in & check-out", "Check-in from 15:00 · Check-out by 11:00. Early or late? Ask us on WhatsApp."],
-            ["Currency", "Egyptian Pound (EGP). Euro is widely accepted; ATMs at the resort and Naama Bay."],
-            ["Climate", "Sunny all year. Winter 22–26°C, summer 33–40°C. Sea 22–28°C — swimmable every month."],
-            ["How to reach the resort", "Sharm el-Sheikh airport (SSH) is ~15 minutes away. Book our private transfer for €15, or take an official taxi."],
-            ["Documents", "Italian ID card or passport is required: Domina needs it for the guest delegation. Visa on arrival covers Sinai stays."],
-          ].map(([q, a]) => (
-            <details key={q} className="group border border-border bg-card px-6 py-5">
-              <summary className="flex cursor-pointer list-none items-center justify-between font-display text-2xl">{q}<span className="text-gold transition group-open:rotate-45">+</span></summary>
-              <p className="mt-3 text-muted-foreground">{a}</p>
-            </details>
-          ))}
-        </div>
-      </Section>
-
-      {/* REAL ESTATE */}
-      <RealEstate />
-
-      {/* FOOTER */}
-      <footer className="border-t border-border px-5 py-16 sm:px-8">
-        <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-3">
-          <div className="flex items-start gap-4 text-gold">
-            <Cartouche className="h-14 w-10" />
-            <div><p className="font-display text-2xl text-foreground">Oasi del Faraone</p><p className="text-sm italic text-muted-foreground">Elisir d'Oriente — Il tuo angolo d'Oriente sul Mar Rosso</p></div>
-          </div>
-          <div className="text-sm text-muted-foreground">
-            <p className="eyebrow mb-3">Contact</p>
-            <p>Fulvio De Siena</p>
-            <a href={wa(OWNER_WHATSAPP, "Ciao Fulvio!")} className="text-gold">+39 334 732 8158 (WhatsApp)</a>
-            <p className="mt-2">Domina Coral Bay, Sharm el-Sheikh, Egypt</p>
-          </div>
-          <div className="text-sm text-muted-foreground">
-            <p className="eyebrow mb-3">Follow</p>
-            <div className="flex gap-5"><a href="#" className="hover:text-gold">Instagram</a><a href="#" className="hover:text-gold">Facebook</a><a href="#" className="hover:text-gold">TikTok</a></div>
-          </div>
-        </div>
-        <p className="mx-auto mt-12 max-w-6xl text-xs text-muted-foreground/60">© {new Date().getFullYear()} Oasi del Faraone</p>
-      </footer>
-    </main>
-  );
-}
-
-function RealEstate() {
-  const [sent, setSent] = useState(false);
-  return (
-    <section className="border-t border-border bg-navy px-5 py-20 sm:px-8">
-      <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-2">
-        <div className="reveal">
-          <p className="eyebrow !text-terracotta">Invest in the Red Sea</p>
-          <h2 className="mt-4 text-3xl sm:text-4xl">Interested in buying or investing at Domina Coral Bay?</h2>
-          <p className="mt-4 text-muted-foreground">Studios, duplexes, shops and business opportunities. We know the resort from the inside — and we'll guide you.</p>
-        </div>
-        {sent ? (
-          <p className="reveal is-visible self-center font-display text-2xl text-gold">Thank you — we'll be in touch very soon.</p>
-        ) : (
-          <form
-            className="reveal grid gap-3 sm:grid-cols-2"
-            onSubmit={(e) => {
-              e.preventDefault();
-              const f = new FormData(e.currentTarget);
-              window.open(wa(OWNER_WHATSAPP, `Real estate lead\n${[...f.entries()].map(([k, v]) => `${k}: ${v}`).join("\n")}`), "_blank");
-              setSent(true);
-            }}
-          >
-            <input required name="Name" className="field" placeholder="Name" />
-            <input required name="Email" type="email" className="field" placeholder="Email" />
-            <input name="Phone" type="tel" className="field" placeholder="Phone" />
-            <select name="Interest" className="field" defaultValue="Studio">
-              {["Studio", "2-bed", "Duplex", "Shop", "Business activity", "Other investment"].map((o) => <option key={o}>{o}</option>)}
-            </select>
-            <select name="Budget" className="field sm:col-span-2" defaultValue="€50k – €100k">
-              {["Under €50k", "€50k – €100k", "€100k – €200k", "€200k – €400k", "€400k+"].map((o) => <option key={o}>{o}</option>)}
-            </select>
-            <button className="border border-gold py-3 text-xs font-semibold uppercase tracking-[0.2em] text-gold transition hover:bg-gold hover:text-primary-foreground sm:col-span-2">We'll guide you</button>
-          </form>
-        )}
-      </div>
+  const toggleExtra = (id: string) => setExtras(x => x.includes(id) ? x.filter(e => e !== id) : [...x, id]);
+  return <main>
+    <header className={`site-header ${hidden && !menu ? "header-hidden" : ""} ${scrolled || menu ? "header-solid" : ""}`}><div className="site-container flex items-center justify-between gap-3">
+      <a href="#top" className="brand" onClick={() => setMenu(false)}><Cartouche /><span>Oasi del Faraone<small>ELISIR D’ORIENTE</small></span></a>
+      <nav aria-label="Navigazione principale" className="hidden items-center gap-7 lg:flex">{NAV.map(([id, name]) => <a key={id} href={`#${id}`} className="nav-link">{name}</a>)}</nav>
+      <div className="flex items-center gap-2"><Button asChild className="nav-book"><a href="#book" onClick={() => setMenu(false)}>PRENOTA<ArrowUpRight /></a></Button><Button variant="ghost" size="icon" className="lg:hidden" aria-label={menu ? "Chiudi menu" : "Apri menu"} aria-expanded={menu} onClick={() => setMenu(v => !v)}>{menu ? <X /> : <Menu />}</Button></div>
+    </div>{menu && <nav aria-label="Navigazione mobile" className="mobile-menu site-container">{NAV.map(([id, name]) => <a key={id} href={`#${id}`} onClick={() => setMenu(false)}>{name}</a>)}</nav>}</header>
+    <section id="top" ref={heroRef} className="hero">
+      <div className="hero-media"><img src={resort.url} width={1920} height={1080} alt="Veduta aerea ufficiale del Domina Coral Bay sul Mar Rosso" fetchPriority="high" /><img src={beach.url} width={1920} height={1080} alt="Spiaggia del Domina Coral Bay, fotografia ufficiale" className="hero-second" /></div><div className="hero-veil" /><div className="hero-shimmer" aria-hidden="true" />
+      <div className="site-container hero-content"><p className="eyebrow">DOMINA CORAL BAY · SHARM EL-SHEIKH</p><h1>Oasi del Faraone</h1><p className="hero-subbrand">Elisir d’Oriente</p><p className="hero-tagline">Dove l’Egitto diventa un’oasi.<br />Solo per te.</p><div className="hero-actions"><Button asChild className="luxury-cta"><a href="#book">Il tuo prossimo soggiorno<ArrowUpRight /></a></Button><a className="hero-discover" href="#apartment">Entra nell’oasi<ArrowDown size={16} /></a></div></div>
+      <div className="hero-bottom site-container"><span>27°57′ N · 34°23′ E</span><span>Mar Rosso, Egitto</span><a href="#apartment" aria-label="Scopri l’appartamento"><ArrowDown size={20} /></a></div>
     </section>
-  );
+    <div className="intro-strip"><div className="site-container"><span>Un appartamento. Il tuo ritmo.</span><span>Fino a 4 ospiti</span><span>Il Mar Rosso, ogni giorno.</span></div></div>
+    <Section id="apartment" eyebrow="01 / Il tuo angolo d’Oriente" title={<>Un rifugio privato.<br /><em>Un mare di possibilità.</em></>} intro="Un appartamento di 60 m², un balcone affacciato sulla piscina e il piacere di sentirsi a casa. Al Domina Coral Bay, ogni giornata comincia con una possibilità diversa.">
+      <div className="reveal apartment-gallery"><Placeholder label="Il tuo appartamento" /><div className="grid gap-4"><Placeholder label="Il balcone" /><Placeholder label="La zona notte" /></div></div>
+      <div className="reveal apartment-details"><div className="room-stats">{[["60", "metri quadrati"], ["4", "ospiti massimi"], ["Balcone", "vista piscina"]].map(([v,l]) => <div key={l}><p>{v}</p><span>{l}</span></div>)}</div><ul>{ROOM_AMENITIES.map(a => <li key={a}><Check size={14} />{a}</li>)}</ul></div>
+      <p className="reveal room-note">Wi-Fi non disponibile in camera. Spa a pagamento separato, bambini non ammessi. Ristoranti e bar si vivono à la carte.</p>
+    </Section>
+    <Section id="resort" eyebrow="02 / Una destinazione nella destinazione" title={<>Il villaggio, <em>da vivere.</em></>} intro="Spiagge private, piscine, lago salato e serate sotto le stelle. Il soggiorno ti dà accesso alle strutture del Domina Coral Bay; ristoranti, bar e attività a pagamento si scelgono separatamente." className="bg-secondary">
+      <div className="reveal resort-banner"><img src={beach.url} alt="Spiaggia del resort Domina Coral Bay, foto ufficiale" loading="lazy" width={1600} height={800} /><span>DOMINA CORAL BAY · FOTO UFFICIALE</span></div>
+      <div className="facilities-grid">{FACILITIES.map(f => <article key={f.name} className="reveal facility"><f.icon size={27} strokeWidth={1.2} /><h3>{f.name}</h3><p>{f.description}</p><span>{f.note}</span></article>)}</div>
+    </Section>
+    <section id="moovy" className="moovy-section site-section"><div className="site-container moovy-layout"><div className="reveal"><p className="eyebrow text-moovy">MOBILITÀ, CON UN’ENERGIA NUOVA</p><div className="moovy-brand"><Zap strokeWidth={1.4} /><span>MOOVY</span></div><h2>Muoviti nel Villaggio<br />con MOOVY</h2><p className="section-intro">MOOVY porta la mobilità elettrica nel Domina Coral Bay. Scooter elettrici, biciclette e monopattini disponibili all’interno del villaggio per spostarti in totale libertà, comodità e rispetto per l’ambiente.</p><div className="mt-8 flex items-center gap-3 text-moovy"><Bike size={25} /><span className="text-sm">Elettrico. Leggero. Libero.</span></div></div><div className="reveal moovy-download"><div className="qr-placeholder" aria-label="Segnaposto QR MOOVY, non scansionabile"><QrCode size={128} strokeWidth={1} /><span>QR IN ARRIVO</span></div><h3>Scarica l’app MOOVY</h3><p>Disponibile presto al Domina Coral Bay</p></div></div></section>
+    <Section id="mina" eyebrow="03 / Il tuo amico sul posto" title="La tua guida a Sharm — Mina">
+      <div className="mina-layout"><div className="reveal"><Placeholder label="Mina, il tuo amico a Sharm" portrait /></div><div className="reveal mina-copy"><p className="font-display text-3xl leading-snug">Il nostro fidato amico sul posto. Mina conosce ogni barriera corallina e gli angoli più autentici di Sharm.</p><p className="mt-6 text-muted-foreground leading-relaxed">Mina conosce Sharm come pochi. Nato e cresciuto qui, è la persona giusta per scoprire la vera essenza di questo luogo — dai fondali della barriera corallina alle strade del mercato notturno, dalle escursioni nel deserto ai migliori tavoli in città. Con Mina, non sei un turista: sei un ospite.</p><ul className="mt-8 space-y-3">{["Tour di snorkeling e immersioni", "Safari nel deserto in quad", "Old Market e zona della moschea Al-Mustafa", "Tour della città e transfer privati"].map(s => <li key={s} className="flex gap-3 text-sm"><Check size={16} className="text-gold shrink-0" />{s}</li>)}</ul><Button asChild className="mina-whatsapp mt-8"><a href={wa(MINA_WHATSAPP, "Ciao Mina! Vorrei scoprire Sharm con te.")} target="_blank" rel="noreferrer"><MessageCircle />Chatta con Mina su WhatsApp</a></Button><a href={`https://wa.me/${MINA_WHATSAPP}`} className="mt-3 block text-sm text-muted-foreground">+20 150 120 2025</a></div></div>
+    </Section>
+    <Section id="extras" eyebrow="04 / Ricordi, non soltanto giorni" title={<>Lasciati portare <em>altrove.</em></>} intro="Dal silenzio del deserto ai colori della barriera corallina. Scegli le esperienze che ti somigliano: Mina ti aiuterà a organizzarle." className="bg-secondary"><div className="photo-grid">{EXTRAS.map(e => <PhotoCard key={e.id} title={e.name} description={e.desc} image={e.image} photo={e.photo} price={e.price === null ? "Prezzo su richiesta" : "€15 a persona"} selected={extras.includes(e.id)} onAdd={() => toggleExtra(e.id)} />)}</div>{extras.length > 0 && <Button asChild variant="link" className="mt-6"><a href="#book">{extras.length} esperienze selezionate · vai al soggiorno<ArrowUpRight /></a></Button>}</Section>
+    <Section id="explore" eyebrow="05 / La Sharm che ci piace" title={<>Oltre i cancelli <em>del resort.</em></>} intro="Un tramonto, un profumo, una passeggiata. I luoghi che ti consigliamo di scoprire, un passo alla volta."><div className="photo-grid">{SPOTS.map(s => <PhotoCard key={s.name} title={s.name} description={s.desc} image={s.image} photo={s.photo} />)}</div></Section>
+    <Section id="restaurants" eyebrow="06 / I nostri consigli — dove mangiare" title="I più amati dai nostri ospiti" intro="Una buona tavola fa parte del viaggio. Questi sono gli indirizzi che condividiamo con chi viene a trovarci." className="bg-secondary"><div className="restaurant-grid">{RESTAURANTS.map((r,i) => <article key={r.name} className="reveal restaurant-card"><span className="restaurant-number">{String(i + 1).padStart(2,"0")}</span><p className="restaurant-tag">{r.tag}</p><h3>{r.name}</h3><p className="restaurant-desc">{r.desc}</p><p className="restaurant-cuisine">Tipo di cucina <span>{r.cuisine}</span></p></article>)}</div><p className="mt-6 text-xs text-muted-foreground">Per orari, menu e prenotazioni aggiornati, chiedi a Mina.</p></Section>
+    <Section id="tariffe" eyebrow="07 / Il valore del tuo soggiorno" title={<>Un’oasi tutta tua.<br /><em>Una tariffa, fino a 4 ospiti.</em></>} intro="Il prezzo è per appartamento, non per persona. Scegli la stagione che preferisci."><div className="season-grid">{SEASONS.map(s => <article key={s.id} className="reveal season-card"><p className="eyebrow">Stagione {s.name}</p><p className="season-price">€{s.range}</p><span className="text-xs text-muted-foreground">a notte · intero appartamento</span><p className="season-period">{s.period}</p></article>)}</div><div className="reveal pricing-notes"><p>Il preventivo usa tariffe indicative: €75 bassa, €95 media, €130 alta e €170 picco. Il prezzo finale viene confermato da Fulvio.</p><p>Picco a Pasqua e Pasquetta. Gennaio dopo il 6, febbraio e dicembre prima del 20: prezzo su richiesta.</p><p>Accesso a spiagge, piscine, lago salato, teatro e animazione. Ristoranti e bar à la carte. Spa e casinò a pagamento separato.</p></div></Section>
+    <Section id="book" eyebrow="08 / Ci vediamo sul Mar Rosso" title={<>Le tue date.<br /><em>Il tuo prossimo ricordo.</em></>} className="bg-secondary"><div className="reveal"><Booking extras={extras} toggleExtra={toggleExtra} /></div></Section>
+    <Section id="info" eyebrow="Prima di partire" title="Le cose da sapere"><div className="reveal info-list">{[
+      ["Arrivo e partenza", "Check-in dalle 15:00, check-out entro le 11:00. Per esigenze diverse, contatta Fulvio."],
+      ["Servizi e accesso al villaggio", "Fino a 4 persone, accesso a spiagge private, piscine, lago salato e intrattenimento. Ristoranti e bar à la carte. La spa è a pagamento e non ammette bambini; il casinò è a pagamento e riservato agli adulti."],
+      ["Wi-Fi e dotazioni", "Il Wi-Fi non è disponibile in camera. L’appartamento dispone di un balcone e delle dotazioni elencate nella sezione appartamento. La macchina da caffè non è presente."],
+      ["Transfer dall’aeroporto", "Transfer a €15 per persona. Organizza arrivo e dettagli direttamente con Mina al +20 150 120 2025."],
+      ["Documenti di viaggio", "Verifica documenti, visti e requisiti di ingresso aggiornati prima della partenza, tramite le fonti ufficiali. Fulvio ti darà le indicazioni per la delega ospiti del resort."],
+    ].map(([q,a]) => <details key={q}><summary>{q}<span aria-hidden="true">+</span></summary><p>{a}</p></details>)}</div></Section>
+    <RealEstate />
+    <footer className="site-footer"><div className="site-container footer-layout"><div><a href="#top" className="brand"><Cartouche className="h-14 w-10" /><span>Oasi del Faraone<small>ELISIR D’ORIENTE</small></span></a><p className="mt-5 font-display text-xl italic text-muted-foreground">Il tuo angolo d’Oriente sul Mar Rosso</p></div><div><p className="eyebrow">Parliamone</p><p className="mt-5 text-sm">Fulvio De Siena</p><a href={`https://wa.me/${OWNER_WHATSAPP}`} className="mt-2 block text-sm text-gold-light">+39 334 732 8158</a><p className="mt-5 text-sm text-muted-foreground">Domina Coral Bay<br />Sharm el-Sheikh, Egitto</p></div><div><p className="eyebrow">Restiamo in contatto</p><div className="mt-4 flex gap-3"><Button variant="outline" size="icon" disabled aria-label="Instagram — profilo in arrivo" title="Instagram — profilo in arrivo"><Instagram /></Button><Button asChild variant="outline" size="icon"><a href={`https://wa.me/${OWNER_WHATSAPP}`} aria-label="WhatsApp Fulvio" title="WhatsApp Fulvio"><MessageCircle /></a></Button></div><p className="mt-3 text-xs text-muted-foreground">Instagram · prossimamente</p></div></div><div className="site-container footer-bottom"><span>© {new Date().getFullYear()} Oasi del Faraone</span><span>Un piccolo angolo d’Egitto. Un grande ricordo.</span></div></footer>
+  </main>;
+}
+function RealEstate() {
+  const [opened, setOpened] = useState(false);
+  return <section id="invest" className="site-section invest-section"><div className="site-container invest-layout"><div className="reveal"><p className="eyebrow">IMPREZA REAL ESTATE</p><h2>Vuoi investire al<br /><em>Domina Coral Bay?</em></h2><p className="section-intro">Acquistare un appartamento in uno dei resort più esclusivi del Mar Rosso è più semplice di quanto pensi. Raccogli le tue domande, ti mettiamo in contatto con i nostri partner.</p><span className="invest-mark" aria-hidden="true">Impreza.</span></div><form className="reveal invest-form" onSubmit={e => { e.preventDefault(); const f = new FormData(e.currentTarget); window.open(wa(OWNER_WHATSAPP, `Richiesta Impreza Real Estate\n${[...f.entries()].map(([k,v]) => `${k}: ${v}`).join("\n")}`), "_blank", "noopener,noreferrer"); setOpened(true); }}><label>Nome<input required name="Nome" autoComplete="name" className="field" /></label><label>Email<input required name="Email" type="email" autoComplete="email" className="field" /></label><label>Telefono<input required name="Telefono" type="tel" autoComplete="tel" className="field" /></label><label>Tipo di interesse<select name="Tipo di interesse" className="field">{["Acquisto appartamento", "Investimento", "Informazioni generali"].map(o => <option key={o}>{o}</option>)}</select></label><label className="sm:col-span-2">Messaggio<textarea name="Messaggio" rows={3} className="field" /></label><Button type="submit" className="h-12 sm:col-span-2"><MessageCircle />Parliamone su WhatsApp</Button>{opened && <p role="status" className="text-sm text-gold-light sm:col-span-2">Il messaggio è pronto su WhatsApp: invialo per contattare Fulvio.</p>}</form></div></section>;
 }

@@ -1,10 +1,10 @@
 # Redesign e correzioni
-- [ ] Aggiornare design, scorrimento e navigazione italiana.
-- [ ] Correggere camera: 4 ospiti, balcone, niente Wi-Fi/caffè/spa inclusa né Corona.
-- [ ] Aggiornare tariffe e richieste WhatsApp.
-- [ ] Riscrivere Mina al maschile e inserire ritratto segnaposto.
-- [ ] Aggiornare ogni contatto Mina a +20 150 120 2025, senza cambiare Fulvio.
-- [ ] Foto reali per esperienze e luoghi, descrizioni sovrapposte accessibili anche da telefono.
-- [ ] Inserire tutti i nove ristoranti e verificare descrizioni senza inventare dettagli.
-- [ ] Servizi villaggio, MOOVY e investimento.
-- [ ] Verificare preventivo, WhatsApp e visualizzazione a 375px.
+- [x] Aggiornare design, scorrimento e navigazione italiana.
+- [x] Correggere camera: 4 ospiti, balcone, niente Wi-Fi/caffè/spa inclusa né Corona.
+- [x] Aggiornare tariffe e richieste WhatsApp.
+- [x] Riscrivere Mina al maschile e inserire ritratto segnaposto.
+- [x] Aggiornare ogni contatto Mina a +20 150 120 2025, senza cambiare Fulvio.
+- [x] Foto reali illustrative per esperienze e luoghi, descrizioni sovrapposte accessibili anche da telefono.
+- [x] Inserire tutti i nove ristoranti; nomi verificati (Mahony, Impàsto), descrizioni dei nuovi locali secondo le indicazioni di Fulvio.
+- [x] Servizi villaggio, MOOVY e investimento.
+- [x] Verificare preventivo, WhatsApp e visualizzazione a 375px; 17 test superati.
