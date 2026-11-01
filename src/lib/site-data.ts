@@ -30,6 +30,14 @@ import villageDiveBoat from "@/assets/village-dive-boat.webp.asset.json";
 import villageTurtleReef from "@/assets/village-turtle-reef.webp.asset.json";
 import villageRestaurantChef from "@/assets/village-restaurant-chef.webp.asset.json";
 import villageRestaurantTerrace from "@/assets/village-restaurant-terrace.webp.asset.json";
+import villageCoastAerial from "@/assets/village-coast-aerial.webp.asset.json";
+import villageLagoonDay from "@/assets/village-lagoon-day.webp.asset.json";
+import villageLagoonNight from "@/assets/village-lagoon-night.webp.asset.json";
+import villageBeachSunset from "@/assets/village-beach-sunset.webp.asset.json";
+import villagePadelCourts from "@/assets/village-padel-courts.webp.asset.json";
+import villageGymWeights from "@/assets/village-gym-weights.webp.asset.json";
+import villageBeachClubNight from "@/assets/village-beach-club-night.webp.asset.json";
+import villageEveningShow from "@/assets/village-evening-show.webp.asset.json";
 export const OWNER_WHATSAPP = "393347328158";
 export const MINA_WHATSAPP = "393481804764";
 export const wa = (num: string, text: string) => `https://wa.me/${num}?text=${encodeURIComponent(text)}`;
@@ -78,15 +86,24 @@ export const APARTMENT_PHOTOS: { src: string; alt: string }[] = [
   { src: aptPoolWaterfall.url, alt: "L’acqua della piscina con cascata di rocce" },
 ];
 // Real village photos supplied by the owner (August 2026) for the Domina Coral Bay carousel.
+// Order follows the day: arrival and sea, water and beach, sport, wellness, reef, table, evenings.
 export const VILLAGE_PHOTOS: { src: string; alt: string }[] = [
+  { src: villageCoastAerial.url, alt: "Vista aerea sulla spiaggia, i pontili e la barriera corallina" },
   { src: villagePool.url, alt: "Piscina con parete di roccia e lettini prendisole" },
+  { src: villageLagoonDay.url, alt: "Laguna con rocce e getto d’acqua, gazebo bianchi sullo sfondo" },
+  { src: villageLagoonNight.url, alt: "Laguna di notte, con rocce e cascate illuminate" },
   { src: villageBeachLoungers.url, alt: "Lettini all’ombra di un ombrellone in paglia, con il mare davanti" },
   { src: villageBeachDaybed.url, alt: "Lettone in riva al mare sulla spiaggia del villaggio" },
+  { src: villageBeachSunset.url, alt: "La spiaggia e i campi da beach volley al tramonto" },
+  { src: villagePadelCourts.url, alt: "Campi da padel nel villaggio" },
+  { src: villageGym.url, alt: "Sala fitness affacciata sulla spiaggia" },
+  { src: villageGymWeights.url, alt: "Sala pesi con attrezzi e materassini" },
   { src: villageSpaGarden.url, alt: "Giardino benessere con cascata di roccia e palme" },
   { src: villageSpaMassage.url, alt: "Massaggio con fagottini d’erbe nella spa del villaggio" },
-  { src: villageGym.url, alt: "Sala fitness affacciata sulla spiaggia" },
   { src: villageDiveBoat.url, alt: "Gommone da immersione con i sub in azione" },
   { src: villageTurtleReef.url, alt: "Tartaruga marina tra i coralli del Mar Rosso" },
   { src: villageRestaurantChef.url, alt: "Lo chef che impiatta un piatto caldo in sala" },
   { src: villageRestaurantTerrace.url, alt: "Tavolo apparecchiato con vista sulla laguna del resort" },
+  { src: villageBeachClubNight.url, alt: "Beach club sul mare illuminato di sera" },
+  { src: villageEveningShow.url, alt: "Spettacolo serale con gli artisti davanti agli ospiti a cena" },
 ];
