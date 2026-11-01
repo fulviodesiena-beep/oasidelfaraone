@@ -5,16 +5,6 @@ import beach from "@/assets/beach.jpg.asset.json";
 import heroAerial from "@/assets/hero-aerial.jpg.asset.json";
 import heroPool from "@/assets/hero-pool.jpg.asset.json";
 import heroRoom from "@/assets/hero-room.jpg.asset.json";
-import aptBedroomDaybed from "@/assets/apt-bedroom-daybed.jpg.asset.json";
-import aptRoomTowelArt from "@/assets/apt-room-towel-art.jpg.asset.json";
-import aptBedFlowers from "@/assets/apt-bed-flowers.jpg.asset.json";
-import aptSofaBed from "@/assets/apt-sofa-bed.jpg.asset.json";
-import aptBedroomSofa from "@/assets/apt-bedroom-sofa.jpg.asset.json";
-import aptBathroomBathtub from "@/assets/apt-bathroom-bathtub.jpg.asset.json";
-import aptBathroomVanity from "@/assets/apt-bathroom-vanity.jpg.asset.json";
-import aptBalconyChairs from "@/assets/apt-balcony-chairs.jpg.asset.json";
-import aptPoolRocks from "@/assets/apt-pool-rocks.jpg.asset.json";
-import aptPoolWaterfall from "@/assets/apt-pool-waterfall.jpg.asset.json";
 import villageAerial from "@/assets/village-aerial.jpg.asset.json";
 import villagePool from "@/assets/village-pool.jpg.asset.json";
 import villageClub from "@/assets/village-club.jpg.asset.json";
@@ -22,7 +12,7 @@ import moovyChild from "@/assets/moovy-child.jpg.asset.json";
 import { Button } from "@/components/ui/button";
 import { Booking } from "@/components/site/Booking";
 import { PhotoCard } from "@/components/site/PhotoCard";
-import { EXTRAS, MINA_WHATSAPP, OWNER_WHATSAPP, RESTAURANTS, ROOM_AMENITIES, SPOTS, wa } from "@/lib/site-data";
+import { APARTMENT_PHOTOS, EXTRAS, MINA_WHATSAPP, OWNER_WHATSAPP, RESTAURANTS, ROOM_AMENITIES, SPOTS, wa } from "@/lib/site-data";
 import { SEASONS } from "@/lib/pricing";
 const DESCRIPTION = "Oasi del Faraone — Elisir d’Oriente: appartamento con balcone per 4 persone al Domina Coral Bay, Sharm el-Sheikh. Tariffe, mare ed esperienze con Mina. Prenota direttamente con Fulvio.";
 export const Route = createFileRoute("/")({
@@ -41,7 +31,6 @@ function Placeholder({ label, portrait = false }: { label: string; portrait?: bo
 function Racket({ size = 27, strokeWidth = 1.2 }: { size?: number; strokeWidth?: number }) { return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} aria-hidden="true"><ellipse cx="14" cy="9" rx="6.5" ry="7" /><path d="M9.5 14 4 21.5M3 20.5l1.5 1.5" /><circle cx="12" cy="7" r=".6" /><circle cx="15.5" cy="7" r=".6" /><circle cx="13.5" cy="10.5" r=".6" /></svg>; }
 type Slide = { src: string; alt: string };
 const HERO: Slide[] = [{ src: heroAerial.url, alt: "Resort sul Mar Rosso visto dall’alto · foto illustrativa" }, { src: heroPool.url, alt: "Piscina infinity al tramonto · foto illustrativa" }, { src: heroRoom.url, alt: "Camera in stile orientale · foto illustrativa" }];
-const APARTMENT: Slide[] = [{ src: aptBedroomDaybed.url, alt: "Camera con letto matrimoniale e lettino" }, { src: aptRoomTowelArt.url, alt: "Letto e divano letto con asciugamani e petali" }, { src: aptBedFlowers.url, alt: "Dettaglio del letto con petali" }, { src: aptSofaBed.url, alt: "Divano letto accanto al balcone" }, { src: aptBedroomSofa.url, alt: "Angolo riposo con divanetto" }, { src: aptBathroomBathtub.url, alt: "Bagno con vasca e doccia" }, { src: aptBathroomVanity.url, alt: "Bagno con lavandino e porta scorrevole" }, { src: aptBalconyChairs.url, alt: "Balcone con due poltrone in legno" }, { src: aptPoolRocks.url, alt: "Piscina del villaggio con rocce e ombrelloni" }, { src: aptPoolWaterfall.url, alt: "L’acqua della piscina con cascata di rocce" }];
 const VILLAGE: Slide[] = [{ src: villageAerial.url, alt: "Resort sul mare visto dall’alto · foto illustrativa" }, { src: villagePool.url, alt: "Piscina di un resort a Sharm · foto illustrativa" }, { src: beach.url, alt: "Spiaggia privata del Domina Coral Bay" }, { src: villageClub.url, alt: "Beach club e intrattenimento · foto illustrativa" }];
 function Carousel({ slides, label, portrait = false }: { slides: Slide[]; label: string; portrait?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -93,7 +82,7 @@ function Index() {
     </section>
     <div className="intro-strip"><div className="site-container"><span>Il tuo rifugio privato.</span><span>Fino a 4 ospiti</span><span>Il Mar Rosso, ogni giorno.</span></div></div>
     <Section id="apartment" eyebrow="01 / Il tuo angolo d’Oriente" title={<>Un rifugio privato.<br /><em>Un mare di possibilità.</em></>} intro="Un appartamento di 60 m², un balcone affacciato sulla piscina e il piacere di sentirsi a casa. Al Domina Coral Bay, ogni giornata comincia con una possibilità diversa.">
-      <Carousel slides={APARTMENT} label="Foto dell’appartamento" portrait />
+      <Carousel slides={APARTMENT_PHOTOS} label="Foto dell’appartamento" portrait />
       <div className="reveal apartment-details"><div className="room-stats">{[["60", "metri quadrati"], ["4", "ospiti massimi"], ["Balcone", "vista piscina"]].map(([v,l]) => <div key={l}><p>{v}</p><span>{l}</span></div>)}</div><ul>{ROOM_AMENITIES.map(a => <li key={a}><Check size={14} />{a}</li>)}</ul></div>
       <p className="reveal room-note">Wi-Fi non disponibile in camera. Spa a pagamento separato, bambini non ammessi. Ristoranti e bar si vivono à la carte.</p>
     </Section>
