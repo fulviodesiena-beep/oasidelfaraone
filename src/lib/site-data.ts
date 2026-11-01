@@ -20,6 +20,16 @@ import aptBathroomVanity from "@/assets/apt-bathroom-vanity.jpg.asset.json";
 import aptBalconyChairs from "@/assets/apt-balcony-chairs.jpg.asset.json";
 import aptPoolRocks from "@/assets/apt-pool-rocks.jpg.asset.json";
 import aptPoolWaterfall from "@/assets/apt-pool-waterfall.jpg.asset.json";
+import villagePool from "@/assets/village-pool.webp.asset.json";
+import villageBeachLoungers from "@/assets/village-beach-loungers.webp.asset.json";
+import villageBeachDaybed from "@/assets/village-beach-daybed.webp.asset.json";
+import villageSpaGarden from "@/assets/village-spa-garden.webp.asset.json";
+import villageSpaMassage from "@/assets/village-spa-massage.webp.asset.json";
+import villageGym from "@/assets/village-gym.webp.asset.json";
+import villageDiveBoat from "@/assets/village-dive-boat.webp.asset.json";
+import villageTurtleReef from "@/assets/village-turtle-reef.webp.asset.json";
+import villageRestaurantChef from "@/assets/village-restaurant-chef.webp.asset.json";
+import villageRestaurantTerrace from "@/assets/village-restaurant-terrace.webp.asset.json";
 export const OWNER_WHATSAPP = "393347328158";
 export const MINA_WHATSAPP = "393481804764";
 export const wa = (num: string, text: string) => `https://wa.me/${num}?text=${encodeURIComponent(text)}`;
@@ -66,4 +76,17 @@ export const APARTMENT_PHOTOS: { src: string; alt: string }[] = [
   { src: aptBalconyChairs.url, alt: "Balcone con due poltrone in legno" },
   { src: aptPoolRocks.url, alt: "Piscina del villaggio con rocce e ombrelloni" },
   { src: aptPoolWaterfall.url, alt: "L’acqua della piscina con cascata di rocce" },
+];
+// Real village photos supplied by the owner (August 2026) for the Domina Coral Bay carousel.
+export const VILLAGE_PHOTOS: { src: string; alt: string }[] = [
+  { src: villagePool.url, alt: "Piscina con parete di roccia e lettini prendisole" },
+  { src: villageBeachLoungers.url, alt: "Lettini all’ombra di un ombrellone in paglia, con il mare davanti" },
+  { src: villageBeachDaybed.url, alt: "Lettone in riva al mare sulla spiaggia del villaggio" },
+  { src: villageSpaGarden.url, alt: "Giardino benessere con cascata di roccia e palme" },
+  { src: villageSpaMassage.url, alt: "Massaggio con fagottini d’erbe nella spa del villaggio" },
+  { src: villageGym.url, alt: "Sala fitness affacciata sulla spiaggia" },
+  { src: villageDiveBoat.url, alt: "Gommone da immersione con i sub in azione" },
+  { src: villageTurtleReef.url, alt: "Tartaruga marina tra i coralli del Mar Rosso" },
+  { src: villageRestaurantChef.url, alt: "Lo chef che impiatta un piatto caldo in sala" },
+  { src: villageRestaurantTerrace.url, alt: "Tavolo apparecchiato con vista sulla laguna del resort" },
 ];
