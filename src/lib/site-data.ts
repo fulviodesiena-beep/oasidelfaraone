@@ -1,6 +1,5 @@
 import coral from "@/assets/coral.jpg.asset.json";
 import boat from "@/assets/boat.jpg.asset.json";
-import dunes from "@/assets/dunes.jpg.asset.json";
 import pyramids from "@/assets/pyramids.jpg.asset.json";
 import mountain from "@/assets/mountain.jpg.asset.json";
 import sunset from "@/assets/sunset.jpg.asset.json";

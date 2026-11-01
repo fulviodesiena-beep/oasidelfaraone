@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { MINA_WHATSAPP, OWNER_WHATSAPP, wa } from "@/lib/site-data";
 
 describe("WhatsApp contacts", () => {
-  it("routes Mina inquiries to his Egyptian number", () => {
+  it("routes Mina inquiries to his number +39 348 180 4764", () => {
     expect(wa(MINA_WHATSAPP, "Ciao Mina")).toBe("https://wa.me/393481804764?text=Ciao%20Mina");
   });
   it("keeps Fulvio's contact unchanged", () => {
