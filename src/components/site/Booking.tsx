@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight, Minus, Plus, ArrowRight, MessageCircle, X } 
 import { Button } from "@/components/ui/button";
 import { EXTRAS, OWNER_WHATSAPP, wa } from "@/lib/site-data";
 import { dateKey, MAX_GUESTS, quote, seasonFor, SEASON_RATES, transferTotal } from "@/lib/pricing";
-const parse = (s: string) => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
+const parse = (s: string) => { const [y = 0, m = 1, d = 1] = s.split("-").map(Number); return new Date(y, m - 1, d); };
 export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra: (id: string) => void }) {
   const [today] = useState(new Date());
   const [month, setMonth] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
