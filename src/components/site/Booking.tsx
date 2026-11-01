@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ChevronLeft, ChevronRight, Minus, Plus, ArrowRight, MessageCircle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EXTRAS, OWNER_WHATSAPP, wa } from "@/lib/site-data";
-import { dateKey, MAX_GUESTS, quote, seasonFor, SEASON_RATES, transferTotal } from "@/lib/pricing";
+import { dateKey, MAX_GUESTS, quote, seasonFor, SEASON_RATES } from "@/lib/pricing";
 const parse = (s: string) => { const [y = 0, m = 1, d = 1] = s.split("-").map(Number); return new Date(y, m - 1, d); };
 export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra: (id: string) => void }) {
   const [today] = useState(new Date());
@@ -13,9 +13,7 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
   const [children, setChildren] = useState(0);
   const [step, setStep] = useState<"search" | "quote" | "details">("search");
   const [opened, setOpened] = useState(false);
-  const people = adults + children;
-  const transfer = extras.includes("transfer") ? transferTotal(people) : 0;
-  const q = checkIn && checkOut ? quote(parse(checkIn), parse(checkOut), transfer) : null;
+      const q = checkIn && checkOut ? quote(parse(checkIn), parse(checkOut)) : null;
   const valid = Boolean(q && q.nightsCount > 0 && checkIn >= dateKey(today));
   const pick = (d: Date) => { const key = dateKey(d); setOpened(false); if (!checkIn || checkOut || key <= checkIn) { setCheckIn(key); setCheckOut(""); } else setCheckOut(key); setStep("search"); };
   const first = (month.getDay() + 6) % 7;
@@ -49,13 +47,13 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
       <p className="mt-4 text-xs text-muted-foreground">Il prezzo dell’appartamento non cambia da 1 a 4 ospiti.</p>
       {step !== "search" && valid && q && <div className="mt-6 space-y-3 border-t border-border pt-5">
         <div className="flex justify-between gap-3 text-sm"><span>{q.nightsCount} notti · appartamento</span><span>{q.accommodation === null ? "Su richiesta" : `€${q.accommodation}`}</span></div>
-        {extras.map(id => { const e = EXTRAS.find(x => x.id === id); if (!e) return null; return <div key={id} className="flex items-center justify-between gap-2 text-xs text-muted-foreground"><span>{e.name}{id === "transfer" ? ` · €15 × ${people}` : " · su richiesta"}</span><div className="flex items-center gap-1">{id === "transfer" && <span>€{transfer}</span>}<Button size="icon" variant="ghost" aria-label={`Rimuovi ${e.name}`} onClick={() => toggleExtra(id)}><X /></Button></div></div>; })}
+        {extras.map(id => { const e = EXTRAS.find(x => x.id === id); if (!e) return null; return <div key={id} className="flex items-center justify-between gap-2 text-xs text-muted-foreground"><span>{e.name}</span><div className="flex items-center gap-1"><Button size="icon" variant="ghost" aria-label={`Rimuovi ${e.name}`} onClick={() => toggleExtra(id)}><X /></Button></div></div>; })}
         <div className="flex items-end justify-between gap-3 border-t border-border pt-4"><span className="text-sm text-muted-foreground">{q.onRequest ? "Preventivo" : "Totale indicativo"}</span><span className="font-display text-4xl text-gold-light">{q.total === null ? "Su richiesta" : `€${q.total}`}</span></div>
-        {extras.some(id => id !== "transfer") && <p className="text-xs text-muted-foreground">Le escursioni su richiesta non sono comprese nel totale.</p>}
+        {extras.length > 0 && <p className="text-xs text-muted-foreground">Le esperienze selezionate non sono comprese nel totale.</p>}
       </div>}
       {step === "details" && valid && q ? <form className="mt-6 space-y-4" onSubmit={e => {
         e.preventDefault(); const form = new FormData(e.currentTarget);
-        const message = `Richiesta soggiorno — Oasi del Faraone\nNome: ${form.get("Nome")}\nEmail: ${form.get("Email")}\nTelefono: ${form.get("Telefono")}\nDate: ${checkIn} → ${checkOut}\n${q.nightsCount} notti\nOspiti: ${adults} adulti, ${children} bambini\nExtra: ${EXTRAS.filter(x => extras.includes(x.id)).map(x => x.name).join(", ") || "nessuno"}\nTransfer: €${transfer}\nTotale indicativo: ${q.total === null ? "su richiesta" : `€${q.total}`}\nDisponibilità e prezzi da confermare.`;
+        const message = `Richiesta soggiorno — Oasi del Faraone\nNome: ${form.get("Nome")}\nEmail: ${form.get("Email")}\nTelefono: ${form.get("Telefono")}\nDate: ${checkIn} → ${checkOut}\n${q.nightsCount} notti\nOspiti: ${adults} adulti, ${children} bambini\nExtra: ${EXTRAS.filter(x => extras.includes(x.id)).map(x => x.name).join(", ") || "nessuno"}\nTotale indicativo: ${q.total === null ? "su richiesta" : `€${q.total}`}\nDisponibilità e prezzi da confermare.`;
         window.open(wa(OWNER_WHATSAPP, message), "_blank", "noopener,noreferrer"); setOpened(true);
       }}>
         <label className="block text-xs text-muted-foreground">Nome completo<input name="Nome" required autoComplete="name" className="field mt-2" /></label>
