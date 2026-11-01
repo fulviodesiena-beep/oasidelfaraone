@@ -8,3 +8,4 @@
 - [x] Inserire tutti i nove ristoranti; nomi verificati (Mahony, Impàsto), descrizioni dei nuovi locali secondo le indicazioni di Fulvio.
 - [x] Servizi villaggio, MOOVY e investimento.
 - [x] Verificare preventivo, WhatsApp e visualizzazione a 375px; 17 test superati.
+- [x] Sostituire le foto segnaposto dell’appartamento con le dieci foto reali di Fulvio nel carousel Elisir d’Oriente; 19 test superati.
