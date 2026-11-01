@@ -1,5 +1,8 @@
 import boat from "@/assets/boat.jpg.asset.json";
-import sunset from "@/assets/sunset.jpg.asset.json";
+// Place photos chosen so each card shows that exact place (November 2026).
+import spotNaamaBay from "@/assets/spot-naama-bay.jpg.asset.json";
+import spotFarshaLanterns from "@/assets/spot-farsha-lanterns.jpg.asset.json";
+import spotSohoFountain from "@/assets/spot-soho-fountain.jpg.asset.json";
 import lanterns from "@/assets/lanterns-market.jpg.asset.json";
 import dahab from "@/assets/dahab-reef.jpg.asset.json";
 // Experience photos chosen so each card shows exactly what that experience is (November 2026).
@@ -72,10 +75,10 @@ export const RESTAURANTS: { name: string; tag: string; cuisine: string; desc: st
  { name: "Arafa", tag: "Barbecue · Al Fanar", cuisine: "Griglia", desc: "Un indirizzo per una pausa alla griglia. Chiedi a Mina il menu e gli orari aggiornati." },
 ];
 export const SPOTS = [
- { name: "Caffè Farsha", desc: "Lanterne, cuscini e una serata affacciata sul mare: un luogo da vivere con calma.", image: sunset.url, photo: "Tramonto · foto illustrativa" },
- { name: "Baia di Naama", desc: "Una passeggiata sul lungomare, tra locali e luci della sera.", image: coast.url, photo: "Costa · foto illustrativa" },
+ { name: "Caffè Farsha", desc: "Lanterne, cuscini e una serata affacciata sul mare: un luogo da vivere con calma.", image: spotFarshaLanterns.url, photo: "Lanterne sull’acqua al tramonto · foto illustrativa" },
+ { name: "Baia di Naama", desc: "Una passeggiata sul lungomare, tra locali e luci della sera.", image: spotNaamaBay.url, photo: "Rocce e acqua turchese della baia · foto illustrativa" },
  { name: "Vecchio Mercato", desc: "Profumi di spezie, botteghe e la moschea Al Sahaba: il volto più vivace di Sharm.", image: lanterns.url, photo: "Lanterne al mercato · foto illustrativa" },
- { name: "Piazza Soho", desc: "Un incontro con la Sharm serale, tra fontane, locali e passeggiate.", image: sunset.url, photo: "Luce serale · foto illustrativa" },
+ { name: "Piazza Soho", desc: "Un incontro con la Sharm serale, tra fontane, locali e passeggiate.", image: spotSohoFountain.url, photo: "Fontana illuminata in piazza · foto illustrativa" },
  { name: "Blue Hole, Dahab", desc: "Un celebre sito sul mare. Escursioni e immersioni da organizzare con guide qualificate.", image: dahab.url, photo: "Fondali di Dahab · foto illustrativa" },
  { name: "Sharm Vecchia", desc: "Il cuore autentico di Sharm: il vecchio porto dei pescatori, i vicoli bianchi, i ristoranti di pesce fresco e l’anima vera di questa città.", image: expSoukLanterns.url, photo: "Souk di lanterne e botteghe · foto illustrativa" },
 ];
