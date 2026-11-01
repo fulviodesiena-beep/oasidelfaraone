@@ -11,3 +11,4 @@
 - [x] Sostituire le foto segnaposto dell’appartamento con le dieci foto reali di Fulvio nel carousel Elisir d’Oriente; 19 test superati.
 - [x] Sostituire le foto illustrative del villaggio con le diciotto foto reali di Fulvio (mare, piscine, spiaggia, sport, spa, fondali, ristoranti, serate); 21 test superati.
 - [x] Sostituire il ritratto segnaposto di Mina con la foto reale fornita da Fulvio; 22 test superati.
+- [x] Inserire nella sezione MOOVY il logo reale e la foto del bambino con la sacca MOOVY, togliendo la scritta "MOOVY" e l'etichetta "foto illustrativa"; 23 test superati.
