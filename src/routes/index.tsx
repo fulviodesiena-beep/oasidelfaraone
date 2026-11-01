@@ -24,7 +24,7 @@ export function Cartouche({ className = "h-10 w-8" }: { className?: string }) { 
 function Section({ id, eyebrow, title, intro, children, className = "" }: { id?: string; eyebrow: string; title: ReactNode; intro?: string; children: ReactNode; className?: string }) { return <section id={id} className={`site-section ${className}`}><div className="site-container"><div className="reveal section-heading"><p className="eyebrow">{eyebrow}</p><h2>{title}</h2>{intro && <p className="section-intro">{intro}</p>}</div>{children}</div></section>; }
 function Racket({ size = 27, strokeWidth = 1.2 }: { size?: number; strokeWidth?: number }) { return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} aria-hidden="true"><ellipse cx="14" cy="9" rx="6.5" ry="7" /><path d="M9.5 14 4 21.5M3 20.5l1.5 1.5" /><circle cx="12" cy="7" r=".6" /><circle cx="15.5" cy="7" r=".6" /><circle cx="13.5" cy="10.5" r=".6" /></svg>; }
 type Slide = { src: string; alt: string };
-const HERO: Slide[] = [{ src: heroAerial.url, alt: "Resort sul Mar Rosso visto dall’alto · foto illustrativa" }, { src: heroPool.url, alt: "Piscina infinity al tramonto · foto illustrativa" }, { src: heroRoom.url, alt: "Camera in stile orientale · foto illustrativa" }];
+const HERO: Slide[] = HERO_PHOTOS;
 function Carousel({ slides, label, portrait = false }: { slides: Slide[]; label: string; portrait?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const go = (d: number) => ref.current?.scrollBy({ left: d * ref.current.clientWidth * .8, behavior: "smooth" });
