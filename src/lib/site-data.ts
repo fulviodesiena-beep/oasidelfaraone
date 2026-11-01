@@ -38,6 +38,10 @@ import villagePadelCourts from "@/assets/village-padel-courts.webp.asset.json";
 import villageGymWeights from "@/assets/village-gym-weights.webp.asset.json";
 import villageBeachClubNight from "@/assets/village-beach-club-night.webp.asset.json";
 import villageEveningShow from "@/assets/village-evening-show.webp.asset.json";
+// Real hero photos supplied by the owner (November 2026), in the order he sent them.
+import heroPoolSunset from "@/assets/hero-2.jpg.asset.json";
+import heroCoastAerial from "@/assets/hero-1.jpg.asset.json";
+import heroOrientalSuite from "@/assets/hero-3.jpg.asset.json";
 export const OWNER_WHATSAPP = "393347328158";
 export const MINA_WHATSAPP = "393481804764";
 export const wa = (num: string, text: string) => `https://wa.me/${num}?text=${encodeURIComponent(text)}`;
