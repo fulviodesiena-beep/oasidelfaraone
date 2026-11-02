@@ -3,12 +3,11 @@ import ownRasmo from "@/assets/exp-rasmo-owner.webp.asset.json";
 import ownTransfer from "@/assets/exp-transfer-owner.jpg.asset.json";
 import ownTiran from "@/assets/exp-tiran-owner.jpg.asset.json";
 import ownFarsha from "@/assets/spot-farsha-owner.jpg.asset.json";
-import ownSoho from "@/assets/spot-soho-owner.jpg.asset.json";
+import spotSohoFountain from "@/assets/spot-soho-fountain.jpg.asset.json";
 import ownMarket from "@/assets/spot-market-owner.jpg.asset.json";
 import ownOldSharm from "@/assets/spot-oldsharm-owner.webp.asset.json";
 import boat from "@/assets/boat.jpg.asset.json";
 // Place photos chosen so each card shows that exact place (November 2026).
-import spotNaamaBay from "@/assets/spot-naama-bay.jpg.asset.json";
 import lanterns from "@/assets/lanterns-market.jpg.asset.json";
 import dahab from "@/assets/dahab-reef.jpg.asset.json";
 // Experience photos chosen so each card shows exactly what that experience is (November 2026).
@@ -79,9 +78,8 @@ export const RESTAURANTS: { name: string; tag: string; cuisine: string; desc: st
 ];
 export const SPOTS = [
  { name: "Caffè Farsha", desc: "Lanterne, cuscini e una serata affacciata sul mare: un luogo da vivere con calma.", image: ownFarsha.url, photo: "Caffè Farsha" },
- { name: "Baia di Naama", desc: "Una passeggiata sul lungomare, tra locali e luci della sera.", image: spotNaamaBay.url, photo: "Rocce e acqua turchese della baia · foto illustrativa" },
  { name: "Vecchio Mercato", desc: "Profumi di spezie, botteghe e la moschea Al Sahaba: il volto più vivace di Sharm.", image: ownMarket.url, photo: "Vecchio Mercato" },
- { name: "Soho Square", desc: "Un incontro con la Sharm serale, tra fontane, locali e passeggiate.", image: ownSoho.url, photo: "Soho Square" },
+ { name: "Soho Square", desc: "Un incontro con la Sharm serale, tra fontane illuminate, negozi e passeggiate.", image: spotSohoFountain.url, photo: "Soho Square, la fontana illuminata di sera" },
  { name: "Blue Hole, Dahab", desc: "Un celebre sito sul mare. Escursioni e immersioni da organizzare con guide qualificate.", image: dahab.url, photo: "Fondali di Dahab · foto illustrativa" },
  { name: "Old Sharm", desc: "Il cuore autentico di Old Sharm: il vecchio porto dei pescatori, i vicoli bianchi, i ristoranti di pesce fresco e l’anima vera di questa città.", image: ownOldSharm.url, photo: "Old Sharm" },
 ];

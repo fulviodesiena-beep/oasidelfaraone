@@ -15,9 +15,8 @@ const EXPECTED_EXTRA: Record<string, string> = {
 
 const EXPECTED_SPOT: Record<string, string> = {
   "Caffè Farsha": "spot-farsha-owner.jpg",
-  "Baia di Naama": "spot-naama-bay.jpg",
   "Vecchio Mercato": "spot-market-owner.jpg",
-  "Soho Square": "spot-soho-owner.jpg",
+  "Soho Square": "spot-soho-fountain.jpg",
   "Blue Hole, Dahab": "dahab-reef.jpg",
   "Old Sharm": "spot-oldsharm-owner.webp",
 };
