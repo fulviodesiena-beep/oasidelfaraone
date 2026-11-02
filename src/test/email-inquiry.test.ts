@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 vi.mock("@/integrations/supabase/client", () => ({ supabase: { from: () => ({ insert: () => new Promise(() => {}) }) } }));
 import { saveInquiryWithin } from "@/lib/inquiries";
-import { checkInReminderEmail, confirmationEmail, depositDue, thankYouEmail } from "@/lib/email-templates";
+import { confirmationEmail, departureDayWhatsApp, getWhatsAppText, preArrivalEmail, thankYouWhatsApp } from "@/lib/email-templates";
+import { messageSchedule, whatsappLink } from "@/lib/communications";
 
 const b = { guest_name: "Anna <b>", check_in: "2026-12-01", check_out: "2026-12-08", total_nights: 7, total_price: 700, deposit_paid: 50 };
 
@@ -16,18 +17,34 @@ describe("inquiry save before WhatsApp", () => {
 });
 
 describe("email templates", () => {
-  it("confirmation shows total and remaining deposit", () => {
-    expect(depositDue(b)).toBe(160);
+  it("confirmation escapes the guest name and links Mina", () => {
     const html = confirmationEmail(b);
-    expect(html).toContain("700,00");
-    expect(html).toContain("160,00");
     expect(html).not.toContain("<b>");
+    expect(html).toContain("https://wa.me/393481804764");
   });
-  it("reminder links Mina's WhatsApp", () => {
-    expect(checkInReminderEmail(b)).toContain("https://wa.me/393481804764");
-    expect(checkInReminderEmail(b)).toContain("+39 348 180 4764");
+  it("pre-arrival explains the yellow card", () => {
+    expect(preArrivalEmail(b)).toContain("Scheda GIALLA");
   });
-  it("thank-you invites a Google review", () => {
-    expect(thankYouEmail(b)).toContain("recensione su Google");
+  it("departure day names room 65135 and MOOVY", () => {
+    expect(departureDayWhatsApp(b)).toContain("65135");
+    expect(departureDayWhatsApp(b)).toContain("MOOVY");
+  });
+  it("thank-you WhatsApp carries the coupon", () => {
+    expect(thankYouWhatsApp(b)).toContain("ELISIR10");
+  });
+  it("getWhatsAppText routes checkin_day", () => {
+    expect(getWhatsAppText("checkin_day", b)).toContain("65135");
+  });
+});
+
+describe("communications schedule", () => {
+  it("computes trigger dates: check-in -5 and check-out +3", () => {
+    const s = messageSchedule(b);
+    expect(s.find(m => m.trigger === "checkin_5")?.date).toBe("2026-11-26");
+    expect(s.find(m => m.trigger === "checkin_day")?.date).toBe("2026-12-01");
+    expect(s.find(m => m.trigger === "checkout_3")?.date).toBe("2026-12-11");
+  });
+  it("whatsapp link uses guest phone digits", () => {
+    expect(whatsappLink("+39 333 123", "ciao")).toBe("https://wa.me/39333123?text=ciao");
   });
 });
