@@ -13,7 +13,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { BookingFormDialog, emptyDraft, Field } from "@/components/admin/BookingFormDialog";
 import { BookingDocuments } from "@/components/admin/BookingDocuments";
-import { balanceDue, BOOKING_STATUS_LABEL, eur, extrasList, fmtDate, monthOf, SOURCE_LABEL, type Booking } from "@/lib/admin";
+import { balanceDue, BOOKING_STATUS_LABEL, PIPELINE_LABEL, eur, extrasList, fmtDate, monthOf, SOURCE_LABEL, type Booking } from "@/lib/admin";
 
 export const Route = createFileRoute("/admin/bookings")({ component: BookingsPage });
 
@@ -73,13 +73,14 @@ function BookingDetail({ booking, onClose }: { booking: Booking | null; onClose:
   const [status, setStatus] = useState<Booking["status"]>("pending");
   const [notes, setNotes] = useState("");
   const [deposit, setDeposit] = useState(0);
+  const [stage, setStage] = useState<Booking["pipeline_stage"]>("lead");
   useEffect(() => {
-    if (booking) { setStatus(booking.status); setNotes(booking.notes ?? ""); setDeposit(Number(booking.deposit_paid)); }
+    if (booking) { setStatus(booking.status); setNotes(booking.notes ?? ""); setDeposit(Number(booking.deposit_paid)); setStage(booking.pipeline_stage); }
   }, [booking]);
   const save = useMutation({
     mutationFn: async () => {
       if (!booking) return;
-      const { error } = await supabase.from("bookings").update({ status, notes: notes.trim() || null, deposit_paid: deposit }).eq("id", booking.id);
+      const { error } = await supabase.from("bookings").update({ status, notes: notes.trim() || null, deposit_paid: deposit, pipeline_stage: stage }).eq("id", booking.id);
       if (error) throw error;
     },
     onSuccess: () => { toast.success("Prenotazione aggiornata"); qc.invalidateQueries({ queryKey: ["admin"] }); onClose(); },
@@ -106,6 +107,8 @@ function BookingDetail({ booking, onClose }: { booking: Booking | null; onClose:
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Stato"><Select value={status} onValueChange={v => setStatus(v as Booking["status"])}><SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>{Object.entries(BOOKING_STATUS_LABEL).map(([k, l]) => <SelectItem key={k} value={k}>{l}</SelectItem>)}</SelectContent></Select></Field>
+          <Field label="Fase pipeline"><Select value={stage} onValueChange={v => setStage(v as Booking["pipeline_stage"])}><SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectContent>{Object.entries(PIPELINE_LABEL).map(([k, l]) => <SelectItem key={k} value={k}>{l}</SelectItem>)}</SelectContent></Select></Field>
           <Field label="Caparra ricevuta (€)"><Input type="number" min={0} step="0.01" value={deposit} onChange={e => setDeposit(Number(e.target.value))} /></Field>
           <p className="text-sm sm:col-span-2">Saldo da ricevere: <span className="text-gold-light">{eur(balanceDue(total, deposit))}</span></p>
           <Field label="Note" className="sm:col-span-2"><Textarea value={notes} onChange={e => setNotes(e.target.value)} /></Field>
