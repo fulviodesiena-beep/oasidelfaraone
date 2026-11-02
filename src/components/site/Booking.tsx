@@ -32,7 +32,7 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
           if (!d) return <div key={i} />;
           const key = dateKey(d);
           const selected = key === checkIn || key === checkOut || Boolean(checkIn && checkOut && key > checkIn && key < checkOut);
-          return <Button key={key} variant="ghost" disabled={key < dateKey(today)} aria-label={d.toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" })} aria-pressed={selected} onClick={() => pick(d)} className={`calendar-day ${selected ? "bg-primary text-primary-foreground hover:bg-primary/90" : "text-foreground"}`}><span>{d.getDate()}</span></Button>;
+          return <Button key={key} variant="ghost" disabled={key < dateKey(today)} aria-label={d.toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" })} aria-pressed={selected} onClick={() => pick(d)} className={`calendar-day ${selected ? "bg-primary text-primary-foreground hover:bg-primary/90" : "text-foreground"}`}>{d.getDate()}</Button>;
         })}
       </div>
       <p className="mt-6 text-xs leading-relaxed text-muted-foreground">Disponibilità da confermare con Fulvio. Il prezzo è riferito all’intero appartamento.</p>
