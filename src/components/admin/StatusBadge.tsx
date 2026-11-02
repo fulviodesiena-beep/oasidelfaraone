@@ -2,12 +2,14 @@ import { Badge } from "@/components/ui/badge";
 import { BOOKING_STATUS_LABEL, INQUIRY_STATUS_LABEL } from "@/lib/admin";
 
 const TONE: Record<string, string> = {
-  confirmed: "border-primary/60 bg-primary/15 text-gold-light",
+  confirmed: "status-confirmed",
+  personal: "status-personal",
+  host_collab: "status-host",
   converted: "border-primary/60 bg-primary/15 text-gold-light",
-  pending: "border-border bg-secondary text-foreground",
+  pending: "status-pending",
   new: "border-primary bg-primary text-primary-foreground",
   contacted: "border-border bg-secondary text-foreground",
-  cancelled: "border-destructive/50 bg-destructive/10 text-destructive",
+  cancelled: "status-cancelled",
   lost: "border-destructive/50 bg-destructive/10 text-destructive",
 };
 

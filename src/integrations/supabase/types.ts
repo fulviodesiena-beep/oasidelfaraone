@@ -27,7 +27,10 @@ export type Database = {
           guest_email: string | null
           guest_name: string
           guest_phone: string | null
+          host_amount: number
+          host_id: string | null
           id: string
+          is_personal_use: boolean
           notes: string | null
           price_per_night: number
           source: string
@@ -47,7 +50,10 @@ export type Database = {
           guest_email?: string | null
           guest_name: string
           guest_phone?: string | null
+          host_amount?: number
+          host_id?: string | null
           id?: string
+          is_personal_use?: boolean
           notes?: string | null
           price_per_night?: number
           source?: string
@@ -67,7 +73,10 @@ export type Database = {
           guest_email?: string | null
           guest_name?: string
           guest_phone?: string | null
+          host_amount?: number
+          host_id?: string | null
           id?: string
+          is_personal_use?: boolean
           notes?: string | null
           price_per_night?: number
           source?: string
@@ -75,7 +84,53 @@ export type Database = {
           total_nights?: number
           total_price?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "bookings_host_id_fkey"
+            columns: ["host_id"]
+            isOneToOne: false
+            referencedRelation: "hosts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      documents: {
+        Row: {
+          booking_id: string
+          created_at: string
+          file_type: string | null
+          file_url: string
+          id: string
+          name: string
+          uploaded_by: string
+        }
+        Insert: {
+          booking_id: string
+          created_at?: string
+          file_type?: string | null
+          file_url: string
+          id?: string
+          name: string
+          uploaded_by?: string
+        }
+        Update: {
+          booking_id?: string
+          created_at?: string
+          file_type?: string | null
+          file_url?: string
+          id?: string
+          name?: string
+          uploaded_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documents_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       guests: {
         Row: {
@@ -110,6 +165,39 @@ export type Database = {
           notes?: string | null
           phone?: string | null
           total_stays?: number
+        }
+        Relationships: []
+      }
+      hosts: {
+        Row: {
+          apartment_number: string | null
+          created_at: string
+          email: string | null
+          id: string
+          name: string
+          notes: string | null
+          phone: string | null
+          total_owed: number
+        }
+        Insert: {
+          apartment_number?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+          total_owed?: number
+        }
+        Update: {
+          apartment_number?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          total_owed?: number
         }
         Relationships: []
       }
@@ -194,7 +282,12 @@ export type Database = {
     }
     Enums: {
       app_role: "admin"
-      booking_status: "pending" | "confirmed" | "cancelled"
+      booking_status:
+        | "pending"
+        | "confirmed"
+        | "cancelled"
+        | "personal"
+        | "host_collab"
       inquiry_status: "new" | "contacted" | "converted" | "lost"
     }
     CompositeTypes: {
@@ -324,7 +417,13 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin"],
-      booking_status: ["pending", "confirmed", "cancelled"],
+      booking_status: [
+        "pending",
+        "confirmed",
+        "cancelled",
+        "personal",
+        "host_collab",
+      ],
       inquiry_status: ["new", "contacted", "converted", "lost"],
     },
   },

@@ -4,11 +4,17 @@ import type { Tables } from "@/integrations/supabase/types";
 export type Booking = Tables<"bookings">;
 export type Inquiry = Tables<"inquiries">;
 export type Guest = Tables<"guests">;
+export type Host = Tables<"hosts">;
+export type DocumentRow = Tables<"documents">;
+
+export const DOCUMENT_TYPES = ["Documento identità", "Contratto", "Delega Domina", "Altro"] as const;
 
 export const BOOKING_STATUS_LABEL: Record<Booking["status"], string> = {
   pending: "In attesa",
   confirmed: "Confermata",
   cancelled: "Annullata",
+  personal: "Uso personale",
+  host_collab: "Collab. host",
 };
 export const INQUIRY_STATUS_LABEL: Record<Inquiry["status"], string> = {
   new: "Nuova",
@@ -16,7 +22,7 @@ export const INQUIRY_STATUS_LABEL: Record<Inquiry["status"], string> = {
   converted: "Convertita",
   lost: "Persa",
 };
-export const SOURCE_LABEL: Record<string, string> = { whatsapp: "WhatsApp", direct: "Diretta", manual: "Manuale" };
+export const SOURCE_LABEL: Record<string, string> = { whatsapp: "WhatsApp", direct: "Diretta", manual: "Manuale", personal: "Personale", host: "Host" };
 
 export const eur = (n: number | string | null | undefined) =>
   new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR", maximumFractionDigits: 2 }).format(Number(n ?? 0));
@@ -48,6 +54,7 @@ export function dashboardStats(bookings: Booking[], inquiries: Pick<Inquiry, "st
     checkOutsToday: active.filter(b => b.check_out === today),
     monthCount: thisMonth.length,
     monthTotal: thisMonth.reduce((s, b) => s + Number(b.total_price), 0),
+    toCollect: bookings.filter(b => b.status === "confirmed").reduce((s, b) => s + Number(b.balance_due ?? 0), 0),
     newInquiries: inquiries.filter(i => i.status === "new").length,
     upcoming: bookings
       .filter(b => b.status === "confirmed" && b.check_in >= today)

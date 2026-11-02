@@ -20,3 +20,5 @@
 - /admin is a client-only (ssr: false) layout gated in beforeLoad by an admin row in user_roles; the login page lives at admin_.login.tsx so it is not nested under the gate.
 - Admin pages read and write through the browser client under RLS (has_role admin); public sign-up is disabled and the owner account gets the admin role via a trigger on auth.users matched by email.
 - Guest records are created or updated by a database trigger when a booking becomes confirmed (match by email or digits-only phone); balance_due is a generated column.
+- Booking documents live in the private `documents` storage bucket (admin-only RLS); the app shares them only via time-limited signed URLs, and the Domina delega PDF is built in the browser with pdf-lib from `src/lib/delega.ts`.
+- Personal-use and host-collaboration rules (zero price, host required, hosts.total_owed) are enforced by database triggers, not only the form.
