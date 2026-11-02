@@ -6,6 +6,13 @@ export type InquiryInput = {
   extras: string[]; message: string;
 };
 
+export const SAVE_TIMEOUT_MS = 2000;
+
+/** Waits for the save at most `ms`; resolves false on timeout so WhatsApp is never blocked. */
+export function saveInquiryWithin(i: InquiryInput, ms = SAVE_TIMEOUT_MS): Promise<boolean> {
+  return Promise.race([saveInquiry(i), new Promise<boolean>(r => setTimeout(() => r(false), ms))]);
+}
+
 /** Saves a website booking request before WhatsApp opens. Never throws: WhatsApp must still open. */
 export async function saveInquiry(i: InquiryInput): Promise<boolean> {
   try {

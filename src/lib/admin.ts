@@ -16,6 +16,10 @@ export const BOOKING_STATUS_LABEL: Record<Booking["status"], string> = {
   personal: "Uso personale",
   host_collab: "Collab. host",
 };
+export const PIPELINE_LABEL: Record<Booking["pipeline_stage"], string> = {
+  lead: "Lead", quoted: "Preventivo inviato", follow_up: "Follow-up", confirmed: "Confermato",
+  pre_stay: "Pre-soggiorno", staying: "In soggiorno", post_stay: "Post-soggiorno", loyal: "Cliente fedele",
+};
 export const INQUIRY_STATUS_LABEL: Record<Inquiry["status"], string> = {
   new: "Nuova",
   contacted: "Contattata",

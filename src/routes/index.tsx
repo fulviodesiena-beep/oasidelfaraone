@@ -9,16 +9,32 @@ import { Booking } from "@/components/site/Booking";
 import { PhotoCard } from "@/components/site/PhotoCard";
 import { APARTMENT_PHOTOS, EXTRAS, HERO_PHOTOS, INSTAGRAM_URL, MINA_WHATSAPP, OWNER_EMAIL, OWNER_WHATSAPP, RESTAURANTS, ROOM_AMENITIES, SPOTS, VILLAGE_PHOTOS, wa } from "@/lib/site-data";
 import { SEASONS } from "@/lib/pricing";
-const DESCRIPTION = "Oasi del Faraone — Elisir d’Oriente: appartamento con balcone per 4 persone al Domina Coral Bay, Sharm el-Sheikh. Tariffe, mare ed esperienze con Mina. Prenota direttamente con Fulvio.";
+const DESCRIPTION = "Appartamento privato a Domina Coral Bay, Sharm el-Sheikh. Vista mare, piscina inclusa. Fino a 4 ospiti, da €70 a notte. Prenota direttamente senza intermediari.";
+const OG_DESCRIPTION = "Il tuo rifugio privato nel cuore del Mar Rosso. Appartamento con vista, piscina e accesso diretto alla spiaggia a Domina Coral Bay.";
+const SITE_URL = "https://oasidelfaraone.com";
+const LODGING_JSONLD = {
+  "@context": "https://schema.org", "@type": "LodgingBusiness",
+  name: "Oasi del Faraone - Elisir d'Oriente",
+  description: "Appartamento privato a Domina Coral Bay, Sharm el-Sheikh",
+  address: { "@type": "PostalAddress", streetAddress: "Domina Coral Bay", addressLocality: "Sharm el-Sheikh", addressCountry: "EG" },
+  telephone: "+393347328158", email: "prenotazionisharm@gmail.com", url: SITE_URL, priceRange: "€€",
+  amenityFeature: ["Piscina", "Vista mare", "Aria condizionata"].map(name => ({ "@type": "LocationFeatureSpecification", name, value: true })),
+};
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
     { title: "Oasi del Faraone | Elisir d’Oriente · Domina Coral Bay" },
     { name: "description", content: DESCRIPTION },
-    { property: "og:title", content: "Oasi del Faraone — Il tuo soggiorno sul Mar Rosso" },
-    { property: "og:description", content: DESCRIPTION },
+    { name: "keywords", content: "appartamento Sharm el-Sheikh, Domina Coral Bay, vacanze Sharm, alloggio Sharm, camera Domina, Elisir d'Oriente" },
+    { property: "og:title", content: "Oasi del Faraone · Elisir d'Oriente · Sharm el-Sheikh" },
+    { property: "og:description", content: OG_DESCRIPTION },
     { property: "og:type", content: "website" },
+    { property: "og:locale", content: "it_IT" },
+    { property: "og:url", content: `${SITE_URL}/` },
     { name: "twitter:card", content: "summary_large_image" },
-  ] }), component: Index,
+  ],
+  links: [{ rel: "canonical", href: SITE_URL }],
+  scripts: [{ type: "application/ld+json", children: JSON.stringify(LODGING_JSONLD) }],
+  }), component: Index,
 });
 export function Cartouche({ className = "h-10 w-8" }: { className?: string }) { return <svg viewBox="0 0 48 64" className={className} aria-hidden="true"><rect x="4" y="2" width="40" height="56" rx="20" fill="none" stroke="currentColor" strokeWidth="2" /><path d="M8 61h32M20 48V28m8 20V28m-11 2h14m-14 5h14m-14 5h14" fill="none" stroke="currentColor" strokeWidth="2" /><circle cx="24" cy="17" r="6" className="fill-terracotta" /></svg>; }
 function Section({ id, eyebrow, title, intro, children, className = "" }: { id?: string; eyebrow: string; title: ReactNode; intro?: string; children: ReactNode; className?: string }) { return <section id={id} className={`site-section ${className}`}><div className="site-container"><div className="reveal section-heading"><p className="eyebrow">{eyebrow}</p><h2>{title}</h2>{intro && <p className="section-intro">{intro}</p>}</div>{children}</div></section>; }
