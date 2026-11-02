@@ -17,3 +17,7 @@
 - [x] Correggere anche le tre località sbagliate (Baia di Naama con la baia rocciosa, Caffè Farsha con le lanterne sul mare, Piazza Soho con la fontana illuminata) e togliere la foto doppia; 29 test superati.
 - [x] Collegare Instagram @oasidelfaraone, puntare il bottone di Mina a wa.me/393481804764 e aggiungere la sezione Contatti con i bottoni WhatsApp e email.
 - [x] Sostituire la foto del transfer dall'aeroporto con la foto reale dell'accoglienza al terminal (autista, ospite con bagaglio, auto col bagagliaio aperto), con inquadratura spostata a sinistra per tenere l'ospite in cornice; 33 test superati.
+
+- [x] Gestionale /admin: accesso, dashboard, prenotazioni, richieste, clienti; richieste del sito salvate prima di WhatsApp
+- [ ] Fulvio crea il suo account (prenotazionisharm@gmail.com) da Utenti → Aggiungi utente, poi verifica il pannello da loggato
+- [ ] Gestionale: PDF delega per Domina Coral Bay
