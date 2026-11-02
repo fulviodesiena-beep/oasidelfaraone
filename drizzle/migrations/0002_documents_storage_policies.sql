@@ -1,0 +1,4 @@
+create policy "Admins read documents files" on storage.objects for select to authenticated using (bucket_id = 'documents' and public.has_role(auth.uid(),'admin'));
+create policy "Admins upload documents files" on storage.objects for insert to authenticated with check (bucket_id = 'documents' and public.has_role(auth.uid(),'admin'));
+create policy "Admins update documents files" on storage.objects for update to authenticated using (bucket_id = 'documents' and public.has_role(auth.uid(),'admin'));
+create policy "Admins delete documents files" on storage.objects for delete to authenticated using (bucket_id = 'documents' and public.has_role(auth.uid(),'admin'));
