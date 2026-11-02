@@ -15,3 +15,4 @@
 - [x] Sostituire le tre foto dello slider hero con le foto reali di Fulvio, nell'ordine indicato (piscina al tramonto, veduta aerea, soggiorno orientale); 25 test superati.
 - [x] Rifare le foto delle sei esperienze con immagini attinenti (auto nera di notte, campo beduino, piramide con cammello, cielo stellato, coralli) e Sharm Vecchia con il souk; le quattro foto generiche ritirate; 28 test superati.
 - [x] Correggere anche le tre località sbagliate (Baia di Naama con la baia rocciosa, Caffè Farsha con le lanterne sul mare, Piazza Soho con la fontana illuminata) e togliere la foto doppia; 29 test superati.
+- [x] Collegare Instagram @oasidelfaraone, puntare il bottone di Mina a wa.me/393481804764 e aggiungere la sezione Contatti con i bottoni WhatsApp e email.
