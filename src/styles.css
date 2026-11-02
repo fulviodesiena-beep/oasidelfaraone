@@ -245,3 +245,10 @@ h2 em { color: var(--gold-light); font-weight: 400; }
  html { scroll-behavior: auto; } *,*::before,*::after { animation: none !important; transition-duration: .01ms !important; }
  .reveal { opacity: 1; transform: none; } .hero-media,.hero-content { transform: none; } .hero-slide { animation: none; } .hero-slide-0 { opacity: 1; }
 }
+
+/* Admin booking status tones */
+@utility status-pending { border-color: oklch(0.8 0.15 90 / .6); background: oklch(0.8 0.15 90 / .15); color: oklch(0.88 0.14 90); }
+@utility status-confirmed { border-color: oklch(0.72 0.15 150 / .6); background: oklch(0.72 0.15 150 / .15); color: oklch(0.82 0.13 150); }
+@utility status-cancelled { border-color: oklch(0.65 0.2 25 / .6); background: oklch(0.65 0.2 25 / .15); color: oklch(0.78 0.15 25); }
+@utility status-personal { border-color: oklch(0.7 0 0 / .5); background: oklch(0.7 0 0 / .12); color: oklch(0.85 0 0); }
+@utility status-host { border-color: oklch(0.68 0.13 245 / .6); background: oklch(0.68 0.13 245 / .15); color: oklch(0.8 0.11 245); }
