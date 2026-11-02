@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ChevronLeft, ChevronRight, Minus, Plus, ArrowRight, MessageCircle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EXTRAS, OWNER_WHATSAPP, wa } from "@/lib/site-data";
-import { dateKey, MAX_GUESTS, quote, seasonFor, SEASON_RATES } from "@/lib/pricing";
+import { dateKey, MAX_GUESTS, quote } from "@/lib/pricing";
 const parse = (s: string) => { const [y = 0, m = 1, d = 1] = s.split("-").map(Number); return new Date(y, m - 1, d); };
 export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra: (id: string) => void }) {
   const [today] = useState(new Date());
@@ -30,9 +30,9 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
         {["L", "M", "M", "G", "V", "S", "D"].map((d, i) => <span key={i} className="pb-3 text-xs text-muted-foreground">{d}</span>)}
         {days.map((d, i) => {
           if (!d) return <div key={i} />;
-          const key = dateKey(d), season = seasonFor(d);
+          const key = dateKey(d);
           const selected = key === checkIn || key === checkOut || Boolean(checkIn && checkOut && key > checkIn && key < checkOut);
-          return <Button key={key} variant="ghost" disabled={key < dateKey(today)} aria-label={d.toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" })} aria-pressed={selected} onClick={() => pick(d)} className={`calendar-day ${selected ? "bg-primary text-primary-foreground hover:bg-primary/90" : "text-foreground"}`}><span>{d.getDate()}</span><span className={`text-[10px] ${selected ? "" : "text-gold-light"}`}>{season ? `€${SEASON_RATES[season]}` : "su richiesta"}</span></Button>;
+          return <Button key={key} variant="ghost" disabled={key < dateKey(today)} aria-label={d.toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" })} aria-pressed={selected} onClick={() => pick(d)} className={`calendar-day ${selected ? "bg-primary text-primary-foreground hover:bg-primary/90" : "text-foreground"}`}><span>{d.getDate()}</span></Button>;
         })}
       </div>
       <p className="mt-6 text-xs leading-relaxed text-muted-foreground">Disponibilità da confermare con Fulvio. I prezzi del calendario sono indicativi e riferiti all’intero appartamento.</p>
