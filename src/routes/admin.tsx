@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { CalendarDays, Inbox, LayoutDashboard, LogOut, Users } from "lucide-react";
+import { CalendarDays, FileText, Handshake, Inbox, LayoutDashboard, LogOut, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
@@ -37,6 +37,8 @@ const NAV = [
   { to: "/admin/bookings", label: "Prenotazioni", icon: CalendarDays },
   { to: "/admin/inquiries", label: "Richieste", icon: Inbox },
   { to: "/admin/guests", label: "Clienti", icon: Users },
+  { to: "/admin/hosts", label: "Host", icon: Handshake },
+  { to: "/admin/documents", label: "Documenti", icon: FileText },
 ] as const;
 
 function AdminLayout() {

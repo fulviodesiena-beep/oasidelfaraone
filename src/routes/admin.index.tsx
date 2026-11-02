@@ -26,11 +26,13 @@ function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
         <Stat title="Check-in oggi" value={data.checkInsToday.length} list={data.checkInsToday} />
         <Stat title="Check-out oggi" value={data.checkOutsToday.length} list={data.checkOutsToday} />
         <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Prenotazioni questo mese</CardTitle></CardHeader>
           <CardContent><p className="font-display text-4xl">{data.monthCount}</p><p className="text-sm text-gold-light">{eur(data.monthTotal)}</p></CardContent></Card>
+        <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Da incassare</CardTitle></CardHeader>
+          <CardContent><p className="font-display text-3xl text-gold-light">{eur(data.toCollect)}</p><p className="text-xs text-muted-foreground">Saldo prenotazioni confermate</p></CardContent></Card>
         <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Richieste nuove</CardTitle></CardHeader>
           <CardContent className="flex items-center gap-3"><span className="inline-flex h-10 min-w-10 items-center justify-center rounded-full bg-primary px-3 font-display text-2xl text-primary-foreground">{data.newInquiries}</span>
             <Link to="/admin/inquiries" className="text-sm text-gold-light underline-offset-4 hover:underline">Apri richieste</Link></CardContent></Card>

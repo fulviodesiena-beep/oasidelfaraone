@@ -12,7 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { BookingFormDialog, emptyDraft, Field } from "@/components/admin/BookingFormDialog";
-import { balanceDue, eur, extrasList, fmtDate, monthOf, SOURCE_LABEL, type Booking } from "@/lib/admin";
+import { BookingDocuments } from "@/components/admin/BookingDocuments";
+import { balanceDue, BOOKING_STATUS_LABEL, eur, extrasList, fmtDate, monthOf, SOURCE_LABEL, type Booking } from "@/lib/admin";
 
 export const Route = createFileRoute("/admin/bookings")({ component: BookingsPage });
 
@@ -36,17 +37,17 @@ function BookingsPage() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-end gap-3">
         <Field label="Stato"><Select value={status} onValueChange={setStatus}><SelectTrigger className="w-40"><SelectValue /></SelectTrigger>
-          <SelectContent><SelectItem value="all">Tutti</SelectItem><SelectItem value="pending">In attesa</SelectItem><SelectItem value="confirmed">Confermata</SelectItem><SelectItem value="cancelled">Annullata</SelectItem></SelectContent></Select></Field>
+          <SelectContent><SelectItem value="all">Tutti</SelectItem>{Object.entries(BOOKING_STATUS_LABEL).map(([k, l]) => <SelectItem key={k} value={k}>{l}</SelectItem>)}</SelectContent></Select></Field>
         <Field label="Mese di arrivo"><Input type="month" className="w-44" value={month} onChange={e => setMonth(e.target.value)} /></Field>
         {month && <Button variant="ghost" size="sm" onClick={() => setMonth("")}>Tutti i mesi</Button>}
         <Button className="ml-auto" onClick={() => setCreating(true)}><Plus />Nuova prenotazione</Button>
       </div>
       <div className="border border-border">
         <Table>
-          <TableHeader><TableRow><TableHead>Ospite</TableHead><TableHead>Date</TableHead><TableHead>Notti</TableHead><TableHead>Totale</TableHead><TableHead>Caparra</TableHead><TableHead>Stato</TableHead></TableRow></TableHeader>
+          <TableHeader><TableRow><TableHead>Ospite</TableHead><TableHead>Date</TableHead><TableHead>Notti</TableHead><TableHead>Totale</TableHead><TableHead>Caparra</TableHead><TableHead>Saldo</TableHead><TableHead>Stato</TableHead></TableRow></TableHeader>
           <TableBody>
-            {isLoading && <TableRow><TableCell colSpan={6} className="text-muted-foreground">Caricamento…</TableCell></TableRow>}
-            {!isLoading && rows.length === 0 && <TableRow><TableCell colSpan={6} className="text-muted-foreground">Nessuna prenotazione.</TableCell></TableRow>}
+            {isLoading && <TableRow><TableCell colSpan={7} className="text-muted-foreground">Caricamento…</TableCell></TableRow>}
+            {!isLoading && rows.length === 0 && <TableRow><TableCell colSpan={7} className="text-muted-foreground">Nessuna prenotazione.</TableCell></TableRow>}
             {rows.map(b => (
               <TableRow key={b.id} className="cursor-pointer" onClick={() => setSelected(b)}>
                 <TableCell>{b.guest_name}</TableCell>
@@ -54,6 +55,7 @@ function BookingsPage() {
                 <TableCell>{b.total_nights}</TableCell>
                 <TableCell>{eur(b.total_price)}</TableCell>
                 <TableCell>{eur(b.deposit_paid)}</TableCell>
+                <TableCell>{eur(b.balance_due)}</TableCell>
                 <TableCell><StatusBadge status={b.status} /></TableCell>
               </TableRow>
             ))}
@@ -98,15 +100,17 @@ function BookingDetail({ booking, onClose }: { booking: Booking | null; onClose:
           <Dt k="Telefono" v={booking.guest_phone ?? "—"} />
           <Dt k="Prezzo a notte" v={eur(booking.price_per_night)} />
           <Dt k="Totale" v={eur(total)} />
+          {booking.source === "host" && <Dt k="Dovuto dall'host" v={eur(booking.host_amount)} />}
           <Dt k="Extra" v={extrasList(booking.extras).join(", ") || "—"} />
         </dl>
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Stato"><Select value={status} onValueChange={v => setStatus(v as Booking["status"])}><SelectTrigger><SelectValue /></SelectTrigger>
-            <SelectContent><SelectItem value="pending">In attesa</SelectItem><SelectItem value="confirmed">Confermata</SelectItem><SelectItem value="cancelled">Annullata</SelectItem></SelectContent></Select></Field>
+            <SelectContent>{Object.entries(BOOKING_STATUS_LABEL).map(([k, l]) => <SelectItem key={k} value={k}>{l}</SelectItem>)}</SelectContent></Select></Field>
           <Field label="Caparra ricevuta (€)"><Input type="number" min={0} step="0.01" value={deposit} onChange={e => setDeposit(Number(e.target.value))} /></Field>
           <p className="text-sm sm:col-span-2">Saldo da ricevere: <span className="text-gold-light">{eur(balanceDue(total, deposit))}</span></p>
           <Field label="Note" className="sm:col-span-2"><Textarea value={notes} onChange={e => setNotes(e.target.value)} /></Field>
         </div>
+        <BookingDocuments booking={booking} />
         <DialogFooter><Button variant="outline" onClick={onClose}>Chiudi</Button><Button onClick={() => save.mutate()} disabled={save.isPending}>Salva modifiche</Button></DialogFooter>
       </DialogContent>
     </Dialog>
