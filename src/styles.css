@@ -129,6 +129,12 @@ h2 em { color: var(--gold-light); font-weight: 400; }
 .mina-photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .mina-whatsapp { width: 100%; min-height: 52px; background: var(--whatsapp); color: var(--background); font-size: 13px; white-space: normal; }
 .mina-whatsapp:hover { background: color-mix(in srgb, var(--whatsapp) 85%, var(--foreground)); }
+.contact-buttons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; max-width: 780px; }
+.contact-btn { width: 100%; min-height: 58px; border-radius: 0; font-size: 13px; letter-spacing: .06em; white-space: normal; }
+.contact-whatsapp { background: var(--whatsapp); color: var(--background); border-color: transparent; }
+.contact-whatsapp:hover { background: color-mix(in srgb, var(--whatsapp) 85%, var(--foreground)); color: var(--background); }
+.contact-email { background: var(--card); color: var(--gold-light); }
+.contact-email:hover { background: var(--accent); color: var(--gold-light); }
 .photo-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
 .photo-card { aspect-ratio: 4/5; min-width: 0; position: relative; overflow: hidden; border: 1px solid var(--border); border-radius: 4px; background: var(--card); }
 .photo-card > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .8s ease; }
@@ -228,6 +234,7 @@ h2 em { color: var(--gold-light); font-weight: 400; }
  .photo-card { aspect-ratio: 4/4.5; } .photo-content { inset: auto 24px 26px; } .photo-content h3 { font-size: 31px; } .photo-details p { font-size: 13px; }
  .season-grid { grid-template-columns: 1fr 1fr; gap: 32px 18px; } .season-price { font-size: 35px; } .season-card .eyebrow { font-size: 8px; } .season-period { font-size: 11px; }
  .pricing-notes { grid-template-columns: 1fr; gap: 15px; }
+ .contact-buttons { grid-template-columns: 1fr; }
  .calendar-day { min-height: 48px; aspect-ratio: 1; }
  .calendar-grid { gap: 0; }
  input[type=date] { font-size: 14px; padding-inline: 5px; }
