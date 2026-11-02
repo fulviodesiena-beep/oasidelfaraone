@@ -35,7 +35,7 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
           return <Button key={key} variant="ghost" disabled={key < dateKey(today)} aria-label={d.toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" })} aria-pressed={selected} onClick={() => pick(d)} className={`calendar-day ${selected ? "bg-primary text-primary-foreground hover:bg-primary/90" : "text-foreground"}`}><span>{d.getDate()}</span></Button>;
         })}
       </div>
-      <p className="mt-6 text-xs leading-relaxed text-muted-foreground">Disponibilità da confermare con Fulvio. I prezzi del calendario sono indicativi e riferiti all’intero appartamento.</p>
+      <p className="mt-6 text-xs leading-relaxed text-muted-foreground">Disponibilità da confermare con Fulvio. Il prezzo è riferito all’intero appartamento.</p>
     </div>
     <div className="min-w-0 border border-border bg-card p-5 sm:p-8">
       <p className="eyebrow">Il tuo soggiorno · fino a 4 persone</p>
