@@ -35,7 +35,8 @@ describe("contact links", () => {
     renderPage();
     const instagram = screen.getByRole("link", { name: /Instagram Oasi del Faraone/i });
     expect(instagram).toHaveAttribute("href", INSTAGRAM_URL);
-    expect(instagram.closest("button")).not.toBeDisabled();
+    expect(instagram).toHaveAttribute("target", "_blank");
+    expect(instagram.closest("button")).toBeNull();
   });
 
   it("offers WhatsApp and email side by side in the contacts section", () => {
