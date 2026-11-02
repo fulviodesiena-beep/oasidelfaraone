@@ -13,7 +13,7 @@ export function BookingCommunications({ booking }: { booking: Booking }) {
   const data: EmailBooking = {
     guest_name: booking.guest_name, check_in: fmtDate(booking.check_in), check_out: fmtDate(booking.check_out),
     total_nights: booking.total_nights, total_price: booking.total_price, deposit_paid: booking.deposit_paid,
-    servizi: extrasList(booking.extras).join(", ") || undefined,
+    servizi: extrasList(booking.extras).join(", "),
   };
   const phone = booking.guest_phone;
   return (
