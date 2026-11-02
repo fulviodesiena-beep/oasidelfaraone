@@ -38,10 +38,10 @@ describe("Experience cards", () => {
   it("crops the transfer photo so the guest with luggage stays in frame", () => {
     // The guest stands at the far left of the photo; a centred crop cut him off.
     const focus = EXTRAS.find(e => e.id === "transfer")?.focus;
-    expect(focus).toBeDefined();
-    const [x] = (focus as string).split(" ");
-    expect(Number.parseInt(x, 10)).toBeGreaterThanOrEqual(0);
-    expect(Number.parseInt(x, 10)).toBeLessThanOrEqual(30);
+    expect(typeof focus).toBe("string");
+    const pct = Number.parseInt((focus ?? "").split(" ")[0] ?? "0", 10);
+    expect(pct).toBeGreaterThanOrEqual(0);
+    expect(pct).toBeLessThanOrEqual(30);
   });
 });
 
