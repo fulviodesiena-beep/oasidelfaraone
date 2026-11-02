@@ -4,10 +4,14 @@ import { balanceDue, dashboardStats, nightsFor, type Booking } from "@/lib/admin
 const b = (o: Partial<Booking>): Booking => ({
   id: Math.random().toString(), created_at: "", guest_name: "X", guest_email: null, guest_phone: null,
   check_in: "2026-11-10", check_out: "2026-11-12", adults: 2, children: 0, extras: [], status: "confirmed",
-  total_nights: 2, price_per_night: 95, total_price: 190, deposit_paid: 0, balance_due: 190, notes: null, source: "manual", ...o,
+  total_nights: 2, price_per_night: 95, total_price: 190, deposit_paid: 0, balance_due: 190, notes: null, source: "manual", is_personal_use: false, host_id: null, host_amount: 0, ...o,
 });
 
 describe("admin rules", () => {
+  it("amount to collect sums balance due on confirmed bookings only", () => {
+    const s = dashboardStats([b({ balance_due: 300 }), b({ balance_due: 120 }), b({ status: "pending", balance_due: 999 }), b({ status: "personal", balance_due: 0 })], [], "2026-11-01");
+    expect(s.toCollect).toBe(420);
+  });
   it("balance due is total price minus deposit received", () => {
     expect(balanceDue(500, 150)).toBe(350);
   });
