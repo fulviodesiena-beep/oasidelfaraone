@@ -28,6 +28,7 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
       </div>
       <div className="calendar-grid grid grid-cols-7 text-center">
         {["L", "M", "M", "G", "V", "S", "D"].map((d, i) => <span key={i} className="pb-3 text-xs text-muted-foreground">{d}</span>)}
+        {/* 2026-11-02 01:07 UTC — calendar cells show only the day number, never a price */}
         {days.map((d, i) => {
           if (!d) return <div key={i} />;
           const key = dateKey(d);
