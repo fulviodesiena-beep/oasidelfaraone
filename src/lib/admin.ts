@@ -1,0 +1,62 @@
+// Browser-safe helpers for the admin panel (pure, testable).
+import type { Tables } from "@/integrations/supabase/types";
+
+export type Booking = Tables<"bookings">;
+export type Inquiry = Tables<"inquiries">;
+export type Guest = Tables<"guests">;
+
+export const BOOKING_STATUS_LABEL: Record<Booking["status"], string> = {
+  pending: "In attesa",
+  confirmed: "Confermata",
+  cancelled: "Annullata",
+};
+export const INQUIRY_STATUS_LABEL: Record<Inquiry["status"], string> = {
+  new: "Nuova",
+  contacted: "Contattata",
+  converted: "Convertita",
+  lost: "Persa",
+};
+export const SOURCE_LABEL: Record<string, string> = { whatsapp: "WhatsApp", direct: "Diretta", manual: "Manuale" };
+
+export const eur = (n: number | string | null | undefined) =>
+  new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR", maximumFractionDigits: 2 }).format(Number(n ?? 0));
+
+export const fmtDate = (s: string | null | undefined) =>
+  s ? new Date(`${s.slice(0, 10)}T12:00:00`).toLocaleDateString("it-IT", { day: "2-digit", month: "short", year: "numeric" }) : "—";
+
+export function nightsFor(checkIn: string, checkOut: string) {
+  if (!checkIn || !checkOut) return 0;
+  const a = Date.parse(`${checkIn}T00:00:00Z`), b = Date.parse(`${checkOut}T00:00:00Z`);
+  return Math.max(0, Math.round((b - a) / 86400000));
+}
+
+export const balanceDue = (total: number, deposit: number) => Math.round((total - deposit) * 100) / 100;
+
+/** "YYYY-MM" of a date string. */
+export const monthOf = (s: string) => s.slice(0, 7);
+
+export function extrasList(extras: unknown): string[] {
+  return Array.isArray(extras) ? extras.map(String) : [];
+}
+
+export function dashboardStats(bookings: Booking[], inquiries: Pick<Inquiry, "status">[], today: string) {
+  const active = bookings.filter(b => b.status !== "cancelled");
+  const month = monthOf(today);
+  const thisMonth = active.filter(b => monthOf(b.check_in) === month);
+  return {
+    checkInsToday: active.filter(b => b.check_in === today),
+    checkOutsToday: active.filter(b => b.check_out === today),
+    monthCount: thisMonth.length,
+    monthTotal: thisMonth.reduce((s, b) => s + Number(b.total_price), 0),
+    newInquiries: inquiries.filter(i => i.status === "new").length,
+    upcoming: bookings
+      .filter(b => b.status === "confirmed" && b.check_in >= today)
+      .sort((a, b) => a.check_in.localeCompare(b.check_in))
+      .slice(0, 5),
+  };
+}
+
+export const todayKey = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+};
