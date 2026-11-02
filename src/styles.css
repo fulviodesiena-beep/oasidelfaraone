@@ -169,8 +169,7 @@ h2 em { color: var(--gold-light); font-weight: 400; }
 .pricing-notes { margin-top: 38px; padding-top: 25px; border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(3,1fr); gap: 30px; }
 .pricing-notes p { font-size: 11px; line-height: 1.8; color: var(--muted-foreground); }
 .calendar-grid { gap: 2px; }
-.calendar-day { width: 100%; height: auto; min-height: 52px; aspect-ratio: 1.05; border-radius: 2px; padding: 2px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
-.calendar-day > span:last-child { white-space: normal; line-height: 1.1; }
+.calendar-day { width: 100%; height: auto; min-height: 52px; aspect-ratio: 1.05; border-radius: 2px; padding: 2px; display: flex; align-items: center; justify-content: center; font-size: 13px; }
 .info-list details { border-bottom: 1px solid var(--border); }
 .info-list summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-block: 23px; font: 27px var(--font-display); }
 .info-list summary::-webkit-details-marker { display: none; }
