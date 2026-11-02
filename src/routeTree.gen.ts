@@ -13,7 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminBookingsRouteImport } from './routes/admin.bookings'
+import { Route as AdminDocumentsRouteImport } from './routes/admin.documents'
 import { Route as AdminGuestsRouteImport } from './routes/admin.guests'
+import { Route as AdminHostsRouteImport } from './routes/admin.hosts'
 import { Route as AdminInquiriesRouteImport } from './routes/admin.inquiries'
 import { Route as AdminLoginRouteImport } from './routes/admin_.login'
 
@@ -37,9 +39,19 @@ const AdminBookingsRoute = AdminBookingsRouteImport.update({
   path: '/bookings',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminDocumentsRoute = AdminDocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminGuestsRoute = AdminGuestsRouteImport.update({
   id: '/guests',
   path: '/guests',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHostsRoute = AdminHostsRouteImport.update({
+  id: '/hosts',
+  path: '/hosts',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminInquiriesRoute = AdminInquiriesRouteImport.update({
@@ -57,7 +69,9 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/admin/bookings': typeof AdminBookingsRoute
+  '/admin/documents': typeof AdminDocumentsRoute
   '/admin/guests': typeof AdminGuestsRoute
+  '/admin/hosts': typeof AdminHostsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/': typeof AdminIndexRoute
@@ -65,7 +79,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin/bookings': typeof AdminBookingsRoute
+  '/admin/documents': typeof AdminDocumentsRoute
   '/admin/guests': typeof AdminGuestsRoute
+  '/admin/hosts': typeof AdminHostsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin': typeof AdminIndexRoute
@@ -75,7 +91,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/admin/bookings': typeof AdminBookingsRoute
+  '/admin/documents': typeof AdminDocumentsRoute
   '/admin/guests': typeof AdminGuestsRoute
+  '/admin/hosts': typeof AdminHostsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin_/login': typeof AdminLoginRoute
   '/admin/': typeof AdminIndexRoute
@@ -86,7 +104,9 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/admin/bookings'
+    | '/admin/documents'
     | '/admin/guests'
+    | '/admin/hosts'
     | '/admin/inquiries'
     | '/admin/login'
     | '/admin/'
@@ -94,7 +114,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin/bookings'
+    | '/admin/documents'
     | '/admin/guests'
+    | '/admin/hosts'
     | '/admin/inquiries'
     | '/admin/login'
     | '/admin'
@@ -103,7 +125,9 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/admin/bookings'
+    | '/admin/documents'
     | '/admin/guests'
+    | '/admin/hosts'
     | '/admin/inquiries'
     | '/admin_/login'
     | '/admin/'
@@ -145,11 +169,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBookingsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/documents': {
+      id: '/admin/documents'
+      path: '/documents'
+      fullPath: '/admin/documents'
+      preLoaderRoute: typeof AdminDocumentsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/guests': {
       id: '/admin/guests'
       path: '/guests'
       fullPath: '/admin/guests'
       preLoaderRoute: typeof AdminGuestsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/hosts': {
+      id: '/admin/hosts'
+      path: '/hosts'
+      fullPath: '/admin/hosts'
+      preLoaderRoute: typeof AdminHostsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/inquiries': {
@@ -171,14 +209,18 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminBookingsRoute: typeof AdminBookingsRoute
+  AdminDocumentsRoute: typeof AdminDocumentsRoute
   AdminGuestsRoute: typeof AdminGuestsRoute
+  AdminHostsRoute: typeof AdminHostsRoute
   AdminInquiriesRoute: typeof AdminInquiriesRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminBookingsRoute: AdminBookingsRoute,
+  AdminDocumentsRoute: AdminDocumentsRoute,
   AdminGuestsRoute: AdminGuestsRoute,
+  AdminHostsRoute: AdminHostsRoute,
   AdminInquiriesRoute: AdminInquiriesRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
