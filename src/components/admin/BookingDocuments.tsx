@@ -23,13 +23,13 @@ export async function uploadDocument(bookingId: string, name: string, file: Blob
 
 export async function openDocument(doc: DocumentRow) {
   const { data, error } = await supabase.storage.from(BUCKET).createSignedUrl(doc.file_url, 300);
-  if (error) return toast.error(error.message);
+  if (error) { toast.error(error.message); return; }
   window.open(data.signedUrl, "_blank", "noopener");
 }
 
 export async function shareDocument(doc: DocumentRow, phone?: string | null) {
   const { data, error } = await supabase.storage.from(BUCKET).createSignedUrl(doc.file_url, SHARE_SECONDS);
-  if (error) return toast.error(error.message);
+  if (error) { toast.error(error.message); return; }
   const text = encodeURIComponent(`${doc.name} — Oasi del Faraone (link valido 7 giorni): ${data.signedUrl}`);
   const digits = (phone ?? "").replace(/\D/g, "");
   window.open(`https://wa.me/${digits}?text=${text}`, "_blank", "noopener");
