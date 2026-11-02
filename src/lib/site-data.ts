@@ -54,9 +54,9 @@ export const MINA_WHATSAPP = "393481804764";
 export const OWNER_EMAIL = "prenotazionisharm@gmail.com";
 export const INSTAGRAM_URL = "https://www.instagram.com/oasidelfaraone";
 export const wa = (num: string, text: string) => `https://wa.me/${num}?text=${encodeURIComponent(text)}`;
-export type Extra = { id: string; name: string; desc: string; image: string; photo: string };
+export type Extra = { id: string; name: string; desc: string; image: string; photo: string; focus?: string };
 export const EXTRAS: Extra[] = [
-  { id: "transfer", name: "Transfer dall’aeroporto", desc: "Il tuo arrivo, senza pensieri. Transfer privato dall’aeroporto di Sharm al Domina, da concordare con Mina.", image: ownTransfer.url, photo: "Transfer dall’aeroporto" },
+  { id: "transfer", name: "Transfer dall’aeroporto", desc: "Il tuo arrivo, senza pensieri. Transfer privato dall’aeroporto di Sharm al Domina, da concordare con Mina.", image: ownTransfer.url, photo: "Transfer dall’aeroporto", focus: "0% 50%" },
   { id: "rasmo", name: "Snorkeling a Ras Mohammed", desc: "Un incontro con i colori della barriera corallina. Itinerario e servizi da concordare con Mina.", image: ownRasmo.url, photo: "Snorkeling a Ras Mohammed" },
   { id: "tiran", name: "In barca verso Tiran", desc: "Il mare aperto, una sosta per nuotare e il tempo che rallenta. Uscita soggetta alle condizioni locali.", image: ownTiran.url, photo: "Gita in barca verso Tiran" },
   { id: "safari", name: "Safari nel deserto", desc: "Esplora il deserto in quad, tra silenzio e luce del tramonto. Programma da concordare.", image: ownSafari.url, photo: "Safari nel deserto" },

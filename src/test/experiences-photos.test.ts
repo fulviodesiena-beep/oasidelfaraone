@@ -34,6 +34,15 @@ describe("Experience cards", () => {
     const images = EXTRAS.map(e => e.image);
     expect(new Set(images).size).toBe(images.length);
   });
+
+  it("crops the transfer photo so the guest with luggage stays in frame", () => {
+    // The guest stands at the far left of the photo; a centred crop cut him off.
+    const focus = EXTRAS.find(e => e.id === "transfer")?.focus;
+    expect(typeof focus).toBe("string");
+    const pct = Number.parseInt((focus ?? "").split(" ")[0] ?? "0", 10);
+    expect(pct).toBeGreaterThanOrEqual(0);
+    expect(pct).toBeLessThanOrEqual(10);
+  });
 });
 
 describe("Place cards", () => {
