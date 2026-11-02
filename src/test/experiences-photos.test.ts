@@ -5,21 +5,21 @@ import { EXTRAS, SPOTS } from "@/lib/site-data";
 // Fulvio asked (November 2026) that every card show a photo of that exact
 // experience or place: the transfer card must show a car, not a coastline.
 const EXPECTED_EXTRA: Record<string, string> = {
-  transfer: "exp-transfer-night.jpg",
-  rasmo: "exp-coral-reef.jpg",
-  tiran: "boat.jpg",
-  safari: "exp-desert-camp.jpg",
+  transfer: "exp-transfer-owner.jpg",
+  rasmo: "exp-rasmo-owner.webp",
+  tiran: "exp-tiran-owner.jpg",
+  safari: "exp-safari-owner.jpg",
   cairo: "exp-pyramids-camel.jpg",
   sinai: "exp-sinai-night.jpg",
 };
 
 const EXPECTED_SPOT: Record<string, string> = {
-  "Caffè Farsha": "spot-farsha-lanterns.jpg",
+  "Caffè Farsha": "spot-farsha-owner.jpg",
   "Baia di Naama": "spot-naama-bay.jpg",
-  "Vecchio Mercato": "lanterns-market.jpg",
-  "Piazza Soho": "spot-soho-fountain.jpg",
+  "Vecchio Mercato": "spot-market-owner.jpg",
+  "Soho Square": "spot-soho-owner.jpg",
   "Blue Hole, Dahab": "dahab-reef.jpg",
-  "Sharm Vecchia": "exp-souk-lanterns.jpg",
+  "Old Sharm": "spot-oldsharm-owner.webp",
 };
 
 describe("Experience cards", () => {
