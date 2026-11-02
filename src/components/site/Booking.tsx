@@ -52,10 +52,16 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
         <div className="flex items-end justify-between gap-3 border-t border-border pt-4"><span className="text-sm text-muted-foreground">{q.onRequest ? "Preventivo" : "Totale indicativo"}</span><span className="font-display text-4xl text-gold-light">{q.total === null ? "Su richiesta" : `€${q.total}`}</span></div>
         {extras.length > 0 && <p className="text-xs text-muted-foreground">Le esperienze selezionate non sono comprese nel totale.</p>}
       </div>}
-      {step === "details" && valid && q ? <form className="mt-6 space-y-4" onSubmit={e => {
+      {step === "details" && valid && q ? <form className="mt-6 space-y-4" onSubmit={async e => {
         e.preventDefault(); const form = new FormData(e.currentTarget);
-        const message = `Richiesta soggiorno — Oasi del Faraone\nNome: ${form.get("Nome")}\nEmail: ${form.get("Email")}\nTelefono: ${form.get("Telefono")}\nDate: ${checkIn} → ${checkOut}\n${q.nightsCount} notti\nOspiti: ${adults} adulti, ${children} bambini\nExtra: ${EXTRAS.filter(x => extras.includes(x.id)).map(x => x.name).join(", ") || "nessuno"}\nTotale indicativo: ${q.total === null ? "su richiesta" : `€${q.total}`}\nDisponibilità e prezzi da confermare.`;
-        window.open(wa(OWNER_WHATSAPP, message), "_blank", "noopener,noreferrer"); setOpened(true);
+        const extraNames = EXTRAS.filter(x => extras.includes(x.id)).map(x => x.name);
+        const message = `Richiesta soggiorno — Oasi del Faraone\nNome: ${form.get("Nome")}\nEmail: ${form.get("Email")}\nTelefono: ${form.get("Telefono")}\nDate: ${checkIn} → ${checkOut}\n${q.nightsCount} notti\nOspiti: ${adults} adulti, ${children} bambini\nExtra: ${extraNames.join(", ") || "nessuno"}\nTotale indicativo: ${q.total === null ? "su richiesta" : `€${q.total}`}\nDisponibilità e prezzi da confermare.`;
+        // Open the tab synchronously (avoids popup blockers), save the inquiry, then point the tab to WhatsApp.
+        const tab = window.open("", "_blank");
+        await saveInquiry({ guest_name: String(form.get("Nome") ?? ""), guest_email: String(form.get("Email") ?? ""), guest_phone: String(form.get("Telefono") ?? ""), check_in: checkIn, check_out: checkOut, adults, children, extras: extraNames, message });
+        const url = wa(OWNER_WHATSAPP, message);
+        if (tab) { tab.opener = null; tab.location.href = url; } else window.location.href = url;
+        setOpened(true);
       }}>
         <label className="block text-xs text-muted-foreground">Nome completo<input name="Nome" required autoComplete="name" className="field mt-2" /></label>
         <label className="block text-xs text-muted-foreground">Email<input name="Email" type="email" required autoComplete="email" className="field mt-2" /></label>
