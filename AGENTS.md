@@ -11,7 +11,9 @@
 
 ## Public booking architecture
 - Keep centralized browser-safe pricing and content modules separate from visual sections so factual rules remain testable.
-- Booking and investment forms compose WhatsApp requests, not stored reservations or payment confirmations; do not imply a message was sent automatically.
+- The booking form saves an inquiry row (anon insert-only) before opening WhatsApp, and saving must never block WhatsApp; investment forms only compose WhatsApp. Never imply a message was sent automatically.
+
+
 - Missing seasonal rates must yield on-request quotes rather than fabricated rates; calculate Easter dates each year.
 - Photo cards reveal details through both pointer hover and accessible toggle controls so mobile users can reach the same content.
 - Downloaded photos are referenced through asset pointers; owner-supplied real photos replace every placeholder or illustrative image for the subject they show, and only genuinely generic photography carries the illustrative label.
