@@ -32,6 +32,7 @@ export type Database = {
           id: string
           is_personal_use: boolean
           notes: string | null
+          pipeline_stage: Database["public"]["Enums"]["pipeline_stage"]
           price_per_night: number
           source: string
           status: Database["public"]["Enums"]["booking_status"]
@@ -55,6 +56,7 @@ export type Database = {
           id?: string
           is_personal_use?: boolean
           notes?: string | null
+          pipeline_stage?: Database["public"]["Enums"]["pipeline_stage"]
           price_per_night?: number
           source?: string
           status?: Database["public"]["Enums"]["booking_status"]
@@ -78,6 +80,7 @@ export type Database = {
           id?: string
           is_personal_use?: boolean
           notes?: string | null
+          pipeline_stage?: Database["public"]["Enums"]["pipeline_stage"]
           price_per_night?: number
           source?: string
           status?: Database["public"]["Enums"]["booking_status"]
@@ -289,6 +292,15 @@ export type Database = {
         | "personal"
         | "host_collab"
       inquiry_status: "new" | "contacted" | "converted" | "lost"
+      pipeline_stage:
+        | "lead"
+        | "quoted"
+        | "follow_up"
+        | "confirmed"
+        | "pre_stay"
+        | "staying"
+        | "post_stay"
+        | "loyal"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -425,6 +437,16 @@ export const Constants = {
         "host_collab",
       ],
       inquiry_status: ["new", "contacted", "converted", "lost"],
+      pipeline_stage: [
+        "lead",
+        "quoted",
+        "follow_up",
+        "confirmed",
+        "pre_stay",
+        "staying",
+        "post_stay",
+        "loyal",
+      ],
     },
   },
 } as const

@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight, Minus, Plus, ArrowRight, MessageCircle, X } 
 import { Button } from "@/components/ui/button";
 import { EXTRAS, OWNER_WHATSAPP, wa } from "@/lib/site-data";
 import { dateKey, MAX_GUESTS, quote } from "@/lib/pricing";
-import { saveInquiry } from "@/lib/inquiries";
+import { saveInquiryWithin } from "@/lib/inquiries";
 const parse = (s: string) => { const [y = 0, m = 1, d = 1] = s.split("-").map(Number); return new Date(y, m - 1, d); };
 export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra: (id: string) => void }) {
   const [today] = useState(new Date());
@@ -59,7 +59,7 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
         const message = `Richiesta soggiorno — Oasi del Faraone\nNome: ${form.get("Nome")}\nEmail: ${form.get("Email")}\nTelefono: ${form.get("Telefono")}\nDate: ${checkIn} → ${checkOut}\n${q.nightsCount} notti\nOspiti: ${adults} adulti, ${children} bambini\nExtra: ${extraNames.join(", ") || "nessuno"}\nTotale indicativo: ${q.total === null ? "su richiesta" : `€${q.total}`}\nDisponibilità e prezzi da confermare.`;
         // Open the tab synchronously (avoids popup blockers), save the inquiry, then point the tab to WhatsApp.
         const tab = window.open("", "_blank");
-        await saveInquiry({ guest_name: String(form.get("Nome") ?? ""), guest_email: String(form.get("Email") ?? ""), guest_phone: String(form.get("Telefono") ?? ""), check_in: checkIn, check_out: checkOut, adults, children, extras: extraNames, message });
+        await saveInquiryWithin({ guest_name: String(form.get("Nome") ?? ""), guest_email: String(form.get("Email") ?? ""), guest_phone: String(form.get("Telefono") ?? ""), check_in: checkIn, check_out: checkOut, adults, children, extras: extraNames, message });
         const url = wa(OWNER_WHATSAPP, message);
         if (tab) { tab.opener = null; tab.location.href = url; } else window.location.href = url;
         setOpened(true);
