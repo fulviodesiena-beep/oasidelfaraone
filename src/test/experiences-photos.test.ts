@@ -41,7 +41,7 @@ describe("Experience cards", () => {
     expect(typeof focus).toBe("string");
     const pct = Number.parseInt((focus ?? "").split(" ")[0] ?? "0", 10);
     expect(pct).toBeGreaterThanOrEqual(0);
-    expect(pct).toBeLessThanOrEqual(30);
+    expect(pct).toBeLessThanOrEqual(10);
   });
 });
 
