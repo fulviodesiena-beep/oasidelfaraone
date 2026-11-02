@@ -13,6 +13,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { BookingFormDialog, emptyDraft, Field } from "@/components/admin/BookingFormDialog";
 import { BookingDocuments } from "@/components/admin/BookingDocuments";
+import { BookingCommunications } from "@/components/admin/BookingCommunications";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { balanceDue, BOOKING_STATUS_LABEL, PIPELINE_LABEL, eur, extrasList, fmtDate, monthOf, SOURCE_LABEL, type Booking } from "@/lib/admin";
 
 export const Route = createFileRoute("/admin/bookings")({ component: BookingsPage });
@@ -104,6 +106,9 @@ function BookingDetail({ booking, onClose }: { booking: Booking | null; onClose:
           {booking.source === "host" && <Dt k="Dovuto dall'host" v={eur(booking.host_amount)} />}
           <Dt k="Extra" v={extrasList(booking.extras).join(", ") || "—"} />
         </dl>
+        <Tabs defaultValue="details">
+          <TabsList><TabsTrigger value="details">Dettagli</TabsTrigger><TabsTrigger value="docs">Documenti</TabsTrigger><TabsTrigger value="comms">Comunicazioni</TabsTrigger></TabsList>
+          <TabsContent value="details">
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Stato"><Select value={status} onValueChange={v => setStatus(v as Booking["status"])}><SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>{Object.entries(BOOKING_STATUS_LABEL).map(([k, l]) => <SelectItem key={k} value={k}>{l}</SelectItem>)}</SelectContent></Select></Field>
@@ -113,7 +118,10 @@ function BookingDetail({ booking, onClose }: { booking: Booking | null; onClose:
           <p className="text-sm sm:col-span-2">Saldo da ricevere: <span className="text-gold-light">{eur(balanceDue(total, deposit))}</span></p>
           <Field label="Note" className="sm:col-span-2"><Textarea value={notes} onChange={e => setNotes(e.target.value)} /></Field>
         </div>
-        <BookingDocuments booking={booking} />
+          </TabsContent>
+          <TabsContent value="docs"><BookingDocuments booking={booking} /></TabsContent>
+          <TabsContent value="comms"><BookingCommunications booking={booking} /></TabsContent>
+        </Tabs>
         <DialogFooter><Button variant="outline" onClick={onClose}>Chiudi</Button><Button onClick={() => save.mutate()} disabled={save.isPending}>Salva modifiche</Button></DialogFooter>
       </DialogContent>
     </Dialog>
