@@ -48,6 +48,12 @@ function Dashboard() {
         <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Richieste nuove</CardTitle></CardHeader>
           <CardContent className="flex items-center gap-3"><span className="inline-flex h-10 min-w-10 items-center justify-center rounded-full bg-primary px-3 font-display text-2xl text-primary-foreground">{data.newInquiries}</span>
             <Link to="/admin/inquiries" className="text-sm text-gold-light underline-offset-4 hover:underline">Apri richieste</Link></CardContent></Card>
+        <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Andamento anno</CardTitle></CardHeader>
+          <CardContent className="space-y-1 text-sm">
+            <p className="flex justify-between"><span className="text-muted-foreground">Prenotazioni confermate</span><span className="font-display text-xl">{data.occ.confirmedYearCount}</span></p>
+            <p className="flex justify-between"><span className="text-muted-foreground">Durata media</span><span className="font-display text-xl">{data.occ.avgNights} notti</span></p>
+            <p className="flex justify-between"><span className="text-muted-foreground">Incasso anno</span><span className="font-display text-xl text-gold-light">{eur(data.occ.revenueYear)}</span></p>
+          </CardContent></Card>
       </div>
 
       {/* Riga 2 — card di occupazione, calcolate dai bookings già caricati */}
