@@ -4,6 +4,7 @@ import { CalendarDays, FileText, Handshake, Inbox, LayoutDashboard, LogOut, User
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
+import { ChangePasswordDialog } from "@/components/admin/ChangePasswordDialog";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu,
   SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger,
@@ -88,6 +89,7 @@ function AdminLayout() {
             <SidebarTrigger />
             <h1 className="font-display text-2xl">{current.label}</h1>
             <span className="ml-auto hidden text-xs text-muted-foreground sm:inline">{adminEmail}</span>
+            <ChangePasswordDialog />
             <Button variant="outline" size="sm" onClick={logout}><LogOut />Esci</Button>
           </header>
           <main className="flex-1 p-4 sm:p-6"><Outlet /></main>
