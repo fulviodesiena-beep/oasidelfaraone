@@ -71,3 +71,48 @@ export const todayKey = () => {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 };
+
+const dayMs = 86400000;
+const toUtc = (s: string) => Date.parse(`${s.slice(0, 10)}T00:00:00Z`);
+const keyOf = (t: number) => new Date(t).toISOString().slice(0, 10);
+
+/** Nights occupied by non-cancelled bookings inside [from, to) (YYYY-MM-DD). */
+export function bookedDaysBetween(bookings: Pick<Booking, "status" | "check_in" | "check_out">[], from: string, to: string) {
+  const a = toUtc(from), b = toUtc(to);
+  const days = new Set<number>();
+  for (const bk of bookings) {
+    if (bk.status === "cancelled") continue;
+    const s = Math.max(a, toUtc(bk.check_in)), e = Math.min(b, toUtc(bk.check_out));
+    for (let t = s; t < e; t += dayMs) days.add(t);
+  }
+  return days.size;
+}
+
+export function occupancyStats(bookings: Booking[], today: string) {
+  const y = Number(today.slice(0, 4)), m = Number(today.slice(5, 7));
+  const monthStart = `${today.slice(0, 7)}-01`;
+  const monthDays = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  const nextMonth = keyOf(Date.UTC(y, m, 1));
+  const yearStart = `${y}-01-01`;
+  const tomorrow = keyOf(toUtc(today) + dayMs);
+  const yearElapsed = Math.round((toUtc(tomorrow) - toUtc(yearStart)) / dayMs);
+  const monthBooked = bookedDaysBetween(bookings, monthStart, nextMonth);
+  const yearBooked = bookedDaysBetween(bookings, yearStart, tomorrow);
+  const inYear = bookings.filter(b => b.check_in.slice(0, 4) === String(y));
+  const confirmedYear = inYear.filter(b => b.status === "confirmed");
+  const revenueYear = inYear
+    .filter(b => b.status === "confirmed" || b.pipeline_stage === "post_stay" || b.pipeline_stage === "loyal")
+    .filter(b => b.status !== "cancelled")
+    .reduce((s, b) => s + Number(b.total_price), 0);
+  const pct = (n: number, d: number) => (d ? Math.round((n / d) * 1000) / 10 : 0);
+  return {
+    monthBooked, monthDays, monthPct: pct(monthBooked, monthDays),
+    yearBooked, yearElapsed, yearPct: pct(yearBooked, yearElapsed),
+    confirmedYearCount: confirmedYear.length,
+    avgNights: confirmedYear.length ? Math.round((confirmedYear.reduce((s, b) => s + b.total_nights, 0) / confirmedYear.length) * 10) / 10 : 0,
+    revenueYear,
+  };
+}
+
+/** Bar colour band: green >70, yellow 40–70, red <40. */
+export const occupancyBand = (pct: number) => (pct > 70 ? "high" : pct >= 40 ? "mid" : "low");
