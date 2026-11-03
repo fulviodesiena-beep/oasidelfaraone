@@ -25,6 +25,10 @@ function Dashboard() {
   if (error) return <p className="text-destructive">Impossibile caricare i dati.</p>;
   if (isLoading || !data) return <p className="text-muted-foreground">Caricamento…</p>;
 
+  // I valori di occupazione arrivano dalla stessa query qui sopra: nessuna nuova chiamata al database.
+  const monthLabel = new Date().toLocaleDateString("it-IT", { month: "long" });
+  const monthTitle = monthLabel.charAt(0).toUpperCase() + monthLabel.slice(1);
+
   return (
     <div className="space-y-6">
       {REVIEW_LINK_IS_PLACEHOLDER && (
@@ -32,21 +36,11 @@ function Dashboard() {
           ⚠️ Link Google Business non configurato. Aggiorna REVIEW_PLACEHOLDER in src/lib/email-templates.ts con il tuo link reale.
         </div>
       )}
+
+      {/* Riga 1 — card esistenti */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <Stat title="Check-in oggi" value={data.checkInsToday.length} list={data.checkInsToday} />
         <Stat title="Check-out oggi" value={data.checkOutsToday.length} list={data.checkOutsToday} />
-        <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Giorni prenotati questo mese</CardTitle></CardHeader>
-          <CardContent><p className="font-display text-4xl">{data.occ.monthBooked} <span className="text-2xl text-muted-foreground">/ {data.occ.monthDays} giorni</span></p></CardContent></Card>
-        <Occupancy title="Occupazione mese corrente" pct={data.occ.monthPct} note={`${data.occ.monthBooked} di ${data.occ.monthDays} giorni`} />
-        <Occupancy title="Occupazione anno corrente" pct={data.occ.yearPct} note={`${data.occ.yearBooked} di ${data.occ.yearElapsed} giorni dal 1° gennaio`} />
-        <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Andamento anno</CardTitle></CardHeader>
-          <CardContent className="space-y-1 text-sm">
-            <p className="flex justify-between"><span className="text-muted-foreground">Prenotazioni confermate</span><span className="font-display text-xl">{data.occ.confirmedYearCount}</span></p>
-            <p className="flex justify-between"><span className="text-muted-foreground">Durata media</span><span className="font-display text-xl">{data.occ.avgNights} notti</span></p>
-            <p className="flex justify-between"><span className="text-muted-foreground">Incasso anno</span><span className="font-display text-xl text-gold-light">{eur(data.occ.revenueYear)}</span></p>
-          </CardContent></Card>
-      </div>
-      <div className="grid gap-4 sm:grid-cols-3">
         <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Prenotazioni questo mese</CardTitle></CardHeader>
           <CardContent><p className="font-display text-4xl">{data.monthCount}</p><p className="text-sm text-gold-light">{eur(data.monthTotal)}</p></CardContent></Card>
         <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Da incassare</CardTitle></CardHeader>
@@ -54,7 +48,22 @@ function Dashboard() {
         <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Richieste nuove</CardTitle></CardHeader>
           <CardContent className="flex items-center gap-3"><span className="inline-flex h-10 min-w-10 items-center justify-center rounded-full bg-primary px-3 font-display text-2xl text-primary-foreground">{data.newInquiries}</span>
             <Link to="/admin/inquiries" className="text-sm text-gold-light underline-offset-4 hover:underline">Apri richieste</Link></CardContent></Card>
+        <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Andamento anno</CardTitle></CardHeader>
+          <CardContent className="space-y-1 text-sm">
+            <p className="flex justify-between"><span className="text-muted-foreground">Prenotazioni confermate</span><span className="font-display text-xl">{data.occ.confirmedYearCount}</span></p>
+            <p className="flex justify-between"><span className="text-muted-foreground">Durata media</span><span className="font-display text-xl">{data.occ.avgNights} notti</span></p>
+            <p className="flex justify-between"><span className="text-muted-foreground">Incasso anno</span><span className="font-display text-xl text-gold-light">{eur(data.occ.revenueYear)}</span></p>
+          </CardContent></Card>
       </div>
+
+      {/* Riga 2 — card di occupazione, calcolate dai bookings già caricati */}
+      <div className="grid gap-4 sm:grid-cols-3">
+        <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Giorni occupati — {monthTitle}</CardTitle></CardHeader>
+          <CardContent><p className="font-display text-4xl">{data.occ.monthBooked} <span className="text-2xl text-muted-foreground">/ {data.occ.monthDays} giorni</span></p></CardContent></Card>
+        <Occupancy title="Occupazione mese" pct={data.occ.monthPct} note={`${data.occ.monthBooked} di ${data.occ.monthDays} giorni`} />
+        <Occupancy title="Occupazione anno" pct={data.occ.yearPct} note={`${data.occ.yearBooked} di ${data.occ.yearElapsed} giorni dal 1° gennaio`} />
+      </div>
+
       <Card>
         <CardHeader><CardTitle className="font-display text-2xl font-normal">Prossime prenotazioni confermate</CardTitle></CardHeader>
         <CardContent>

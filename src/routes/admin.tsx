@@ -1,10 +1,14 @@
+import { useState } from "react";
 import { createFileRoute, Link, Outlet, redirect, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { CalendarDays, FileText, Handshake, Inbox, LayoutDashboard, LogOut, Users } from "lucide-react";
+import { CalendarDays, FileText, Handshake, Inbox, KeyRound, LayoutDashboard, LogOut, Users } from "lucide-react";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
-import { ChangePasswordDialog } from "@/components/admin/ChangePasswordDialog";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu,
   SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger,
@@ -89,7 +93,7 @@ function AdminLayout() {
             <SidebarTrigger />
             <h1 className="font-display text-2xl">{current.label}</h1>
             <span className="ml-auto hidden text-xs text-muted-foreground sm:inline">{adminEmail}</span>
-            <ChangePasswordDialog />
+            <PasswordDialog />
             <Button variant="outline" size="sm" onClick={logout}><LogOut />Esci</Button>
           </header>
           <main className="flex-1 p-4 sm:p-6"><Outlet /></main>
@@ -97,5 +101,50 @@ function AdminLayout() {
       </div>
       <Toaster />
     </SidebarProvider>
+  );
+}
+
+/** Cambia password: tutto inline qui, nessuna dipendenza da componenti esterni. */
+function PasswordDialog() {
+  const [open, setOpen] = useState(false);
+  const [pw, setPw] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [saving, setSaving] = useState(false);
+  const error = pw && pw.length < 8 ? "Almeno 8 caratteri" : confirm && pw !== confirm ? "Le password non coincidono" : "";
+
+  async function save(e: React.FormEvent) {
+    e.preventDefault();
+    if (pw.length < 8 || pw !== confirm) return;
+    setSaving(true);
+    const { error } = await supabase.auth.updateUser({ password: pw });
+    setSaving(false);
+    if (error) { toast.error("Password non aggiornata", { description: error.message }); return; }
+    toast.success("Password aggiornata");
+    setPw(""); setConfirm(""); setOpen(false);
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="ghost" size="sm" aria-label="Cambia password"><KeyRound />Password</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader><DialogTitle className="font-display text-2xl font-normal">Cambia password</DialogTitle></DialogHeader>
+        <form onSubmit={save} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="new-pw">Nuova password</Label>
+            <Input id="new-pw" type="password" autoComplete="new-password" minLength={8} required value={pw} onChange={e => setPw(e.target.value)} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="confirm-pw">Conferma password</Label>
+            <Input id="confirm-pw" type="password" autoComplete="new-password" required value={confirm} onChange={e => setConfirm(e.target.value)} />
+          </div>
+          {error && <p className="text-sm text-destructive">{error}</p>}
+          <DialogFooter>
+            <Button type="submit" disabled={saving || pw.length < 8 || pw !== confirm}>{saving ? "Salvataggio…" : "Salva"}</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
