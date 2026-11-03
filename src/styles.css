@@ -11,13 +11,13 @@
  --color-secondary: var(--secondary); --color-secondary-foreground: var(--foreground); --color-muted: var(--secondary); --color-muted-foreground: var(--muted-foreground);
  --color-accent: var(--accent); --color-accent-foreground: var(--foreground); --color-destructive: var(--destructive); --color-destructive-foreground: var(--foreground);
  --color-border: var(--border); --color-input: var(--input); --color-ring: var(--gold); --color-gold: var(--gold); --color-gold-light: var(--gold-light);
- --color-terracotta: var(--terracotta); --color-cream: var(--foreground); --color-navy: var(--secondary); --color-navy-deep: var(--background); --color-whatsapp: var(--whatsapp); --color-moovy: var(--moovy);
+ --color-terracotta: var(--terracotta); --color-cream: var(--foreground); --color-navy: var(--secondary); --color-navy-deep: var(--background); --color-whatsapp: var(--whatsapp); --color-moovy: var(--moovy); --color-warning: var(--warning);
 }
 :root {
  --radius: .25rem;
  --background: #0D1B2A; --secondary: #122030; --foreground: #F0E8D8; --gold: #C9922A; --gold-light: #E8C97A; --muted-foreground: #A89070;
  --card: rgba(255,255,255,.04); --border: color-mix(in srgb, var(--gold) 22%, transparent); --input: color-mix(in srgb, var(--gold) 36%, transparent);
- --accent: color-mix(in srgb, var(--gold) 12%, var(--secondary)); --destructive: oklch(.7 .17 25); --terracotta: #C77B4A; --moovy: #00B4A6; --whatsapp: oklch(.75 .14 153);
+ --accent: color-mix(in srgb, var(--gold) 12%, var(--secondary)); --destructive: oklch(.7 .17 25); --terracotta: #C77B4A; --moovy: #00B4A6; --whatsapp: oklch(.75 .14 153); --warning: #F2C14E;
  --hero-overlay: linear-gradient(90deg, color-mix(in srgb, var(--background) 82%, transparent), color-mix(in srgb, var(--background) 24%, transparent)), linear-gradient(0deg, var(--background), transparent 32%);
  --photo-overlay: linear-gradient(0deg, color-mix(in srgb, var(--background) 90%, transparent), transparent 68%);
  --photo-hover: color-mix(in srgb, var(--background) 76%, transparent);

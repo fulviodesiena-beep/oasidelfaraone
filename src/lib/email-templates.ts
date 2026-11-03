@@ -17,7 +17,10 @@ export type EmailBooking = {
 
 const CAMERA_DEFAULT = "Elisir d'Oriente 65135";
 const MINA_DISPLAY = "+39 348 180 4764";
-const REVIEW_PLACEHOLDER = "https://g.page/r/oasidelfaraone"; // sostituire con link Google reale
+// TODO: sostituisci con il link reale da Google Business → https://business.google.com
+const REVIEW_PLACEHOLDER = "https://g.page/r/oasidelfaraone";
+// Finché il link resta quello segnaposto, la dashboard admin mostra un avviso giallo.
+export const REVIEW_LINK_IS_PLACEHOLDER = REVIEW_PLACEHOLDER.includes("g.page/r/oasidelfaraone");
 const COUPON_CODE = "ELISIR10";
 
 const esc = (s: string) =>
@@ -256,7 +259,11 @@ Basta comunicarcelo al momento della prossima prenotazione e lo scaleremo subito
 ━━━━━━━━━━━━━━━━━━━
 
 Lasciaci una recensione — anche solo qualche riga sincera ci aiuta enormemente:
+
+👉 Clicca sul link qui sotto: si apre la scheda Google dell'Oasi del Faraone.
 ${REVIEW_PLACEHOLDER}
+
+📝 Lì in alto trovi le stelle: toccale (5 se ti sei trovato bene) e scrivi anche solo due righe di commento. Ci vuole meno di un minuto.
 
 Grazie davvero. A presto — magari già il prossimo anno! 🌊☀️
 Fulvio — ${camera}, Domina Coral Bay, Sharm el Sheikh`;
