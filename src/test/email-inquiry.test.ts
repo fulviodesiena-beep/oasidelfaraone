@@ -39,8 +39,8 @@ describe("email templates", () => {
     expect(t).toContain("Metti le stelle");
     expect(t.indexOf("Clicca sul link qui sotto")).toBeLessThan(t.indexOf("g.page/r/oasidelfaraone"));
   });
-  it("admin banner stays on while the review link is the placeholder", () => {
-    expect(REVIEW_LINK_IS_PLACEHOLDER).toBe(true);
+  it("admin banner flag agrees with the review link in the message", () => {
+    expect(REVIEW_LINK_IS_PLACEHOLDER).toBe(thankYouWhatsApp(b).includes("g.page/r/oasidelfaraone"));
   });
   it("getWhatsAppText routes checkin_day", () => {
     expect(getWhatsAppText("checkin_day", b)).toContain("65135");
