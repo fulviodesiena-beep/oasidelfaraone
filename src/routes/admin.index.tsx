@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatusBadge } from "@/components/admin/StatusBadge";
-import { dashboardStats, eur, fmtDate, todayKey, type Booking } from "@/lib/admin";
+import { dashboardStats, occupancyBand, occupancyStats, eur, fmtDate, todayKey, type Booking } from "@/lib/admin";
 import { REVIEW_LINK_IS_PLACEHOLDER } from "@/lib/email-templates";
 
 export const Route = createFileRoute("/admin/")({ component: Dashboard });
@@ -19,7 +19,7 @@ function Dashboard() {
       ]);
       if (b.error) throw b.error;
       if (i.error) throw i.error;
-      return dashboardStats(b.data, i.data, today);
+      return { ...dashboardStats(b.data, i.data, today), occ: occupancyStats(b.data, today) };
     },
   });
   if (error) return <p className="text-destructive">Impossibile caricare i dati.</p>;
@@ -32,9 +32,21 @@ function Dashboard() {
           ⚠️ Link Google Business non configurato. Aggiorna REVIEW_PLACEHOLDER in src/lib/email-templates.ts con il tuo link reale.
         </div>
       )}
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <Stat title="Check-in oggi" value={data.checkInsToday.length} list={data.checkInsToday} />
         <Stat title="Check-out oggi" value={data.checkOutsToday.length} list={data.checkOutsToday} />
+        <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Giorni prenotati questo mese</CardTitle></CardHeader>
+          <CardContent><p className="font-display text-4xl">{data.occ.monthBooked} <span className="text-2xl text-muted-foreground">/ {data.occ.monthDays} giorni</span></p></CardContent></Card>
+        <Occupancy title="Occupazione mese corrente" pct={data.occ.monthPct} note={`${data.occ.monthBooked} di ${data.occ.monthDays} giorni`} />
+        <Occupancy title="Occupazione anno corrente" pct={data.occ.yearPct} note={`${data.occ.yearBooked} di ${data.occ.yearElapsed} giorni dal 1° gennaio`} />
+        <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Andamento anno</CardTitle></CardHeader>
+          <CardContent className="space-y-1 text-sm">
+            <p className="flex justify-between"><span className="text-muted-foreground">Prenotazioni confermate</span><span className="font-display text-xl">{data.occ.confirmedYearCount}</span></p>
+            <p className="flex justify-between"><span className="text-muted-foreground">Durata media</span><span className="font-display text-xl">{data.occ.avgNights} notti</span></p>
+            <p className="flex justify-between"><span className="text-muted-foreground">Incasso anno</span><span className="font-display text-xl text-gold-light">{eur(data.occ.revenueYear)}</span></p>
+          </CardContent></Card>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-3">
         <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Prenotazioni questo mese</CardTitle></CardHeader>
           <CardContent><p className="font-display text-4xl">{data.monthCount}</p><p className="text-sm text-gold-light">{eur(data.monthTotal)}</p></CardContent></Card>
         <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Da incassare</CardTitle></CardHeader>
@@ -64,5 +76,16 @@ function Stat({ title, value, list }: { title: string; value: number; list: Book
     <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">{title}</CardTitle></CardHeader>
       <CardContent><p className="font-display text-4xl">{value}</p>
         {list.map(b => <p key={b.id} className="truncate text-xs text-muted-foreground">{b.guest_name}</p>)}</CardContent></Card>
+  );
+}
+
+const BAND = { high: "bg-success", mid: "bg-warning", low: "bg-destructive" } as const;
+function Occupancy({ title, pct, note }: { title: string; pct: number; note: string }) {
+  return (
+    <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">{title}</CardTitle></CardHeader>
+      <CardContent className="space-y-2"><p className="font-display text-4xl">{pct.toLocaleString("it-IT")}%</p>
+        <div className="h-2 w-full overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
+          <div className={`h-full rounded-full ${BAND[occupancyBand(pct)]}`} style={{ width: `${Math.min(100, pct)}%` }} /></div>
+        <p className="text-xs text-muted-foreground">{note}</p></CardContent></Card>
   );
 }
