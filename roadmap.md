@@ -21,3 +21,4 @@
 - [x] Gestionale /admin: accesso, dashboard, prenotazioni, richieste, clienti; richieste del sito salvate prima di WhatsApp
 - [ ] Fulvio crea il suo account (prenotazionisharm@gmail.com) da Utenti → Aggiungi utente, poi verifica il pannello da loggato
 - [ ] Gestionale: PDF delega per Domina Coral Bay
+- [x] Protezione doppie prenotazioni: vincolo nel database, date occupate nel calendario pubblico con legenda, avviso nel form admin
