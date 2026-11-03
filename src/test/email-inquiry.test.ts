@@ -36,7 +36,7 @@ describe("email templates", () => {
     const t = thankYouWhatsApp(b);
     expect(t).toContain("Lasciaci una recensione");
     expect(t).toContain("Clicca sul link qui sotto");
-    expect(t).toContain("Metti le stelle");
+    expect(t).toContain("toccale (5 se ti sei trovato bene)");
     expect(t.indexOf("Clicca sul link qui sotto")).toBeLessThan(t.indexOf("g.page/r/oasidelfaraone"));
   });
   it("admin banner flag agrees with the review link in the message", () => {
