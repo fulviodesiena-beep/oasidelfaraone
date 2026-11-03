@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { dashboardStats, eur, fmtDate, todayKey, type Booking } from "@/lib/admin";
+import { REVIEW_LINK_IS_PLACEHOLDER } from "@/lib/email-templates";
 
 export const Route = createFileRoute("/admin/")({ component: Dashboard });
 
@@ -26,6 +27,11 @@ function Dashboard() {
 
   return (
     <div className="space-y-6">
+      {REVIEW_LINK_IS_PLACEHOLDER && (
+        <div className="rounded-md border border-warning/45 bg-warning/10 px-4 py-3 text-sm text-warning" role="alert">
+          ⚠️ Link Google Business non configurato. Aggiorna REVIEW_PLACEHOLDER in src/lib/email-templates.ts con il tuo link reale.
+        </div>
+      )}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
         <Stat title="Check-in oggi" value={data.checkInsToday.length} list={data.checkInsToday} />
         <Stat title="Check-out oggi" value={data.checkOutsToday.length} list={data.checkOutsToday} />
