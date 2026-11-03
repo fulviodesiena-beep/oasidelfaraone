@@ -61,6 +61,15 @@ export function BookingFormDialog({ open, onOpenChange, initial, inquiryId }: {
       : { ...p, is_personal_use: false, status: "pending", source: "manual" });
   }
 
+  const { data: conflicts = 0 } = useQuery({
+    queryKey: ["admin", "overlap", d.check_in, d.check_out], enabled: open && nights > 0,
+    queryFn: async () => {
+      const { count, error } = await supabase.from("bookings").select("id", { count: "exact", head: true })
+        .eq("status", "confirmed").lt("check_in", d.check_out).gt("check_out", d.check_in);
+      if (error) throw error; return count ?? 0;
+    },
+  });
+
   const save = useMutation({
     mutationFn: async () => {
       const row: TablesInsert<"bookings"> = {
@@ -78,7 +87,9 @@ export function BookingFormDialog({ open, onOpenChange, initial, inquiryId }: {
       }
     },
     onSuccess: () => { toast.success("Prenotazione salvata"); qc.invalidateQueries({ queryKey: ["admin"] }); onOpenChange(false); },
-    onError: (e: Error) => toast.error(e.message || "Salvataggio non riuscito"),
+    onError: (e: Error & { code?: string }) => toast.error(e.code === "23P01"
+      ? "Date già occupate da un'altra prenotazione attiva. Salvala come \"In attesa\" oppure cambia le date."
+      : e.message || "Salvataggio non riuscito"),
   });
 
   const guests = d.adults + d.children;
@@ -126,6 +137,7 @@ export function BookingFormDialog({ open, onOpenChange, initial, inquiryId }: {
           <Field label="Extra (separati da virgola)" className="sm:col-span-2"><Input value={d.extras.join(", ")} onChange={e => set("extras", e.target.value.split(",").map(s => s.trim()).filter(Boolean))} /></Field>
           <Field label="Note" className="sm:col-span-2"><Textarea value={d.notes} onChange={e => set("notes", e.target.value)} /></Field>
           {guests > 4 && <p className="text-sm text-destructive sm:col-span-2">Massimo 4 ospiti.</p>}
+          {conflicts > 0 && <p role="alert" className="rounded-md border border-destructive bg-destructive/10 p-3 text-sm text-destructive sm:col-span-2">⚠️ Attenzione: esiste già una prenotazione confermata per queste date. Verifica prima di procedere.</p>}
         </form>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Annulla</Button>

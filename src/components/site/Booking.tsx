@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Minus, Plus, ArrowRight, MessageCircle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EXTRAS, OWNER_WHATSAPP, wa } from "@/lib/site-data";
 import { dateKey, MAX_GUESTS, quote } from "@/lib/pricing";
 import { saveInquiryWithin } from "@/lib/inquiries";
+import { isOccupied, rangeHitsOccupied, type Range } from "@/lib/availability";
+import { supabase } from "@/integrations/supabase/client";
 const parse = (s: string) => { const [y = 0, m = 1, d = 1] = s.split("-").map(Number); return new Date(y, m - 1, d); };
 export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra: (id: string) => void }) {
   const [today] = useState(new Date());
@@ -14,8 +16,13 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
   const [children, setChildren] = useState(0);
   const [step, setStep] = useState<"search" | "quote" | "details">("search");
   const [opened, setOpened] = useState(false);
+  const [occupied, setOccupied] = useState<Range[]>([]);
+  useEffect(() => {
+    supabase.rpc("get_occupied_ranges").then(({ data, error }) => { if (!error && data) setOccupied(data); }, () => {});
+  }, []);
       const q = checkIn && checkOut ? quote(parse(checkIn), parse(checkOut)) : null;
-  const valid = Boolean(q && q.nightsCount > 0 && checkIn >= dateKey(today));
+  const clash = Boolean(checkIn && checkOut && rangeHitsOccupied(checkIn, checkOut, occupied));
+  const valid = Boolean(q && q.nightsCount > 0 && checkIn >= dateKey(today) && !clash);
   const pick = (d: Date) => { const key = dateKey(d); setOpened(false); if (!checkIn || checkOut || key <= checkIn) { setCheckIn(key); setCheckOut(""); } else setCheckOut(key); setStep("search"); };
   const first = (month.getDay() + 6) % 7;
   const count = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
@@ -34,9 +41,15 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
           if (!d) return <div key={i} />;
           const key = dateKey(d);
           const selected = key === checkIn || key === checkOut || Boolean(checkIn && checkOut && key > checkIn && key < checkOut);
-          return <Button key={key} variant="ghost" disabled={key < dateKey(today)} aria-label={d.toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" })} aria-pressed={selected} onClick={() => pick(d)} className={`calendar-day ${selected ? "bg-primary text-primary-foreground hover:bg-primary/90" : "text-foreground"}`}>{d.getDate()}</Button>;
+          const busy = isOccupied(key, occupied);
+          return <Button key={key} variant="ghost" disabled={key < dateKey(today) || busy} aria-label={`${d.toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" })}${busy ? " — occupato" : ""}`} aria-pressed={selected} onClick={() => pick(d)} className={`calendar-day ${selected ? "bg-primary text-primary-foreground hover:bg-primary/90" : busy ? "text-muted-foreground line-through" : "text-foreground"}`}>{d.getDate()}</Button>;
         })}
       </div>
+      <div className="mt-5 flex gap-5 text-xs text-muted-foreground">
+        <span className="flex items-center gap-2"><span className="size-2.5 rounded-full bg-muted-foreground" />Occupato</span>
+        <span className="flex items-center gap-2"><span className="size-2.5 rounded-full bg-whatsapp" />Disponibile</span>
+      </div>
+      {clash && <p role="alert" className="mt-3 text-sm text-destructive">Le date scelte includono giorni già occupati. Scegli un altro periodo.</p>}
       <p className="mt-6 text-xs leading-relaxed text-muted-foreground">Disponibilità da confermare con Fulvio. Il prezzo è riferito all’intero appartamento.</p>
     </div>
     <div className="min-w-0 border border-border bg-card p-5 sm:p-8">
