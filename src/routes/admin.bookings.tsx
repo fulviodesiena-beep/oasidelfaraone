@@ -11,9 +11,10 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { StatusBadge } from "@/components/admin/StatusBadge";
-import { BookingFormDialog, emptyDraft, Field } from "@/components/admin/BookingFormDialog";
+import { BookingFormDialog, CHANNELS, emptyDraft, Field, SplitPreview } from "@/components/admin/BookingFormDialog";
 import { BookingDocuments } from "@/components/admin/BookingDocuments";
 import { BookingCommunications } from "@/components/admin/BookingCommunications";
+import { previewSplit, suggestedCommission } from "@/lib/finance";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { balanceDue, BOOKING_STATUS_LABEL, PIPELINE_LABEL, eur, extrasList, fmtDate, monthOf, SOURCE_LABEL, type Booking } from "@/lib/admin";
 
@@ -76,13 +77,19 @@ function BookingDetail({ booking, onClose }: { booking: Booking | null; onClose:
   const [notes, setNotes] = useState("");
   const [deposit, setDeposit] = useState(0);
   const [stage, setStage] = useState<Booking["pipeline_stage"]>("lead");
+  const [channel, setChannel] = useState("diretto");
+  const [commission, setCommission] = useState(0);
   useEffect(() => {
-    if (booking) { setStatus(booking.status); setNotes(booking.notes ?? ""); setDeposit(Number(booking.deposit_paid)); setStage(booking.pipeline_stage); }
+    if (booking) { setStatus(booking.status); setNotes(booking.notes ?? ""); setDeposit(Number(booking.deposit_paid)); setStage(booking.pipeline_stage); setChannel(booking.channel || "diretto"); setCommission(Number(booking.channel_commission)); }
   }, [booking]);
+  const { data: settings } = useQuery({
+    queryKey: ["admin", "settings"], enabled: !!booking,
+    queryFn: async () => { const { data, error } = await supabase.from("settings").select("*").eq("id", 1).single(); if (error) throw error; return data; },
+  });
   const save = useMutation({
     mutationFn: async () => {
       if (!booking) return;
-      const { error } = await supabase.from("bookings").update({ status, notes: notes.trim() || null, deposit_paid: deposit, pipeline_stage: stage }).eq("id", booking.id);
+      const { error } = await supabase.from("bookings").update({ status, notes: notes.trim() || null, deposit_paid: deposit, pipeline_stage: stage, channel, channel_commission: booking.is_personal_use ? 0 : commission }).eq("id", booking.id);
       if (error) throw error;
     },
     onSuccess: () => { toast.success("Prenotazione aggiornata"); qc.invalidateQueries({ queryKey: ["admin"] }); onClose(); },
@@ -90,6 +97,7 @@ function BookingDetail({ booking, onClose }: { booking: Booking | null; onClose:
   });
   if (!booking) return null;
   const total = Number(booking.total_price);
+  const split = previewSplit(total, commission, booking.total_nights, Number(booking.owner_cap_per_night ?? settings?.owner_cap_per_night ?? 80), Number(booking.fds_min_per_night ?? settings?.fds_min_per_night ?? 20), booking.is_personal_use);
   return (
     <Dialog open onOpenChange={o => { if (!o) onClose(); }}>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-xl">
@@ -121,6 +129,10 @@ function BookingDetail({ booking, onClose }: { booking: Booking | null; onClose:
           <Field label="Fase pipeline"><Select value={stage} onValueChange={v => setStage(v as Booking["pipeline_stage"])}><SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>{Object.entries(PIPELINE_LABEL).map(([k, l]) => <SelectItem key={k} value={k}>{l}</SelectItem>)}</SelectContent></Select></Field>
           <Field label="Caparra ricevuta (€)"><Input type="number" min={0} step="0.01" value={deposit} onChange={e => setDeposit(Number(e.target.value))} /></Field>
+          <Field label="Canale"><Select disabled={booking.is_personal_use} value={channel} onValueChange={v => { setChannel(v); setCommission(suggestedCommission(v, total)); }}><SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectContent>{CHANNELS.map(([k, l]) => <SelectItem key={k} value={k}>{l}</SelectItem>)}</SelectContent></Select></Field>
+          <Field label={channel === "booking" ? "Commissione canale (€) · suggerito 15%" : "Commissione canale (€)"}><Input disabled={booking.is_personal_use} type="number" min={0} step="0.01" value={commission} onChange={e => setCommission(Number(e.target.value))} /></Field>
+          <SplitPreview net={split.net} owner={split.owner} fds={split.fds} ownerName={settings?.owner_name ?? "Carmine"} />
           <p className="text-sm sm:col-span-2">Saldo da ricevere: <span className="text-gold-light">{eur(balanceDue(total, deposit))}</span></p>
           <Field label="Note" className="sm:col-span-2"><Textarea value={notes} onChange={e => setNotes(e.target.value)} /></Field>
         </div>

@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { balanceDue, BOOKING_STATUS_LABEL, eur, nightsFor, SOURCE_LABEL, type Booking } from "@/lib/admin";
 import { quote } from "@/lib/pricing";
+import { previewSplit, suggestedCommission } from "@/lib/finance";
 
 export type BookingDraft = {
   guest_name: string; guest_email: string; guest_phone: string;
@@ -20,6 +21,7 @@ export type BookingDraft = {
   is_personal_use: boolean; host_id: string; host_amount: number;
   price_per_night: number; total_price: number; deposit_paid: number;
   notes: string; source: string;
+  channel: string; channel_commission: number;
 };
 
 export const emptyDraft = (): BookingDraft => ({
@@ -27,6 +29,7 @@ export const emptyDraft = (): BookingDraft => ({
   adults: 2, children: 0, extras: [], status: "pending",
   price_per_night: 0, total_price: 0, deposit_paid: 0, notes: "", source: "manual",
   is_personal_use: false, host_id: "", host_amount: 0,
+  channel: "diretto", channel_commission: 0,
 });
 
 /** Suggests a nightly rate from the site's seasonal pricing; 0 when on request. */
@@ -48,7 +51,8 @@ export function BookingFormDialog({ open, onOpenChange, initial, inquiryId }: {
   function setDates(ci: string, co: string) {
     setD(p => {
       const rate = p.price_per_night || suggestedRate(ci, co);
-      return { ...p, check_in: ci, check_out: co, price_per_night: rate, total_price: rate * nightsFor(ci, co) };
+      const total = rate * nightsFor(ci, co);
+      return { ...p, check_in: ci, check_out: co, price_per_night: rate, total_price: total, channel_commission: p.channel === "booking" ? suggestedCommission("booking", total) : p.channel_commission };
     });
   }
 
@@ -60,6 +64,13 @@ export function BookingFormDialog({ open, onOpenChange, initial, inquiryId }: {
     setD(p => on ? { ...p, is_personal_use: true, status: "personal", source: "personal", price_per_night: 0, total_price: 0, deposit_paid: 0 }
       : { ...p, is_personal_use: false, status: "pending", source: "manual" });
   }
+
+  const { data: settings } = useQuery({
+    queryKey: ["admin", "settings"], enabled: open,
+    queryFn: async () => { const { data, error } = await supabase.from("settings").select("*").eq("id", 1).single(); if (error) throw error; return data; },
+  });
+  const split = previewSplit(d.total_price, d.channel_commission, nights, Number(settings?.owner_cap_per_night ?? 80), Number(settings?.fds_min_per_night ?? 20), d.is_personal_use);
+  function setTotal(total: number) { setD(p => ({ ...p, total_price: total, channel_commission: p.channel === "booking" ? suggestedCommission("booking", total) : p.channel_commission })); }
 
   const { data: conflicts = 0 } = useQuery({
     queryKey: ["admin", "overlap", d.check_in, d.check_out], enabled: open && nights > 0,
@@ -76,7 +87,7 @@ export function BookingFormDialog({ open, onOpenChange, initial, inquiryId }: {
         guest_name: d.guest_name.trim(), guest_email: d.guest_email.trim() || null, guest_phone: d.guest_phone.trim() || null,
         check_in: d.check_in, check_out: d.check_out, adults: d.adults, children: d.children, extras: d.extras,
         status: d.status, total_nights: nights, price_per_night: d.price_per_night, total_price: d.total_price,
-        deposit_paid: d.deposit_paid, notes: d.notes.trim() || null, source: d.source,
+        deposit_paid: d.deposit_paid, channel: d.channel, channel_commission: d.is_personal_use ? 0 : d.channel_commission, notes: d.notes.trim() || null, source: d.source,
         is_personal_use: d.is_personal_use, host_id: d.source === "host" ? d.host_id || null : null, host_amount: d.source === "host" ? d.host_amount : 0,
       };
       const { error } = await supabase.from("bookings").insert(row);
@@ -109,8 +120,8 @@ export function BookingFormDialog({ open, onOpenChange, initial, inquiryId }: {
           <Field label="Partenza"><Input type="date" required min={d.check_in} value={d.check_out} onChange={e => setDates(d.check_in, e.target.value)} /></Field>
           <Field label="Adulti"><Input type="number" min={1} max={4} value={d.adults} onChange={e => set("adults", Number(e.target.value))} /></Field>
           <Field label="Bambini"><Input type="number" min={0} max={3} value={d.children} onChange={e => set("children", Number(e.target.value))} /></Field>
-          <Field label="Prezzo a notte (€)"><Input disabled={lock} type="number" min={0} step="0.01" value={d.price_per_night} onChange={e => { const r = Number(e.target.value); setD(p => ({ ...p, price_per_night: r, total_price: r * nights })); }} /></Field>
-          <Field label={`Totale (€) · ${nights} notti`}><Input disabled={lock} type="number" min={0} step="0.01" value={d.total_price} onChange={e => set("total_price", Number(e.target.value))} /></Field>
+          <Field label="Prezzo a notte (€)"><Input disabled={lock} type="number" min={0} step="0.01" value={d.price_per_night} onChange={e => { const r = Number(e.target.value); setD(p => ({ ...p, price_per_night: r })); setTotal(r * nights); }} /></Field>
+          <Field label={`Totale (€) · ${nights} notti`}><Input disabled={lock} type="number" min={0} step="0.01" value={d.total_price} onChange={e => setTotal(Number(e.target.value))} /></Field>
           <Field label="Caparra ricevuta (€)"><Input disabled={lock} type="number" min={0} step="0.01" value={d.deposit_paid} onChange={e => set("deposit_paid", Number(e.target.value))} /></Field>
           <Field label="Saldo da ricevere"><p className="flex h-9 items-center text-sm text-gold-light">{eur(balanceDue(d.total_price, d.deposit_paid))}</p></Field>
           <Field label="Stato">
@@ -125,6 +136,14 @@ export function BookingFormDialog({ open, onOpenChange, initial, inquiryId }: {
               <SelectContent>{Object.entries(SOURCE_LABEL).filter(([k]) => k !== "personal").map(([k, l]) => <SelectItem key={k} value={k}>{l}</SelectItem>)}</SelectContent>
             </Select>
           </Field>
+          <Field label="Canale">
+            <Select disabled={lock} value={d.channel} onValueChange={v => setD(p => ({ ...p, channel: v, channel_commission: suggestedCommission(v, p.total_price) }))}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>{CHANNELS.map(([k, l]) => <SelectItem key={k} value={k}>{l}</SelectItem>)}</SelectContent>
+            </Select>
+          </Field>
+          <Field label={d.channel === "booking" ? "Commissione canale (€) · suggerito 15%" : "Commissione canale (€)"}><Input disabled={lock} type="number" min={0} step="0.01" value={d.channel_commission} onChange={e => set("channel_commission", Number(e.target.value))} /></Field>
+          <SplitPreview net={split.net} owner={split.owner} fds={split.fds} ownerName={settings?.owner_name ?? "Carmine"} />
           {d.source === "host" && <>
             <Field label="Host collaboratore">
               <Select value={d.host_id} onValueChange={v => set("host_id", v)}>
@@ -150,4 +169,17 @@ export function BookingFormDialog({ open, onOpenChange, initial, inquiryId }: {
 
 export function Field({ label, children, className = "" }: { label: string; children: React.ReactNode; className?: string }) {
   return <div className={`space-y-1.5 ${className}`}><Label className="text-xs text-muted-foreground">{label}</Label>{children}</div>;
+}
+
+export const CHANNELS = [["diretto", "Diretto"], ["booking", "Booking.com"], ["airbnb", "Airbnb"], ["altro", "Altro"]] as const;
+
+export function SplitPreview({ net, owner, fds, ownerName }: { net: number; owner: number; fds: number; ownerName: string }) {
+  return (
+    <div className="grid grid-cols-3 gap-2 rounded-md border border-border p-3 text-sm sm:col-span-2">
+      <div><p className="text-xs text-muted-foreground">Netto alloggio</p><p>{eur(net)}</p></div>
+      <div><p className="text-xs text-muted-foreground">Quota {ownerName}</p><p className="text-gold-light">{eur(owner)}</p></div>
+      <div><p className="text-xs text-muted-foreground">Borsellino FDS</p><p className="text-gold-light">{eur(fds)}</p></div>
+      <p className="col-span-3 text-xs text-muted-foreground">Anteprima: i valori definitivi li calcola il gestionale al salvataggio.</p>
+    </div>
+  );
 }
