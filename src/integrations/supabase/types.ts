@@ -97,6 +97,33 @@ export type Database = {
           },
         ]
       }
+      data_backups: {
+        Row: {
+          created_at: string
+          id: string
+          label: string
+          row_count: number
+          rows: Json
+          table_name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          label: string
+          row_count: number
+          rows: Json
+          table_name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          label?: string
+          row_count?: number
+          rows?: Json
+          table_name?: string
+        }
+        Relationships: []
+      }
       documents: {
         Row: {
           booking_id: string
