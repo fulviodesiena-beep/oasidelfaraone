@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { EXTRAS, OWNER_WHATSAPP, wa } from "@/lib/site-data";
 import { dateKey, MAX_GUESTS, quote } from "@/lib/pricing";
 import { saveInquiryWithin } from "@/lib/inquiries";
+import { trackEvent } from "@/lib/tracking";
 import { isOccupied, rangeHitsOccupied, type Range } from "@/lib/availability";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -98,9 +99,10 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
         e.preventDefault(); const form = new FormData(e.currentTarget);
         const extraNames = [...EXTRAS.filter(x => extras.includes(x.id)).map(x => x.name), ...(dinner ? ["Cena romantica"] : [])];
         const note = String(form.get("Note") ?? "").trim();
-        const message = `Richiesta soggiorno — Oasi del Faraone\nNome: ${form.get("Nome")}\nEmail: ${form.get("Email")}\nTelefono: ${form.get("Telefono")}\nDate: ${checkIn} → ${checkOut}\n${q.nightsCount} notti\nOspiti: ${adults} adulti, ${children} bambini\nExtra: ${extraNames.join(", ") || "nessuno"}${note ? `\nNote: ${note}` : ""}\nTotale indicativo: ${q.total === null ? "su richiesta" : `€${q.total}`}\nDisponibilità e prezzi da confermare.`;
+        const message = `Richiesta soggiorno — Oasi del Faraone\nNome: ${form.get("Nome")}\nEmail: ${form.get("Email")}\nTelefono: ${form.get("Telefono")}\nDate: ${checkIn} → ${checkOut}\n${q.nightsCount} notti\nOspiti: ${adults} adulti, ${children} bambini\nExtra: ${extraNames.join(", ") || "nessuno"}${note ? `\nNote: ${note}` : ""}\nTotale indicativo alloggio: ${q.total === null ? "da confermare" : `€${q.total}`}\nPulizia finale €${q.cleaningFee} in reception al check-in\nDisponibilità e prezzi da confermare.`;
         const tab = window.open("", "_blank");
-        await saveInquiryWithin({ guest_name: String(form.get("Nome") ?? ""), guest_email: String(form.get("Email") ?? ""), guest_phone: String(form.get("Telefono") ?? ""), check_in: checkIn, check_out: checkOut, adults, children, extras: extraNames, message });
+        await saveInquiryWithin({ guest_name: String(form.get("Nome") ?? ""), guest_email: String(form.get("Email") ?? ""), guest_phone: String(form.get("Telefono") ?? ""), check_in: checkIn, check_out: checkOut, adults, children, extras: extraNames, message, consent_privacy: form.get("consent_privacy") === "on", consent_marketing: form.get("consent_marketing") === "on" });
+        trackEvent("Lead");
         const url = wa(OWNER_WHATSAPP, message);
         if (tab) { tab.opener = null; tab.location.href = url; } else window.location.href = url;
         setOpened(true);
@@ -108,8 +110,10 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
         <p className="eyebrow">2 · Riepilogo e contatti</p>
         <div className="flex items-center justify-between gap-3 border border-border p-4 text-sm">
           <div><p>{fmt(checkIn)} → {fmt(checkOut)}</p><p className="text-xs text-muted-foreground">{q.nightsCount} notti · {adults + children} ospiti</p></div>
-          <span className="font-display text-3xl text-gold-light">{q.total === null ? "Su richiesta" : `€${q.total}`}</span>
+          <span className="font-display text-3xl text-gold-light">{q.total === null ? "Da confermare" : `€${q.total}`}</span>
         </div>
+        <p className="flex justify-between text-xs text-muted-foreground"><span>Pulizia finale · pagata in reception al check-in</span><span>€{q.cleaningFee} · non inclusa</span></p>
+        {q.minStayWarning && <p role="note" className="text-xs text-warning">Soggiorno minimo consigliato: {q.minStayWarning} notti{q.touchesPeak ? " nel periodo di Picco" : ""}. Puoi comunque inviare la richiesta.</p>}
         <p role="timer" className={`flex items-center gap-2 text-sm ${left <= 120 ? "text-destructive" : "text-gold"}`}><Timer className="size-4" />Preventivo riservato per: {mmss(left)}</p>
         <input name="Nome" aria-label="Nome completo" placeholder="Nome e Cognome" required autoComplete="name" className="field" />
         <input name="Telefono" aria-label="Telefono" type="tel" defaultValue="+39 " required autoComplete="tel" className="field" />
@@ -118,6 +122,8 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
           {QUICK_EXTRAS.map(x => { const on = x.id === "cena" ? dinner : extras.includes(x.id); return <label key={x.id} className="flex cursor-pointer items-center gap-3 text-sm"><input type="checkbox" className="accent-primary" checked={on} onChange={() => x.id === "cena" ? setDinner(!dinner) : toggleExtra(x.id)} /><x.icon className="size-4 text-gold-light" />{x.name}</label>; })}
         </fieldset>
         {showNote ? <textarea name="Note" aria-label="Note" rows={3} maxLength={1000} className="field" placeholder="Note per Fulvio" /> : <Button type="button" variant="link" className="h-auto p-0" onClick={() => setShowNote(true)}>Aggiungi una nota</Button>}
+        <label className="flex items-start gap-3 text-xs"><input type="checkbox" name="consent_privacy" required className="mt-0.5 accent-primary" /><span>Ho letto l’<a href="/privacy" target="_blank" rel="noreferrer" className="underline">informativa privacy</a> e acconsento al trattamento dei dati per gestire la richiesta (obbligatorio).</span></label>
+        <label className="flex items-start gap-3 text-xs"><input type="checkbox" name="consent_marketing" className="mt-0.5 accent-primary" /><span>Voglio ricevere offerte e novità (facoltativo).</span></label>
         <Button type="submit" className="h-12 w-full whitespace-normal">Richiedi prenotazione<ArrowRight /></Button>
         <p className="text-xs leading-relaxed text-muted-foreground">Nessun pagamento online. Si apre WhatsApp con il messaggio pronto: invialo a Fulvio per ricevere conferma.</p>
         {opened && <p role="status" className="text-sm text-gold-light">La richiesta è pronta su WhatsApp: inviala per contattare Fulvio.</p>}
