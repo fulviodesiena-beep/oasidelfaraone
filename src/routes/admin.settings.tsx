@@ -37,7 +37,7 @@ function SettingsPage() {
     onError: (e: Error) => toast.error(e.message),
   });
   if (!s) return <p className="text-muted-foreground">Caricamento…</p>;
-  const exportUrl = `${window.location.origin}/api/public/ical/${s.ical_token}.ics`;
+  const exportUrl = `https://oasidelfaraone.it/api/public/ical/${s.ical_token}.ics`;
   const pixelOk = !f.meta_pixel_id || /^\d{5,20}$/.test(f.meta_pixel_id);
 
   return (
