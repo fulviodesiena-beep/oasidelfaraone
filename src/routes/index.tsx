@@ -12,7 +12,7 @@ import { SEASONS } from "@/lib/pricing";
 const TITLE = "Appartamento a Sharm el-Sheikh · Domina Coral Bay | Oasi del Faraone";
 const DESCRIPTION = "Appartamento privato fino a 4 ospiti al Domina Coral Bay, Sharm el-Sheikh. Balcone vista piscina, spiagge e piscine del resort incluse. Preventivo in 2 minuti.";
 const SITE_URL = "https://oasidelfaraone.it";
-const OG_IMAGE = `${SITE_URL}${HERO_PHOTOS[0].src}`;
+const OG_IMAGE = `${SITE_URL}${HERO_PHOTOS[0]?.src ?? ""}`;
 const FAQS: [string, ReactNode, string][] = [
   ["Cosa è incluso nel soggiorno?", "Spiagge, piscine, padel, beach volley e animazione del resort Domina Coral Bay sono inclusi, senza costi aggiuntivi. Ristoranti e bar sono à la carte; spa e casinò sono a pagamento.", ""],
   ["C’è il Wi‑Fi?", "In camera il Wi‑Fi non è disponibile. Consigliamo una eSIM o una SIM locale: ti diamo noi le indicazioni prima della partenza.", ""],
