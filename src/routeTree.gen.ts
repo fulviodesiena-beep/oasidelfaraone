@@ -19,6 +19,8 @@ import { Route as AdminGuestsRouteImport } from './routes/admin.guests'
 import { Route as AdminHostsRouteImport } from './routes/admin.hosts'
 import { Route as AdminInquiriesRouteImport } from './routes/admin.inquiries'
 import { Route as AdminLoginRouteImport } from './routes/admin_.login'
+import { Route as ApiPublicIcalTokenRouteImport } from './routes/api/public/ical.$token'
+import { Route as ApiPublicJobsIcalSyncRouteImport } from './routes/api/public/jobs/ical-sync'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -70,6 +72,16 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicIcalTokenRoute = ApiPublicIcalTokenRouteImport.update({
+  id: '/api/public/ical/$token',
+  path: '/api/public/ical/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicJobsIcalSyncRoute = ApiPublicJobsIcalSyncRouteImport.update({
+  id: '/api/public/jobs/ical-sync',
+  path: '/api/public/jobs/ical-sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -82,6 +94,8 @@ export interface FileRoutesByFullPath {
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
+  '/api/public/jobs/ical-sync': typeof ApiPublicJobsIcalSyncRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -93,6 +107,8 @@ export interface FileRoutesByTo {
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin': typeof AdminIndexRoute
+  '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
+  '/api/public/jobs/ical-sync': typeof ApiPublicJobsIcalSyncRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -106,6 +122,8 @@ export interface FileRoutesById {
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin_/login': typeof AdminLoginRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
+  '/api/public/jobs/ical-sync': typeof ApiPublicJobsIcalSyncRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -120,6 +138,8 @@ export interface FileRouteTypes {
     | '/admin/inquiries'
     | '/admin/login'
     | '/admin/'
+    | '/api/public/ical/$token'
+    | '/api/public/jobs/ical-sync'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -131,6 +151,8 @@ export interface FileRouteTypes {
     | '/admin/inquiries'
     | '/admin/login'
     | '/admin'
+    | '/api/public/ical/$token'
+    | '/api/public/jobs/ical-sync'
   id:
     | '__root__'
     | '/'
@@ -143,6 +165,8 @@ export interface FileRouteTypes {
     | '/admin/inquiries'
     | '/admin_/login'
     | '/admin/'
+    | '/api/public/ical/$token'
+    | '/api/public/jobs/ical-sync'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -150,6 +174,8 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   PrivacyRoute: typeof PrivacyRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  ApiPublicIcalTokenRoute: typeof ApiPublicIcalTokenRoute
+  ApiPublicJobsIcalSyncRoute: typeof ApiPublicJobsIcalSyncRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -224,6 +250,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/ical/$token': {
+      id: '/api/public/ical/$token'
+      path: '/api/public/ical/$token'
+      fullPath: '/api/public/ical/$token'
+      preLoaderRoute: typeof ApiPublicIcalTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/jobs/ical-sync': {
+      id: '/api/public/jobs/ical-sync'
+      path: '/api/public/jobs/ical-sync'
+      fullPath: '/api/public/jobs/ical-sync'
+      preLoaderRoute: typeof ApiPublicJobsIcalSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -252,6 +292,8 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   PrivacyRoute: PrivacyRoute,
   AdminLoginRoute: AdminLoginRoute,
+  ApiPublicIcalTokenRoute: ApiPublicIcalTokenRoute,
+  ApiPublicJobsIcalSyncRoute: ApiPublicJobsIcalSyncRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
