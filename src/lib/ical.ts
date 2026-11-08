@@ -19,8 +19,8 @@ export function parseIcal(text: string): IcalEvent[] {
     const i = line.indexOf(":"); if (i < 0) continue;
     const name = line.slice(0, i).split(";")[0]!.toUpperCase(), value = line.slice(i + 1);
     if (name === "UID") cur.uid = value.trim().slice(0, 500);
-    else if (name === "DTSTART") cur.start = toKey(value) ?? undefined;
-    else if (name === "DTEND") cur.end = toKey(value) ?? undefined;
+    else if (name === "DTSTART") { const k = toKey(value); if (k) cur.start = k; }
+    else if (name === "DTEND") { const k = toKey(value); if (k) cur.end = k; }
   }
   return out;
 }
