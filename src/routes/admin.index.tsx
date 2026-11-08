@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { dashboardStats, occupancyBand, occupancyStats, eur, fmtDate, todayKey, type Booking } from "@/lib/admin";
 import { REVIEW_LINK_IS_PLACEHOLDER } from "@/lib/email-templates";
+import { FinancePanel } from "@/components/admin/FinancePanel";
 
 export const Route = createFileRoute("/admin/")({ component: Dashboard });
 
@@ -63,6 +64,8 @@ function Dashboard() {
         <Occupancy title="Occupazione mese" pct={data.occ.monthPct} note={`${data.occ.monthBooked} di ${data.occ.monthDays} giorni`} />
         <Occupancy title="Occupazione anno" pct={data.occ.yearPct} note={`${data.occ.yearBooked} di ${data.occ.yearElapsed} giorni dal 1° gennaio`} />
       </div>
+
+      <FinancePanel />
 
       <Card>
         <CardHeader><CardTitle className="font-display text-2xl font-normal">Prossime prenotazioni confermate</CardTitle></CardHeader>
