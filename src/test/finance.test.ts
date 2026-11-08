@@ -28,3 +28,11 @@ describe("finance dashboard", () => {
     expect(doubleBookingConflicts([b({ status: "cancelled" })], blocks)).toHaveLength(0);
   });
 });
+
+import { previewSplit, suggestedCommission } from "@/lib/finance";
+describe("booking form split preview", () => {
+  it("suggests 15% commission only for Booking.com", () => { expect(suggestedCommission("booking", 1000)).toBe(150); expect(suggestedCommission("diretto", 1000)).toBe(0); });
+  it("Carmine capped at 80/night, FDS gets the rest", () => expect(previewSplit(1000, 150, 5, 80, 20)).toEqual({ net: 850, owner: 400, fds: 450 }));
+  it("FDS keeps at least 20/night on low nets", () => expect(previewSplit(450, 0, 5, 80, 20)).toEqual({ net: 450, owner: 350, fds: 100 }));
+  it("personal use is zero", () => expect(previewSplit(500, 0, 5, 80, 20, true).owner).toBe(0));
+});

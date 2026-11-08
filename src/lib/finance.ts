@@ -71,3 +71,12 @@ export function doubleBookingConflicts(bookings: Booking[], blocks: Block[]) {
     bookings.filter(b => b.status !== "cancelled" && !isOta(b) && b.check_in < k.end_date && b.check_out > k.start_date)
       .map(b => ({ block: k, booking: b })));
 }
+
+/** Preview of the DB-generated split (mirrors bookings.room_amount / fds_amount). */
+export function previewSplit(totalPrice: number, commission: number, nights: number, capPerNight: number, fdsMinPerNight: number, personal = false) {
+  if (personal || nights <= 0) return { net: 0, owner: 0, fds: 0 };
+  const net = Math.max(totalPrice - commission, 0);
+  const owner = Math.round(nights * Math.min(capPerNight, Math.max(net / nights - fdsMinPerNight, 0)) * 100) / 100;
+  return { net, owner, fds: Math.round((net - owner) * 100) / 100 };
+}
+export const suggestedCommission = (channel: string, total: number) => channel === "booking" ? Math.round(total * 15) / 100 : 0;
