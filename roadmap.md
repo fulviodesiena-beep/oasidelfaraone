@@ -23,3 +23,4 @@
 - [ ] Gestionale: PDF delega per Domina Coral Bay
 - [x] Protezione doppie prenotazioni: vincolo nel database, date occupate nel calendario pubblico con legenda, avviso nel form admin
 - [x] Prenotazione in 2 passaggi, timer 12 minuti, extra rapidi, link Gestionale nel footer (contatore visitatori non fatto: numeri finti)
+- [x] Blocco 2: build corretto, Impostazioni, Spese, dashboard conti + calendario 3 mesi, sync Booking ogni 15 min, ripartizione Carmine/FDS, giorni dall'ultimo contatto

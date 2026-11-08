@@ -13,7 +13,7 @@ describe("seasonal price list", () => {
  it("low season is 80: Jan 7–31, May, June", () => { expect(one(2027,0,7)).toBe(80); expect(one(2027,0,31)).toBe(80); expect(one(2027,4,10)).toBe(80); expect(one(2027,5,10)).toBe(80); });
  it("mid season is 100: Feb, Mar, Jul, Sep, Nov, Dec 1–19", () => { for (const m of [1,2,6,8,10]) expect(one(2027,m,5)).toBe(100); expect(one(2027,11,1)).toBe(100); expect(one(2027,11,19)).toBe(100); });
  it("high season is 120: April, August outside 10–20, October", () => { expect(one(2027,3,20)).toBe(120); expect(one(2027,7,9)).toBe(120); expect(one(2027,7,21)).toBe(120); expect(one(2027,9,10)).toBe(120); });
- it("peak is 150: Dec 20–Jan 6 and Aug 10–20", () => { for (const [m,d] of [[11,20],[0,6],[7,10],[7,20]]) { expect(seasonFor(new Date(2027,m,d))).toBe("peak"); expect(one(2027,m,d)).toBe(150); } });
+ it("peak is 150: Dec 20–Jan 6 and Aug 10–20", () => { for (const [m,d] of ([[11,20],[0,6],[7,10],[7,20]] as const)) { expect(seasonFor(new Date(2027,m,d))).toBe("peak"); expect(one(2027,m,d)).toBe(150); } });
  it("Easter week runs Thursday before to Easter Monday, each year", () => {
   // Easter 2027 = 28 March; 2026 = 5 April
   for (const d of [25,26,27,28,29]) expect(seasonFor(new Date(2027,2,d))).toBe("peak");

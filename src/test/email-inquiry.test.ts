@@ -9,7 +9,7 @@ const b = { guest_name: "Anna <b>", check_in: "2026-12-01", check_out: "2026-12-
 describe("inquiry save before WhatsApp", () => {
   it("gives up after 2 seconds when the database does not answer", async () => {
     vi.useFakeTimers();
-    const p = saveInquiryWithin({ guest_name: "A", guest_email: "", guest_phone: "", check_in: "", check_out: "", adults: 2, children: 0, extras: [], message: "m" });
+    const p = saveInquiryWithin({ guest_name: "A", guest_email: "", guest_phone: "", check_in: "", check_out: "", adults: 2, children: 0, extras: [], message: "m", consent_privacy: true, consent_marketing: false });
     await vi.advanceTimersByTimeAsync(2000);
     await expect(p).resolves.toBe(false);
     vi.useRealTimers();

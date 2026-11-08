@@ -105,6 +105,12 @@ function BookingDetail({ booking, onClose }: { booking: Booking | null; onClose:
           <Dt k="Totale" v={eur(total)} />
           {booking.source === "host" && <Dt k="Dovuto dall'host" v={eur(booking.host_amount)} />}
           <Dt k="Extra" v={extrasList(booking.extras).join(", ") || "—"} />
+          <Dt k="Canale" v={booking.channel === "diretto" ? "Diretto" : booking.channel} />
+          {Number(booking.channel_commission) > 0 && <Dt k="Commissione OTA" v={eur(booking.channel_commission)} />}
+          {booking.net_accommodation != null && <Dt k="Netto alloggio" v={eur(booking.net_accommodation)} />}
+          {booking.room_amount != null && <Dt k="Quota Carmine (proprietario)" v={eur(booking.room_amount)} />}
+          {booking.fds_amount != null && <Dt k="Borsellino FDS" v={eur(booking.fds_amount)} />}
+          {booking.owner_cap_per_night != null && <Dt k="Regola applicata" v={`tetto ${eur(booking.owner_cap_per_night)}/notte, minimo FDS ${eur(booking.fds_min_per_night)}/notte`} />}
         </dl>
         <Tabs defaultValue="details">
           <TabsList><TabsTrigger value="details">Dettagli</TabsTrigger><TabsTrigger value="docs">Documenti</TabsTrigger><TabsTrigger value="comms">Comunicazioni</TabsTrigger></TabsList>
