@@ -22,3 +22,5 @@
 - Guest records are created or updated by a database trigger when a booking becomes confirmed (match by email or digits-only phone); balance_due is a generated column.
 - Booking documents live in the private `documents` storage bucket (admin-only RLS); the app shares them only via time-limited signed URLs, and the Domina delega PDF is built in the browser with pdf-lib from `src/lib/delega.ts`.
 - Personal-use and host-collaboration rules (zero price, host required, hosts.total_owed) are enforced by database triggers, not only the form.
+- Revenue split (owner share / FDS) lives in generated booking columns fed by snapshot columns set by a trigger; the app only displays them, and dashboard maths lives in `src/lib/finance.ts` (expenses paid by the owner reduce the owner's net, never FDS).
+- Booking.com iCal import runs from a managed 15-minute HTTP schedule on /api/public/jobs/ical-sync and from the admin "Sincronizza ora" server function; both share `syncBookingIcal`.
