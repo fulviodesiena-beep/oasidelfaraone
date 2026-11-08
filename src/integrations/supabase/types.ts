@@ -63,6 +63,7 @@ export type Database = {
           deposit_paid: number
           extras: Json
           fds_amount: number | null
+          fds_min_per_night: number | null
           fds_share_pct: number | null
           guest_email: string | null
           guest_name: string
@@ -73,6 +74,7 @@ export type Database = {
           is_personal_use: boolean
           net_accommodation: number | null
           notes: string | null
+          owner_cap_per_night: number | null
           pipeline_stage: Database["public"]["Enums"]["pipeline_stage"]
           price_per_night: number
           room_amount: number | null
@@ -93,6 +95,7 @@ export type Database = {
           deposit_paid?: number
           extras?: Json
           fds_amount?: number | null
+          fds_min_per_night?: number | null
           fds_share_pct?: number | null
           guest_email?: string | null
           guest_name: string
@@ -103,6 +106,7 @@ export type Database = {
           is_personal_use?: boolean
           net_accommodation?: number | null
           notes?: string | null
+          owner_cap_per_night?: number | null
           pipeline_stage?: Database["public"]["Enums"]["pipeline_stage"]
           price_per_night?: number
           room_amount?: number | null
@@ -123,6 +127,7 @@ export type Database = {
           deposit_paid?: number
           extras?: Json
           fds_amount?: number | null
+          fds_min_per_night?: number | null
           fds_share_pct?: number | null
           guest_email?: string | null
           guest_name?: string
@@ -133,6 +138,7 @@ export type Database = {
           is_personal_use?: boolean
           net_accommodation?: number | null
           notes?: string | null
+          owner_cap_per_night?: number | null
           pipeline_stage?: Database["public"]["Enums"]["pipeline_stage"]
           price_per_night?: number
           room_amount?: number | null
@@ -226,6 +232,7 @@ export type Database = {
           date: string
           id: string
           note: string | null
+          paid_by: string | null
           period_month: string | null
         }
         Insert: {
@@ -237,6 +244,7 @@ export type Database = {
           date?: string
           id?: string
           note?: string | null
+          paid_by?: string | null
           period_month?: string | null
         }
         Update: {
@@ -248,6 +256,7 @@ export type Database = {
           date?: string
           id?: string
           note?: string | null
+          paid_by?: string | null
           period_month?: string | null
         }
         Relationships: []
@@ -402,6 +411,7 @@ export type Database = {
       settings: {
         Row: {
           booking_ical_url: string | null
+          fds_min_per_night: number | null
           fds_share_pct: number
           ical_token: string
           id: number
@@ -409,10 +419,13 @@ export type Database = {
           last_sync_error: string | null
           last_sync_success_at: string | null
           meta_pixel_id: string | null
+          owner_cap_per_night: number | null
+          owner_name: string | null
           updated_at: string
         }
         Insert: {
           booking_ical_url?: string | null
+          fds_min_per_night?: number | null
           fds_share_pct?: number
           ical_token?: string
           id?: number
@@ -420,10 +433,13 @@ export type Database = {
           last_sync_error?: string | null
           last_sync_success_at?: string | null
           meta_pixel_id?: string | null
+          owner_cap_per_night?: number | null
+          owner_name?: string | null
           updated_at?: string
         }
         Update: {
           booking_ical_url?: string | null
+          fds_min_per_night?: number | null
           fds_share_pct?: number
           ical_token?: string
           id?: number
@@ -431,6 +447,8 @@ export type Database = {
           last_sync_error?: string | null
           last_sync_success_at?: string | null
           meta_pixel_id?: string | null
+          owner_cap_per_night?: number | null
+          owner_name?: string | null
           updated_at?: string
         }
         Relationships: []
