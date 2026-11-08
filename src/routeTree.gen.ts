@@ -15,9 +15,11 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminBookingsRouteImport } from './routes/admin.bookings'
 import { Route as AdminDocumentsRouteImport } from './routes/admin.documents'
+import { Route as AdminExpensesRouteImport } from './routes/admin.expenses'
 import { Route as AdminGuestsRouteImport } from './routes/admin.guests'
 import { Route as AdminHostsRouteImport } from './routes/admin.hosts'
 import { Route as AdminInquiriesRouteImport } from './routes/admin.inquiries'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminLoginRouteImport } from './routes/admin_.login'
 import { Route as ApiPublicIcalTokenRouteImport } from './routes/api/public/ical.$token'
 import { Route as ApiPublicJobsIcalSyncRouteImport } from './routes/api/public/jobs/ical-sync'
@@ -52,6 +54,11 @@ const AdminDocumentsRoute = AdminDocumentsRouteImport.update({
   path: '/documents',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminExpensesRoute = AdminExpensesRouteImport.update({
+  id: '/expenses',
+  path: '/expenses',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminGuestsRoute = AdminGuestsRouteImport.update({
   id: '/guests',
   path: '/guests',
@@ -65,6 +72,11 @@ const AdminHostsRoute = AdminHostsRouteImport.update({
 const AdminInquiriesRoute = AdminInquiriesRouteImport.update({
   id: '/inquiries',
   path: '/inquiries',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
@@ -89,9 +101,11 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/documents': typeof AdminDocumentsRoute
+  '/admin/expenses': typeof AdminExpensesRoute
   '/admin/guests': typeof AdminGuestsRoute
   '/admin/hosts': typeof AdminHostsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/': typeof AdminIndexRoute
   '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
@@ -102,9 +116,11 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/documents': typeof AdminDocumentsRoute
+  '/admin/expenses': typeof AdminExpensesRoute
   '/admin/guests': typeof AdminGuestsRoute
   '/admin/hosts': typeof AdminHostsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin': typeof AdminIndexRoute
   '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
@@ -117,9 +133,11 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/documents': typeof AdminDocumentsRoute
+  '/admin/expenses': typeof AdminExpensesRoute
   '/admin/guests': typeof AdminGuestsRoute
   '/admin/hosts': typeof AdminHostsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin_/login': typeof AdminLoginRoute
   '/admin/': typeof AdminIndexRoute
   '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
@@ -133,9 +151,11 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/admin/bookings'
     | '/admin/documents'
+    | '/admin/expenses'
     | '/admin/guests'
     | '/admin/hosts'
     | '/admin/inquiries'
+    | '/admin/settings'
     | '/admin/login'
     | '/admin/'
     | '/api/public/ical/$token'
@@ -146,9 +166,11 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/admin/bookings'
     | '/admin/documents'
+    | '/admin/expenses'
     | '/admin/guests'
     | '/admin/hosts'
     | '/admin/inquiries'
+    | '/admin/settings'
     | '/admin/login'
     | '/admin'
     | '/api/public/ical/$token'
@@ -160,9 +182,11 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/admin/bookings'
     | '/admin/documents'
+    | '/admin/expenses'
     | '/admin/guests'
     | '/admin/hosts'
     | '/admin/inquiries'
+    | '/admin/settings'
     | '/admin_/login'
     | '/admin/'
     | '/api/public/ical/$token'
@@ -222,6 +246,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDocumentsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/expenses': {
+      id: '/admin/expenses'
+      path: '/expenses'
+      fullPath: '/admin/expenses'
+      preLoaderRoute: typeof AdminExpensesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/guests': {
       id: '/admin/guests'
       path: '/guests'
@@ -241,6 +272,13 @@ declare module '@tanstack/react-router' {
       path: '/inquiries'
       fullPath: '/admin/inquiries'
       preLoaderRoute: typeof AdminInquiriesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin_/login': {
@@ -270,18 +308,22 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminBookingsRoute: typeof AdminBookingsRoute
   AdminDocumentsRoute: typeof AdminDocumentsRoute
+  AdminExpensesRoute: typeof AdminExpensesRoute
   AdminGuestsRoute: typeof AdminGuestsRoute
   AdminHostsRoute: typeof AdminHostsRoute
   AdminInquiriesRoute: typeof AdminInquiriesRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminBookingsRoute: AdminBookingsRoute,
   AdminDocumentsRoute: AdminDocumentsRoute,
+  AdminExpensesRoute: AdminExpensesRoute,
   AdminGuestsRoute: AdminGuestsRoute,
   AdminHostsRoute: AdminHostsRoute,
   AdminInquiriesRoute: AdminInquiriesRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
