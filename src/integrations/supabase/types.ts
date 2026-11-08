@@ -14,16 +14,56 @@ export type Database = {
   }
   public: {
     Tables: {
+      availability_blocks: {
+        Row: {
+          created_at: string
+          end_date: string
+          external_uid: string | null
+          id: string
+          reason: string | null
+          source: string
+          start_date: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          end_date: string
+          external_uid?: string | null
+          id?: string
+          reason?: string | null
+          source?: string
+          start_date: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          end_date?: string
+          external_uid?: string | null
+          id?: string
+          reason?: string | null
+          source?: string
+          start_date?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       bookings: {
         Row: {
           adults: number
           balance_due: number | null
+          channel: string
+          channel_commission: number
           check_in: string
           check_out: string
           children: number
           created_at: string
           deposit_paid: number
           extras: Json
+          fds_amount: number | null
+          fds_share_pct: number | null
           guest_email: string | null
           guest_name: string
           guest_phone: string | null
@@ -31,9 +71,11 @@ export type Database = {
           host_id: string | null
           id: string
           is_personal_use: boolean
+          net_accommodation: number | null
           notes: string | null
           pipeline_stage: Database["public"]["Enums"]["pipeline_stage"]
           price_per_night: number
+          room_amount: number | null
           source: string
           status: Database["public"]["Enums"]["booking_status"]
           total_nights: number
@@ -42,12 +84,16 @@ export type Database = {
         Insert: {
           adults?: number
           balance_due?: number | null
+          channel?: string
+          channel_commission?: number
           check_in: string
           check_out: string
           children?: number
           created_at?: string
           deposit_paid?: number
           extras?: Json
+          fds_amount?: number | null
+          fds_share_pct?: number | null
           guest_email?: string | null
           guest_name: string
           guest_phone?: string | null
@@ -55,9 +101,11 @@ export type Database = {
           host_id?: string | null
           id?: string
           is_personal_use?: boolean
+          net_accommodation?: number | null
           notes?: string | null
           pipeline_stage?: Database["public"]["Enums"]["pipeline_stage"]
           price_per_night?: number
+          room_amount?: number | null
           source?: string
           status?: Database["public"]["Enums"]["booking_status"]
           total_nights?: number
@@ -66,12 +114,16 @@ export type Database = {
         Update: {
           adults?: number
           balance_due?: number | null
+          channel?: string
+          channel_commission?: number
           check_in?: string
           check_out?: string
           children?: number
           created_at?: string
           deposit_paid?: number
           extras?: Json
+          fds_amount?: number | null
+          fds_share_pct?: number | null
           guest_email?: string | null
           guest_name?: string
           guest_phone?: string | null
@@ -79,9 +131,11 @@ export type Database = {
           host_id?: string | null
           id?: string
           is_personal_use?: boolean
+          net_accommodation?: number | null
           notes?: string | null
           pipeline_stage?: Database["public"]["Enums"]["pipeline_stage"]
           price_per_night?: number
+          room_amount?: number | null
           source?: string
           status?: Database["public"]["Enums"]["booking_status"]
           total_nights?: number
@@ -96,6 +150,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      data_backups: {
+        Row: {
+          created_at: string
+          id: string
+          label: string
+          row_count: number
+          rows: Json
+          table_name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          label: string
+          row_count: number
+          rows: Json
+          table_name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          label?: string
+          row_count?: number
+          rows?: Json
+          table_name?: string
+        }
+        Relationships: []
       }
       documents: {
         Row: {
@@ -134,6 +215,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      expenses: {
+        Row: {
+          amount: number
+          amount_eur: number | null
+          category: string
+          created_at: string
+          currency: string
+          date: string
+          id: string
+          note: string | null
+          period_month: string | null
+        }
+        Insert: {
+          amount: number
+          amount_eur?: number | null
+          category: string
+          created_at?: string
+          currency?: string
+          date?: string
+          id?: string
+          note?: string | null
+          period_month?: string | null
+        }
+        Update: {
+          amount?: number
+          amount_eur?: number | null
+          category?: string
+          created_at?: string
+          currency?: string
+          date?: string
+          id?: string
+          note?: string | null
+          period_month?: string | null
+        }
+        Relationships: []
       }
       guests: {
         Row: {
@@ -210,45 +327,111 @@ export type Database = {
           check_in: string | null
           check_out: string | null
           children: number
+          consent_marketing: boolean
+          consent_privacy: boolean
           created_at: string
           extras: Json
           guest_email: string | null
           guest_name: string
           guest_phone: string | null
           id: string
+          landing_page: string | null
+          last_contact_at: string | null
+          lost_reason: string | null
           message: string | null
+          next_follow_up_at: string | null
+          referrer: string | null
           source_url: string | null
           status: Database["public"]["Enums"]["inquiry_status"]
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
         }
         Insert: {
           adults?: number
           check_in?: string | null
           check_out?: string | null
           children?: number
+          consent_marketing?: boolean
+          consent_privacy?: boolean
           created_at?: string
           extras?: Json
           guest_email?: string | null
           guest_name: string
           guest_phone?: string | null
           id?: string
+          landing_page?: string | null
+          last_contact_at?: string | null
+          lost_reason?: string | null
           message?: string | null
+          next_follow_up_at?: string | null
+          referrer?: string | null
           source_url?: string | null
           status?: Database["public"]["Enums"]["inquiry_status"]
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
         }
         Update: {
           adults?: number
           check_in?: string | null
           check_out?: string | null
           children?: number
+          consent_marketing?: boolean
+          consent_privacy?: boolean
           created_at?: string
           extras?: Json
           guest_email?: string | null
           guest_name?: string
           guest_phone?: string | null
           id?: string
+          landing_page?: string | null
+          last_contact_at?: string | null
+          lost_reason?: string | null
           message?: string | null
+          next_follow_up_at?: string | null
+          referrer?: string | null
           source_url?: string | null
           status?: Database["public"]["Enums"]["inquiry_status"]
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
+      }
+      settings: {
+        Row: {
+          booking_ical_url: string | null
+          fds_share_pct: number
+          ical_token: string
+          id: number
+          last_sync_attempt_at: string | null
+          last_sync_error: string | null
+          last_sync_success_at: string | null
+          meta_pixel_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          booking_ical_url?: string | null
+          fds_share_pct?: number
+          ical_token?: string
+          id?: number
+          last_sync_attempt_at?: string | null
+          last_sync_error?: string | null
+          last_sync_success_at?: string | null
+          meta_pixel_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          booking_ical_url?: string | null
+          fds_share_pct?: number
+          ical_token?: string
+          id?: number
+          last_sync_attempt_at?: string | null
+          last_sync_error?: string | null
+          last_sync_success_at?: string | null
+          meta_pixel_id?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -282,12 +465,26 @@ export type Database = {
           check_out: string
         }[]
       }
+      get_public_settings: {
+        Args: never
+        Returns: {
+          meta_pixel_id: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      ical_export_ranges: {
+        Args: { _token: string }
+        Returns: {
+          end_date: string
+          start_date: string
+          uid: string
+        }[]
       }
     }
     Enums: {

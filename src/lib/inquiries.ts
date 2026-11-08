@@ -1,9 +1,11 @@
 import { supabase } from "@/integrations/supabase/client";
+import { getAttribution } from "@/lib/tracking";
 
 export type InquiryInput = {
   guest_name: string; guest_email: string; guest_phone: string;
   check_in: string; check_out: string; adults: number; children: number;
   extras: string[]; message: string;
+  consent_privacy: boolean; consent_marketing: boolean;
 };
 
 export const SAVE_TIMEOUT_MS = 2000;
@@ -28,6 +30,9 @@ export async function saveInquiry(i: InquiryInput): Promise<boolean> {
       message: i.message.slice(0, 4000),
       status: "new",
       source_url: typeof window !== "undefined" ? window.location.href : null,
+      consent_privacy: i.consent_privacy,
+      consent_marketing: i.consent_marketing,
+      ...getAttribution(),
     });
     if (error) console.error("Inquiry not saved", error.message);
     return !error;

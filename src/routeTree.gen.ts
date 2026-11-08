@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminBookingsRouteImport } from './routes/admin.bookings'
 import { Route as AdminDocumentsRouteImport } from './routes/admin.documents'
@@ -18,6 +19,8 @@ import { Route as AdminGuestsRouteImport } from './routes/admin.guests'
 import { Route as AdminHostsRouteImport } from './routes/admin.hosts'
 import { Route as AdminInquiriesRouteImport } from './routes/admin.inquiries'
 import { Route as AdminLoginRouteImport } from './routes/admin_.login'
+import { Route as ApiPublicIcalTokenRouteImport } from './routes/api/public/ical.$token'
+import { Route as ApiPublicJobsIcalSyncRouteImport } from './routes/api/public/jobs/ical-sync'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -27,6 +30,11 @@ const IndexRoute = IndexRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -64,10 +72,21 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicIcalTokenRoute = ApiPublicIcalTokenRouteImport.update({
+  id: '/api/public/ical/$token',
+  path: '/api/public/ical/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicJobsIcalSyncRoute = ApiPublicJobsIcalSyncRouteImport.update({
+  id: '/api/public/jobs/ical-sync',
+  path: '/api/public/jobs/ical-sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/privacy': typeof PrivacyRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/documents': typeof AdminDocumentsRoute
   '/admin/guests': typeof AdminGuestsRoute
@@ -75,9 +94,12 @@ export interface FileRoutesByFullPath {
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
+  '/api/public/jobs/ical-sync': typeof ApiPublicJobsIcalSyncRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/privacy': typeof PrivacyRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/documents': typeof AdminDocumentsRoute
   '/admin/guests': typeof AdminGuestsRoute
@@ -85,11 +107,14 @@ export interface FileRoutesByTo {
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin': typeof AdminIndexRoute
+  '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
+  '/api/public/jobs/ical-sync': typeof ApiPublicJobsIcalSyncRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/privacy': typeof PrivacyRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/documents': typeof AdminDocumentsRoute
   '/admin/guests': typeof AdminGuestsRoute
@@ -97,12 +122,15 @@ export interface FileRoutesById {
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin_/login': typeof AdminLoginRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
+  '/api/public/jobs/ical-sync': typeof ApiPublicJobsIcalSyncRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/admin'
+    | '/privacy'
     | '/admin/bookings'
     | '/admin/documents'
     | '/admin/guests'
@@ -110,9 +138,12 @@ export interface FileRouteTypes {
     | '/admin/inquiries'
     | '/admin/login'
     | '/admin/'
+    | '/api/public/ical/$token'
+    | '/api/public/jobs/ical-sync'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/privacy'
     | '/admin/bookings'
     | '/admin/documents'
     | '/admin/guests'
@@ -120,10 +151,13 @@ export interface FileRouteTypes {
     | '/admin/inquiries'
     | '/admin/login'
     | '/admin'
+    | '/api/public/ical/$token'
+    | '/api/public/jobs/ical-sync'
   id:
     | '__root__'
     | '/'
     | '/admin'
+    | '/privacy'
     | '/admin/bookings'
     | '/admin/documents'
     | '/admin/guests'
@@ -131,12 +165,17 @@ export interface FileRouteTypes {
     | '/admin/inquiries'
     | '/admin_/login'
     | '/admin/'
+    | '/api/public/ical/$token'
+    | '/api/public/jobs/ical-sync'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  PrivacyRoute: typeof PrivacyRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  ApiPublicIcalTokenRoute: typeof ApiPublicIcalTokenRoute
+  ApiPublicJobsIcalSyncRoute: typeof ApiPublicJobsIcalSyncRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -153,6 +192,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -204,6 +250,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/ical/$token': {
+      id: '/api/public/ical/$token'
+      path: '/api/public/ical/$token'
+      fullPath: '/api/public/ical/$token'
+      preLoaderRoute: typeof ApiPublicIcalTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/jobs/ical-sync': {
+      id: '/api/public/jobs/ical-sync'
+      path: '/api/public/jobs/ical-sync'
+      fullPath: '/api/public/jobs/ical-sync'
+      preLoaderRoute: typeof ApiPublicJobsIcalSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -230,7 +290,10 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  PrivacyRoute: PrivacyRoute,
   AdminLoginRoute: AdminLoginRoute,
+  ApiPublicIcalTokenRoute: ApiPublicIcalTokenRoute,
+  ApiPublicJobsIcalSyncRoute: ApiPublicJobsIcalSyncRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
