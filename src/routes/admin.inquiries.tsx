@@ -42,14 +42,23 @@ function InquiriesPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const markContacted = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("inquiries").update({ last_contact_at: new Date().toISOString() }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["admin"] }),
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   return (
     <div className="space-y-4">
       <div className="border border-border">
         <Table>
-          <TableHeader><TableRow><TableHead>Nome</TableHead><TableHead>Date richieste</TableHead><TableHead>Ospiti</TableHead><TableHead>Extra</TableHead><TableHead>Ricevuta</TableHead><TableHead>Stato</TableHead><TableHead /></TableRow></TableHeader>
+          <TableHeader><TableRow><TableHead>Nome</TableHead><TableHead>Date richieste</TableHead><TableHead>Ospiti</TableHead><TableHead>Extra</TableHead><TableHead>Ricevuta</TableHead><TableHead>Ultimo contatto</TableHead><TableHead>Stato</TableHead><TableHead /></TableRow></TableHeader>
           <TableBody>
-            {isLoading && <TableRow><TableCell colSpan={7} className="text-muted-foreground">Caricamento…</TableCell></TableRow>}
-            {!isLoading && data.length === 0 && <TableRow><TableCell colSpan={7} className="text-muted-foreground">Nessuna richiesta dal sito, per ora.</TableCell></TableRow>}
+            {isLoading && <TableRow><TableCell colSpan={8} className="text-muted-foreground">Caricamento…</TableCell></TableRow>}
+            {!isLoading && data.length === 0 && <TableRow><TableCell colSpan={8} className="text-muted-foreground">Nessuna richiesta dal sito, per ora.</TableCell></TableRow>}
             {data.map(i => (
               <TableRow key={i.id}>
                 <TableCell><div>{i.guest_name}</div><div className="text-xs text-muted-foreground">{i.guest_phone ?? i.guest_email ?? ""}</div></TableCell>
@@ -57,6 +66,7 @@ function InquiriesPage() {
                 <TableCell>{i.adults + i.children}</TableCell>
                 <TableCell className="max-w-48 truncate">{extrasList(i.extras).join(", ") || "—"}</TableCell>
                 <TableCell className="whitespace-nowrap">{fmtDate(i.created_at)}</TableCell>
+                <TableCell className="whitespace-nowrap"><SinceContact i={i} onMark={() => markContacted.mutate(i.id)} /></TableCell>
                 <TableCell>
                   <Select value={i.status} onValueChange={v => setStatus.mutate({ id: i.id, status: v as Inquiry["status"] })}>
                     <SelectTrigger className="w-36" aria-label={`Stato richiesta ${i.guest_name}`}><SelectValue /></SelectTrigger>
@@ -70,6 +80,20 @@ function InquiriesPage() {
         </Table>
       </div>
       {converting && <BookingFormDialog open onOpenChange={o => { if (!o) setConverting(null); }} initial={draftFromInquiry(converting)} inquiryId={converting.id} />}
+    </div>
+  );
+}
+
+/** Days since last contact (or since received, if never contacted); red after 24 hours on open inquiries. */
+function SinceContact({ i, onMark }: { i: Inquiry; onMark: () => void }) {
+  const ref = i.last_contact_at ?? i.created_at;
+  const hours = (Date.now() - Date.parse(ref)) / 3600000;
+  const days = Math.floor(hours / 24);
+  const late = hours > 24 && (i.status === "new" || i.status === "contacted");
+  return (
+    <div className="flex items-center gap-2">
+      <span className={late ? "font-medium text-destructive" : "text-muted-foreground"}>{days === 0 ? "oggi" : `${days} ${days === 1 ? "giorno" : "giorni"}`}{!i.last_contact_at && " (mai)"}</span>
+      <Button size="sm" variant="ghost" onClick={onMark}>Contattato ora</Button>
     </div>
   );
 }
