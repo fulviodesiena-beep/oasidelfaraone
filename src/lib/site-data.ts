@@ -83,22 +83,22 @@ export const SPOTS = [
  { name: "Blue Hole, Dahab", desc: "Un celebre sito sul mare. Escursioni e immersioni da organizzare con guide qualificate.", image: dahab.url, photo: "Fondali di Dahab · foto illustrativa" },
  { name: "Old Sharm", desc: "Il cuore autentico di Old Sharm: il vecchio porto dei pescatori, i vicoli bianchi, i ristoranti di pesce fresco e l’anima vera di questa città.", image: ownOldSharm.url, photo: "Old Sharm" },
 ];
-export const ROOM_AMENITIES = ["Aria condizionata", "TV satellitare", "Balcone", "Microonde", "Cassaforte", "Bollitore", "Asciugacapelli", "Accesso a piscine e spiagge"];
+export const ROOM_AMENITIES = ["Aria condizionata", "TV satellitare", "Balcone vista piscina", "Microonde", "Cassaforte", "Bollitore", "Asciugacapelli", "Spiagge e piscine del resort incluse"];
 export const HERO_PHOTOS: { src: string; alt: string }[] = [
   { src: heroPoolSunset.url, alt: "Piscina a sfioro al tramonto, con il Mar Rosso davanti" },
   { src: heroCoastAerial.url, alt: "Veduta aerea del villaggio, della spiaggia e della barriera corallina" },
   { src: heroOrientalSuite.url, alt: "Soggiorno in stile orientale affacciato sulla piscina, alla sera" },
 ];
 export const APARTMENT_PHOTOS: { src: string; alt: string }[] = [
-  { src: aptBedroomDaybed.url, alt: "Camera con letto matrimoniale e lettino" },
+  { src: aptBedroomDaybed.url, alt: "Camera con letto matrimoniale e lettino dell’appartamento Elisir d’Oriente al Domina Coral Bay" },
   { src: aptRoomTowelArt.url, alt: "Letto e divano letto con asciugamani e petali" },
   { src: aptBedFlowers.url, alt: "Dettaglio del letto con petali" },
-  { src: aptSofaBed.url, alt: "Divano letto accanto al balcone" },
+  { src: aptSofaBed.url, alt: "Divano letto accanto al balcone vista piscina dell’appartamento a Sharm el-Sheikh" },
   { src: aptBedroomSofa.url, alt: "Angolo riposo con divanetto" },
-  { src: aptBathroomBathtub.url, alt: "Bagno con vasca e doccia" },
+  { src: aptBathroomBathtub.url, alt: "Bagno dell’appartamento con vasca e doccia in vetro" },
   { src: aptBathroomVanity.url, alt: "Bagno con lavandino e porta scorrevole" },
-  { src: aptBalconyChairs.url, alt: "Balcone con due poltrone in legno" },
-  { src: aptPoolRocks.url, alt: "Piscina del villaggio con rocce e ombrelloni" },
+  { src: aptBalconyChairs.url, alt: "Balcone con vista sulla piscina dell’appartamento Elisir d’Oriente al Domina Coral Bay" },
+  { src: aptPoolRocks.url, alt: "Piscina del villaggio Domina Coral Bay con rocce e ombrelloni" },
   { src: aptPoolWaterfall.url, alt: "L’acqua della piscina con cascata di rocce" },
 ];
 // Real village photos supplied by the owner (August 2026) for the Domina Coral Bay carousel.

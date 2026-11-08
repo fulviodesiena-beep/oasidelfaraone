@@ -14,8 +14,19 @@ User-agent: facebookexternalhit
 Allow: /
 Disallow: /admin
 
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-Web
+User-agent: PerplexityBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /admin
+
 User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: https://oasidelfaraone.com/sitemap.xml
+Sitemap: https://oasidelfaraone.it/sitemap.xml
