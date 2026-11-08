@@ -3,7 +3,7 @@ import { seasonFor, quote, MAX_GUESTS, transferTotal } from "@/lib/pricing";
 import { ROOM_AMENITIES } from "@/lib/site-data";
 describe("apartment rules", () => {
  it("limits occupancy to four", () => expect(MAX_GUESTS).toBe(4));
- it("has a balcony rather than a terrace", () => { expect(ROOM_AMENITIES).toContain("Balcone"); expect(ROOM_AMENITIES).not.toContain("Terrazza"); });
+ it("has a balcony rather than a terrace", () => { expect(ROOM_AMENITIES).toContain("Balcone vista piscina"); expect(ROOM_AMENITIES).not.toContain("Terrazza"); });
  it("does not include room Wi-Fi", () => expect(ROOM_AMENITIES.some(a => /wi.?fi/i.test(a))).toBe(false));
  it("does not include a coffee machine", () => expect(ROOM_AMENITIES.some(a => /caff[eè]|coffee/i.test(a))).toBe(false));
  it("does not include spa access", () => expect(ROOM_AMENITIES.some(a => /spa/i.test(a))).toBe(false));
