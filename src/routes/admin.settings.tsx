@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field } from "@/components/admin/BookingFormDialog";
 import { syncBookingNow } from "@/lib/ical.functions";
+import type { TablesUpdate } from "@/integrations/supabase/types";
 
 export const Route = createFileRoute("/admin/settings")({ component: SettingsPage });
 
@@ -26,7 +27,7 @@ function SettingsPage() {
   const [f, setF] = useState({ booking_ical_url: "", owner_cap_per_night: 80, fds_min_per_night: 20, owner_name: "", meta_pixel_id: "" });
   useEffect(() => { if (s) setF({ booking_ical_url: s.booking_ical_url ?? "", owner_cap_per_night: Number(s.owner_cap_per_night ?? 80), fds_min_per_night: Number(s.fds_min_per_night ?? 20), owner_name: s.owner_name ?? "", meta_pixel_id: s.meta_pixel_id ?? "" }); }, [s]);
   const save = useMutation({
-    mutationFn: async (patch: Partial<NonNullable<typeof s>>) => { const { error } = await supabase.from("settings").update({ ...patch, updated_at: new Date().toISOString() }).eq("id", 1); if (error) throw error; },
+    mutationFn: async (patch: TablesUpdate<"settings">) => { const { error } = await supabase.from("settings").update({ ...patch, updated_at: new Date().toISOString() }).eq("id", 1); if (error) throw error; },
     onSuccess: () => { toast.success("Impostazioni salvate"); qc.invalidateQueries({ queryKey: ["admin"] }); },
     onError: (e: Error) => toast.error(e.message),
   });
