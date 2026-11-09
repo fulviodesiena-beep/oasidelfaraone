@@ -1,13 +1,14 @@
 import { supabase } from "@/integrations/supabase/client";
 import { getAttribution } from "@/lib/tracking";
 import { ELISIR_ROOM_ID } from "@/lib/site-data";
+import type { Language } from "@/lib/i18n";
 
 export type InquiryInput = {
   guest_name: string; guest_email: string; guest_phone: string;
   check_in: string; check_out: string; adults: number; children: number;
   extras: string[]; message: string;
   consent_privacy: boolean; consent_marketing: boolean;
-  special_dates?: string; consent_occasions?: boolean; room_id?: string;
+  special_dates?: string; consent_occasions?: boolean; room_id?: string; language?: Language;
 };
 
 export const SAVE_TIMEOUT_MS = 2000;
@@ -37,6 +38,7 @@ export async function saveInquiry(i: InquiryInput): Promise<boolean> {
       special_dates: i.special_dates?.trim().slice(0, 500) || null,
       consent_occasions: !!i.consent_occasions,
       room_id: i.room_id || ELISIR_ROOM_ID,
+      language: i.language ?? "it",
       ...getAttribution(),
     });
     if (error) console.error("Inquiry not saved", error.message);

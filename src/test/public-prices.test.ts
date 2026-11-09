@@ -6,10 +6,8 @@ const read = (p: string) => readFileSync(p, "utf8");
 
 describe("prezzi solo nel preventivo", () => {
   it("la home non espone la sezione Tariffe né importi", () => {
-    const home = read("src/routes/index.tsx");
+    const home = read("src/components/site/PublicHome.tsx");
     expect(home).not.toMatch(/id="tariffe"|SEASONS|€/);
-    expect(home).toContain('["book", "Disponibilità"]');
-    expect(home).toContain("Verifica disponibilità");
   });
   it("llms.txt non contiene importi", () => {
     expect(read("public/llms.txt")).not.toMatch(/€|\b(80|100|120|150)\s?(€|EUR)/);

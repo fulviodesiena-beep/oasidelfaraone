@@ -6,6 +6,7 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  useRouterState,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
@@ -103,8 +104,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  const pathname = useRouterState({ select: state => state.location.pathname });
+  const language = pathname === "/en" || pathname.startsWith("/en/") ? "en" : pathname === "/de" || pathname.startsWith("/de/") ? "de" : "it";
   return (
-    <html lang="it" translate="no">
+    <html lang={language} dir="ltr" translate="no">
       <head>
         <HeadContent />
       </head>

@@ -482,6 +482,7 @@ export type Database = {
           guest_phone: string | null
           id: string
           landing_page: string | null
+          language: string | null
           last_contact_at: string | null
           lost_reason: string | null
           message: string | null
@@ -511,6 +512,7 @@ export type Database = {
           guest_phone?: string | null
           id?: string
           landing_page?: string | null
+          language?: string | null
           last_contact_at?: string | null
           lost_reason?: string | null
           message?: string | null
@@ -540,6 +542,7 @@ export type Database = {
           guest_phone?: string | null
           id?: string
           landing_page?: string | null
+          language?: string | null
           last_contact_at?: string | null
           lost_reason?: string | null
           message?: string | null
