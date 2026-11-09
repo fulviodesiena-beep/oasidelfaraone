@@ -12,22 +12,31 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as DeRouteImport } from './routes/de'
+import { Route as DisiscrizioneRouteImport } from './routes/disiscrizione'
 import { Route as EnRouteImport } from './routes/en'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminBookingsRouteImport } from './routes/admin.bookings'
 import { Route as AdminContactsRouteImport } from './routes/admin.contacts'
 import { Route as AdminDocumentsRouteImport } from './routes/admin.documents'
+import { Route as AdminEmailsRouteImport } from './routes/admin.emails'
 import { Route as AdminExpensesRouteImport } from './routes/admin.expenses'
 import { Route as AdminGuestsRouteImport } from './routes/admin.guests'
 import { Route as AdminHostsRouteImport } from './routes/admin.hosts'
 import { Route as AdminInquiriesRouteImport } from './routes/admin.inquiries'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminTodayRouteImport } from './routes/admin.today'
 import { Route as AdminLoginRouteImport } from './routes/admin_.login'
+import { Route as DeAbmeldenRouteImport } from './routes/de_.abmelden'
 import { Route as DePrivacyRouteImport } from './routes/de_.privacy'
 import { Route as EnPrivacyRouteImport } from './routes/en_.privacy'
+import { Route as EnUnsubscribeRouteImport } from './routes/en_.unsubscribe'
+import { Route as NewsletterConfermaRouteImport } from './routes/newsletter.conferma'
+import { Route as ApiPublicBrevoWebhookRouteImport } from './routes/api/public/brevo-webhook'
 import { Route as ApiPublicIcalTokenRouteImport } from './routes/api/public/ical.$token'
+import { Route as ApiPublicJobsAutomationsRouteImport } from './routes/api/public/jobs/automations'
 import { Route as ApiPublicJobsIcalSyncRouteImport } from './routes/api/public/jobs/ical-sync'
+import { Route as ApiPublicRIdRouteImport } from './routes/api/public/r.$id'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
 const IndexRoute = IndexRouteImport.update({
@@ -43,6 +52,11 @@ const AdminRoute = AdminRouteImport.update({
 const DeRoute = DeRouteImport.update({
   id: '/de',
   path: '/de',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DisiscrizioneRoute = DisiscrizioneRouteImport.update({
+  id: '/disiscrizione',
+  path: '/disiscrizione',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnRoute = EnRouteImport.update({
@@ -75,6 +89,11 @@ const AdminDocumentsRoute = AdminDocumentsRouteImport.update({
   path: '/documents',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminEmailsRoute = AdminEmailsRouteImport.update({
+  id: '/emails',
+  path: '/emails',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminExpensesRoute = AdminExpensesRouteImport.update({
   id: '/expenses',
   path: '/expenses',
@@ -100,9 +119,19 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminTodayRoute = AdminTodayRouteImport.update({
+  id: '/today',
+  path: '/today',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin_/login',
   path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DeAbmeldenRoute = DeAbmeldenRouteImport.update({
+  id: '/de_/abmelden',
+  path: '/de/abmelden',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DePrivacyRoute = DePrivacyRouteImport.update({
@@ -115,14 +144,40 @@ const EnPrivacyRoute = EnPrivacyRouteImport.update({
   path: '/en/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnUnsubscribeRoute = EnUnsubscribeRouteImport.update({
+  id: '/en_/unsubscribe',
+  path: '/en/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsletterConfermaRoute = NewsletterConfermaRouteImport.update({
+  id: '/newsletter/conferma',
+  path: '/newsletter/conferma',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicBrevoWebhookRoute = ApiPublicBrevoWebhookRouteImport.update({
+  id: '/api/public/brevo-webhook',
+  path: '/api/public/brevo-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicIcalTokenRoute = ApiPublicIcalTokenRouteImport.update({
   id: '/api/public/ical/$token',
   path: '/api/public/ical/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicJobsAutomationsRoute =
+  ApiPublicJobsAutomationsRouteImport.update({
+    id: '/api/public/jobs/automations',
+    path: '/api/public/jobs/automations',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicJobsIcalSyncRoute = ApiPublicJobsIcalSyncRouteImport.update({
   id: '/api/public/jobs/ical-sync',
   path: '/api/public/jobs/ical-sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicRIdRoute = ApiPublicRIdRouteImport.update({
+  id: '/api/public/r/$id',
+  path: '/api/public/r/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LovableEmailTransactionalPreviewRoute =
@@ -136,43 +191,61 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/de': typeof DeRoute
+  '/disiscrizione': typeof DisiscrizioneRoute
   '/en': typeof EnRoute
   '/privacy': typeof PrivacyRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/contacts': typeof AdminContactsRoute
   '/admin/documents': typeof AdminDocumentsRoute
+  '/admin/emails': typeof AdminEmailsRoute
   '/admin/expenses': typeof AdminExpensesRoute
   '/admin/guests': typeof AdminGuestsRoute
   '/admin/hosts': typeof AdminHostsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/today': typeof AdminTodayRoute
   '/admin/login': typeof AdminLoginRoute
+  '/de/abmelden': typeof DeAbmeldenRoute
   '/de/privacy': typeof DePrivacyRoute
   '/en/privacy': typeof EnPrivacyRoute
+  '/en/unsubscribe': typeof EnUnsubscribeRoute
+  '/newsletter/conferma': typeof NewsletterConfermaRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/public/brevo-webhook': typeof ApiPublicBrevoWebhookRoute
   '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
+  '/api/public/jobs/automations': typeof ApiPublicJobsAutomationsRoute
   '/api/public/jobs/ical-sync': typeof ApiPublicJobsIcalSyncRoute
+  '/api/public/r/$id': typeof ApiPublicRIdRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/de': typeof DeRoute
+  '/disiscrizione': typeof DisiscrizioneRoute
   '/en': typeof EnRoute
   '/privacy': typeof PrivacyRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/contacts': typeof AdminContactsRoute
   '/admin/documents': typeof AdminDocumentsRoute
+  '/admin/emails': typeof AdminEmailsRoute
   '/admin/expenses': typeof AdminExpensesRoute
   '/admin/guests': typeof AdminGuestsRoute
   '/admin/hosts': typeof AdminHostsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/today': typeof AdminTodayRoute
   '/admin/login': typeof AdminLoginRoute
+  '/de/abmelden': typeof DeAbmeldenRoute
   '/de/privacy': typeof DePrivacyRoute
   '/en/privacy': typeof EnPrivacyRoute
+  '/en/unsubscribe': typeof EnUnsubscribeRoute
+  '/newsletter/conferma': typeof NewsletterConfermaRoute
   '/admin': typeof AdminIndexRoute
+  '/api/public/brevo-webhook': typeof ApiPublicBrevoWebhookRoute
   '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
+  '/api/public/jobs/automations': typeof ApiPublicJobsAutomationsRoute
   '/api/public/jobs/ical-sync': typeof ApiPublicJobsIcalSyncRoute
+  '/api/public/r/$id': typeof ApiPublicRIdRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesById {
@@ -180,22 +253,31 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/de': typeof DeRoute
+  '/disiscrizione': typeof DisiscrizioneRoute
   '/en': typeof EnRoute
   '/privacy': typeof PrivacyRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/contacts': typeof AdminContactsRoute
   '/admin/documents': typeof AdminDocumentsRoute
+  '/admin/emails': typeof AdminEmailsRoute
   '/admin/expenses': typeof AdminExpensesRoute
   '/admin/guests': typeof AdminGuestsRoute
   '/admin/hosts': typeof AdminHostsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/today': typeof AdminTodayRoute
   '/admin_/login': typeof AdminLoginRoute
+  '/de_/abmelden': typeof DeAbmeldenRoute
   '/de_/privacy': typeof DePrivacyRoute
   '/en_/privacy': typeof EnPrivacyRoute
+  '/en_/unsubscribe': typeof EnUnsubscribeRoute
+  '/newsletter/conferma': typeof NewsletterConfermaRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/public/brevo-webhook': typeof ApiPublicBrevoWebhookRoute
   '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
+  '/api/public/jobs/automations': typeof ApiPublicJobsAutomationsRoute
   '/api/public/jobs/ical-sync': typeof ApiPublicJobsIcalSyncRoute
+  '/api/public/r/$id': typeof ApiPublicRIdRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRouteTypes {
@@ -204,65 +286,92 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/de'
+    | '/disiscrizione'
     | '/en'
     | '/privacy'
     | '/admin/bookings'
     | '/admin/contacts'
     | '/admin/documents'
+    | '/admin/emails'
     | '/admin/expenses'
     | '/admin/guests'
     | '/admin/hosts'
     | '/admin/inquiries'
     | '/admin/settings'
+    | '/admin/today'
     | '/admin/login'
+    | '/de/abmelden'
     | '/de/privacy'
     | '/en/privacy'
+    | '/en/unsubscribe'
+    | '/newsletter/conferma'
     | '/admin/'
+    | '/api/public/brevo-webhook'
     | '/api/public/ical/$token'
+    | '/api/public/jobs/automations'
     | '/api/public/jobs/ical-sync'
+    | '/api/public/r/$id'
     | '/lovable/email/transactional/preview'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/de'
+    | '/disiscrizione'
     | '/en'
     | '/privacy'
     | '/admin/bookings'
     | '/admin/contacts'
     | '/admin/documents'
+    | '/admin/emails'
     | '/admin/expenses'
     | '/admin/guests'
     | '/admin/hosts'
     | '/admin/inquiries'
     | '/admin/settings'
+    | '/admin/today'
     | '/admin/login'
+    | '/de/abmelden'
     | '/de/privacy'
     | '/en/privacy'
+    | '/en/unsubscribe'
+    | '/newsletter/conferma'
     | '/admin'
+    | '/api/public/brevo-webhook'
     | '/api/public/ical/$token'
+    | '/api/public/jobs/automations'
     | '/api/public/jobs/ical-sync'
+    | '/api/public/r/$id'
     | '/lovable/email/transactional/preview'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/de'
+    | '/disiscrizione'
     | '/en'
     | '/privacy'
     | '/admin/bookings'
     | '/admin/contacts'
     | '/admin/documents'
+    | '/admin/emails'
     | '/admin/expenses'
     | '/admin/guests'
     | '/admin/hosts'
     | '/admin/inquiries'
     | '/admin/settings'
+    | '/admin/today'
     | '/admin_/login'
+    | '/de_/abmelden'
     | '/de_/privacy'
     | '/en_/privacy'
+    | '/en_/unsubscribe'
+    | '/newsletter/conferma'
     | '/admin/'
+    | '/api/public/brevo-webhook'
     | '/api/public/ical/$token'
+    | '/api/public/jobs/automations'
     | '/api/public/jobs/ical-sync'
+    | '/api/public/r/$id'
     | '/lovable/email/transactional/preview'
   fileRoutesById: FileRoutesById
 }
@@ -270,13 +379,20 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   DeRoute: typeof DeRoute
+  DisiscrizioneRoute: typeof DisiscrizioneRoute
   EnRoute: typeof EnRoute
   PrivacyRoute: typeof PrivacyRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  DeAbmeldenRoute: typeof DeAbmeldenRoute
   DePrivacyRoute: typeof DePrivacyRoute
   EnPrivacyRoute: typeof EnPrivacyRoute
+  EnUnsubscribeRoute: typeof EnUnsubscribeRoute
+  NewsletterConfermaRoute: typeof NewsletterConfermaRoute
+  ApiPublicBrevoWebhookRoute: typeof ApiPublicBrevoWebhookRoute
   ApiPublicIcalTokenRoute: typeof ApiPublicIcalTokenRoute
+  ApiPublicJobsAutomationsRoute: typeof ApiPublicJobsAutomationsRoute
   ApiPublicJobsIcalSyncRoute: typeof ApiPublicJobsIcalSyncRoute
+  ApiPublicRIdRoute: typeof ApiPublicRIdRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
 
@@ -301,6 +417,13 @@ declare module '@tanstack/react-router' {
       path: '/de'
       fullPath: '/de'
       preLoaderRoute: typeof DeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/disiscrizione': {
+      id: '/disiscrizione'
+      path: '/disiscrizione'
+      fullPath: '/disiscrizione'
+      preLoaderRoute: typeof DisiscrizioneRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/en': {
@@ -345,6 +468,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDocumentsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/emails': {
+      id: '/admin/emails'
+      path: '/emails'
+      fullPath: '/admin/emails'
+      preLoaderRoute: typeof AdminEmailsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/expenses': {
       id: '/admin/expenses'
       path: '/expenses'
@@ -380,11 +510,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSettingsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/today': {
+      id: '/admin/today'
+      path: '/today'
+      fullPath: '/admin/today'
+      preLoaderRoute: typeof AdminTodayRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin_/login': {
       id: '/admin_/login'
       path: '/admin/login'
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/de_/abmelden': {
+      id: '/de_/abmelden'
+      path: '/de/abmelden'
+      fullPath: '/de/abmelden'
+      preLoaderRoute: typeof DeAbmeldenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/de_/privacy': {
@@ -401,6 +545,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnPrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en_/unsubscribe': {
+      id: '/en_/unsubscribe'
+      path: '/en/unsubscribe'
+      fullPath: '/en/unsubscribe'
+      preLoaderRoute: typeof EnUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/newsletter/conferma': {
+      id: '/newsletter/conferma'
+      path: '/newsletter/conferma'
+      fullPath: '/newsletter/conferma'
+      preLoaderRoute: typeof NewsletterConfermaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/brevo-webhook': {
+      id: '/api/public/brevo-webhook'
+      path: '/api/public/brevo-webhook'
+      fullPath: '/api/public/brevo-webhook'
+      preLoaderRoute: typeof ApiPublicBrevoWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/ical/$token': {
       id: '/api/public/ical/$token'
       path: '/api/public/ical/$token'
@@ -408,11 +573,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicIcalTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/jobs/automations': {
+      id: '/api/public/jobs/automations'
+      path: '/api/public/jobs/automations'
+      fullPath: '/api/public/jobs/automations'
+      preLoaderRoute: typeof ApiPublicJobsAutomationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/jobs/ical-sync': {
       id: '/api/public/jobs/ical-sync'
       path: '/api/public/jobs/ical-sync'
       fullPath: '/api/public/jobs/ical-sync'
       preLoaderRoute: typeof ApiPublicJobsIcalSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/r/$id': {
+      id: '/api/public/r/$id'
+      path: '/api/public/r/$id'
+      fullPath: '/api/public/r/$id'
+      preLoaderRoute: typeof ApiPublicRIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lovable/email/transactional/preview': {
@@ -429,11 +608,13 @@ interface AdminRouteChildren {
   AdminBookingsRoute: typeof AdminBookingsRoute
   AdminContactsRoute: typeof AdminContactsRoute
   AdminDocumentsRoute: typeof AdminDocumentsRoute
+  AdminEmailsRoute: typeof AdminEmailsRoute
   AdminExpensesRoute: typeof AdminExpensesRoute
   AdminGuestsRoute: typeof AdminGuestsRoute
   AdminHostsRoute: typeof AdminHostsRoute
   AdminInquiriesRoute: typeof AdminInquiriesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminTodayRoute: typeof AdminTodayRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -441,11 +622,13 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminBookingsRoute: AdminBookingsRoute,
   AdminContactsRoute: AdminContactsRoute,
   AdminDocumentsRoute: AdminDocumentsRoute,
+  AdminEmailsRoute: AdminEmailsRoute,
   AdminExpensesRoute: AdminExpensesRoute,
   AdminGuestsRoute: AdminGuestsRoute,
   AdminHostsRoute: AdminHostsRoute,
   AdminInquiriesRoute: AdminInquiriesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
+  AdminTodayRoute: AdminTodayRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
@@ -455,13 +638,20 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   DeRoute: DeRoute,
+  DisiscrizioneRoute: DisiscrizioneRoute,
   EnRoute: EnRoute,
   PrivacyRoute: PrivacyRoute,
   AdminLoginRoute: AdminLoginRoute,
+  DeAbmeldenRoute: DeAbmeldenRoute,
   DePrivacyRoute: DePrivacyRoute,
   EnPrivacyRoute: EnPrivacyRoute,
+  EnUnsubscribeRoute: EnUnsubscribeRoute,
+  NewsletterConfermaRoute: NewsletterConfermaRoute,
+  ApiPublicBrevoWebhookRoute: ApiPublicBrevoWebhookRoute,
   ApiPublicIcalTokenRoute: ApiPublicIcalTokenRoute,
+  ApiPublicJobsAutomationsRoute: ApiPublicJobsAutomationsRoute,
   ApiPublicJobsIcalSyncRoute: ApiPublicJobsIcalSyncRoute,
+  ApiPublicRIdRoute: ApiPublicRIdRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
 export const routeTree = rootRouteImport
