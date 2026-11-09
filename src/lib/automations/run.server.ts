@@ -88,7 +88,7 @@ export async function loadAutomationContext(db: DB, now: Date) {
   const err = s.error ?? b.error ?? c.error ?? q.error ?? o.error ?? l.error;
   if (err) throw new Error(err.message);
   if (!s.data) throw new Error("Impostazioni mancanti");
-  return { settings: s.data, bookings: b.data as ABooking[], contacts: c.data, inquiries: q.data, occasions: o.data, logs: l.data };
+  return { settings: s.data, bookings: (b.data ?? []) as ABooking[], contacts: c.data ?? [], inquiries: q.data ?? [], occasions: o.data ?? [], logs: l.data ?? [] };
 }
 
 export type RunSummary = { due: number; sent: number; tasks: number; skipped: number; errors: number; details: string[] };
