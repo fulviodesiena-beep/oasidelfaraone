@@ -22,7 +22,7 @@ export async function unsubscribeUrl(contactId: string, lang: Lang) {
   return `${SITE}${unsubscribePath(lang)}?t=${encodeURIComponent(await signToken("unsub", contactId))}`;
 }
 
-export type Rendered = { subject: string; text: string; html: string; links: { label: string; url: string }[]; whatsapp?: string };
+export type Rendered = { subject: string; text: string; html: string; links: { label: string; url: string }[]; props: OasiMessageProps; whatsapp?: string };
 
 type Settings = Database["public"]["Tables"]["settings"]["Row"];
 async function roomOf(db: DB, roomId: string | null | undefined, s: Settings) {
@@ -34,10 +34,9 @@ async function roomOf(db: DB, roomId: string | null | undefined, s: Settings) {
 export async function renderItem(db: DB, item: Pick<DueItem, "msgKey" | "lang" | "name" | "bookingId" | "contactId" | "channel" | "occasion">, s: Settings, opts: { logId?: string } = {}): Promise<Rendered> {
   const lang = item.lang;
   let vars: Record<string, string> = { nome_ospite: item.name, camera: "Elisir d'Oriente", numero_stanza: s.unit_number, occasione: item.occasion ?? "" };
-  let roomId: string | null = null;
   if (item.bookingId) {
     const { data: b } = await db.from("bookings").select("check_in, check_out, total_nights, extras, room_id").eq("id", item.bookingId).single();
-    if (b) { roomId = b.room_id; vars = { ...vars, ...bookingVars(b, item.name, lang, await roomOf(db, b.room_id, s)) }; }
+    if (b) { vars = { ...vars, ...bookingVars(b, item.name, lang, await roomOf(db, b.room_id, s)) }; }
   }
   const overrides = (s.template_overrides ?? {}) as Record<string, Partial<Record<Lang, string>>>;
   const { subject, body } = messageText(item.msgKey, lang, vars, overrides);
@@ -63,7 +62,6 @@ export async function renderItem(db: DB, item: Pick<DueItem, "msgKey" | "lang" |
     case "A6b": if (s.instagram_url) links.push({ label: L("instagram"), url: s.instagram_url }); break;
     case "A8a": case "A8b": case "A9": case "A7": links.push({ label: L("site"), url: site }); break;
   }
-  void roomId;
   const props: OasiMessageProps = { subject, body, links };
   if (MARKETING.has(item.msgKey)) {
     props.footer = MARKETING_FOOTER[lang];
@@ -74,7 +72,7 @@ export async function renderItem(db: DB, item: Pick<DueItem, "msgKey" | "lang" |
   const html = await render(el);
   const text = await render(el, { plainText: true });
   const waText = [body, ...links.map(l => `${l.label}: ${l.url}`)].join("\n\n");
-  return { subject, text, html, links, whatsapp: item.channel === "whatsapp" ? waText : undefined };
+  return { subject, text, html, links, props, whatsapp: item.channel === "whatsapp" ? waText : undefined };
 }
 
 export async function loadAutomationContext(db: DB, now: Date) {
@@ -116,7 +114,7 @@ export async function runAutomations(db: DB, now = new Date()): Promise<RunSumma
     if (item.channel === "whatsapp") { await patch({ status: "queued" }); sum.tasks++; continue; }
     try {
       if (item.channel === "email") {
-        const res = await sendTemplateEmail("oasi-message", item.to, { templateData: { subject: r.subject, body: undefined, ...propsFor(r) }, idempotencyKey: item.dedupKey, replyTo: OWNER_INBOX });
+        const res = await sendTemplateEmail("oasi-message", item.to, { templateData: { ...r.props }, idempotencyKey: item.dedupKey, replyTo: OWNER_INBOX });
         if (res.sent) { await patch({ status: "sent", sent_at: new Date().toISOString() }); sum.sent++; }
         else { await patch({ status: "skipped", reason: "destinatario disiscritto o bloccato" }); sum.skipped++; }
       } else {
@@ -131,5 +129,3 @@ export async function runAutomations(db: DB, now = new Date()): Promise<RunSumma
   return sum;
 }
 
-/** Re-derives the email template props from a rendered item (body + links + marketing footer are already in html/text). */
-function propsFor(r: Rendered) { return { prerendered: true, body: r.text.split("\n\n→")[0], links: r.links, ...(r as unknown as Record<string, unknown>)._props as object }; }
