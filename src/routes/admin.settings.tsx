@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field } from "@/components/admin/BookingFormDialog";
 import { syncBookingNow } from "@/lib/ical.functions";
 import { TemplateUploads } from "@/components/admin/TemplateUploads";
+import { AutomationSettings } from "@/components/admin/AutomationSettings";
 import type { TablesUpdate } from "@/integrations/supabase/types";
 
 export const Route = createFileRoute("/admin/settings")({ component: SettingsPage });
@@ -85,6 +86,9 @@ function SettingsPage() {
 
       <Card><CardHeader><CardTitle className="font-display text-2xl font-normal">Modelli e allegati</CardTitle></CardHeader>
         <CardContent><TemplateUploads /></CardContent></Card>
+
+      <Card><CardHeader><CardTitle className="font-display text-2xl font-normal">Email e automazioni</CardTitle></CardHeader>
+        <CardContent><AutomationSettings s={s} /></CardContent></Card>
 
       <Card><CardHeader><CardTitle className="font-display text-2xl font-normal">Meta Pixel</CardTitle></CardHeader>
         <CardContent className="space-y-4">
