@@ -135,7 +135,7 @@ export const scheduleNewsletter = createServerFn({ method: "POST" }).middleware(
   .handler(async ({ data, context }) => {
     const db = await admin(context);
     const { data: s } = await db.from("settings").select("automations, brevo_list_id").eq("id", 1).single();
-    if (!(s?.automations as Record<string, boolean>)?.A10) throw new Error("Attiva prima l'automazione A10 in Impostazioni");
+    if (!(s?.automations as Record<string, boolean>)?.["A10"]) throw new Error("Attiva prima l'automazione A10 in Impostazioni");
     if (!s?.brevo_list_id) throw new Error("Sincronizza prima i contatti con Brevo");
     const { n, props } = await newsletterProps(db, data.id);
     if (n.status !== "approved") throw new Error("Approva la newsletter prima di programmarla");

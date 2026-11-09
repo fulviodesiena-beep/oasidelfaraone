@@ -22,7 +22,7 @@ export async function unsubscribeUrl(contactId: string, lang: Lang) {
   return `${SITE}${unsubscribePath(lang)}?t=${encodeURIComponent(await signToken("unsub", contactId))}`;
 }
 
-export type Rendered = { subject: string; text: string; html: string; links: { label: string; url: string }[]; props: OasiMessageProps; whatsapp?: string };
+export type Rendered = { subject: string; text: string; html: string; links: { label: string; url: string }[]; props: OasiMessageProps; whatsapp?: string | undefined };
 
 type Settings = Database["public"]["Tables"]["settings"]["Row"];
 async function roomOf(db: DB, roomId: string | null | undefined, s: Settings) {
@@ -33,7 +33,7 @@ async function roomOf(db: DB, roomId: string | null | undefined, s: Settings) {
 /** Renders a due item (or a preview) into subject/text/html plus wa.me link for WhatsApp tasks. */
 export async function renderItem(db: DB, item: Pick<DueItem, "msgKey" | "lang" | "name" | "bookingId" | "contactId" | "channel" | "occasion">, s: Settings, opts: { logId?: string } = {}): Promise<Rendered> {
   const lang = item.lang;
-  let vars: Record<string, string> = { nome_ospite: item.name, camera: "Elisir d'Oriente", numero_stanza: s.unit_number, occasione: item.occasion ?? "" };
+  let vars: Record<string, string> = { nome_ospite: item.name, camera: "Elisir d'Oriente", numero_stanza: s.unit_number, occasione: item.occasion ?? "", ...(item.bookingId ? {} : bookingVars({ check_in: "2027-04-10", check_out: "2027-04-17", total_nights: 7, extras: [] }, item.name, lang, { name: "Elisir d'Oriente", unit: s.unit_number })) };
   if (item.bookingId) {
     const { data: b } = await db.from("bookings").select("check_in, check_out, total_nights, extras, room_id").eq("id", item.bookingId).single();
     if (b) { vars = { ...vars, ...bookingVars(b, item.name, lang, await roomOf(db, b.room_id, s)) }; }
@@ -87,7 +87,8 @@ export async function loadAutomationContext(db: DB, now: Date) {
   ]);
   const err = s.error ?? b.error ?? c.error ?? q.error ?? o.error ?? l.error;
   if (err) throw new Error(err.message);
-  return { settings: s.data, bookings: b.data as ABooking[], contacts: c.data, inquiries: q.data, occasions: o.data, logs: l.data };
+  if (!s.data) throw new Error("Impostazioni mancanti");
+  return { settings: s.data, bookings: (b.data ?? []) as ABooking[], contacts: c.data ?? [], inquiries: q.data ?? [], occasions: o.data ?? [], logs: l.data ?? [] };
 }
 
 export type RunSummary = { due: number; sent: number; tasks: number; skipped: number; errors: number; details: string[] };

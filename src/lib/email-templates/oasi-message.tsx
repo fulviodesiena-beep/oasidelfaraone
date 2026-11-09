@@ -2,11 +2,11 @@ import * as React from 'react'
 import { Body, Button, Container, Head, Hr, Html, Link, Preview, Section, Text } from '@react-email/components'
 import type { TemplateEntry } from './registry'
 
-export interface OasiSection { title?: string; text: string }
+export interface OasiSection { title?: string | undefined; text: string }
 export interface OasiMessageProps {
-  subject?: string; preheader?: string; body?: string; sections?: OasiSection[]
-  links?: { label: string; url: string }[]; cta?: { label: string; url: string }
-  footer?: string; unsubscribeUrl?: string; unsubscribeLabel?: string
+  subject?: string | undefined; preheader?: string | undefined; body?: string | undefined; sections?: OasiSection[] | undefined
+  links?: { label: string; url: string }[] | undefined; cta?: { label: string; url: string } | undefined
+  footer?: string | undefined; unsubscribeUrl?: string | undefined; unsubscribeLabel?: string | undefined
 }
 
 const lines = (t: string) => t.split(/\n{2,}/).map((p, i) => (
@@ -44,7 +44,7 @@ export const OasiMessage = ({ subject, preheader, body = '', sections, links = [
 
 export const template = {
   component: OasiMessage,
-  subject: (d: Record<string, any>) => d.subject || 'Oasi del Faraone',
+  subject: (d: Record<string, any>) => d['subject'] || 'Oasi del Faraone',
   displayName: 'Messaggio Oasi (automazioni)',
   previewData: { subject: '✅ Prenotazione confermata', body: 'Ciao Maria! 🎉\n\nLa tua prenotazione è confermata.', links: [{ label: 'Instagram @oasidelfaraone', url: 'https://www.instagram.com/oasidelfaraone' }] },
 } satisfies TemplateEntry

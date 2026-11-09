@@ -24,6 +24,7 @@ import { Route as AdminExpensesRouteImport } from './routes/admin.expenses'
 import { Route as AdminGuestsRouteImport } from './routes/admin.guests'
 import { Route as AdminHostsRouteImport } from './routes/admin.hosts'
 import { Route as AdminInquiriesRouteImport } from './routes/admin.inquiries'
+import { Route as AdminNewsletterRouteImport } from './routes/admin.newsletter'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminTodayRouteImport } from './routes/admin.today'
 import { Route as AdminLoginRouteImport } from './routes/admin_.login'
@@ -114,6 +115,11 @@ const AdminInquiriesRoute = AdminInquiriesRouteImport.update({
   path: '/inquiries',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminNewsletterRoute = AdminNewsletterRouteImport.update({
+  id: '/newsletter',
+  path: '/newsletter',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -202,6 +208,7 @@ export interface FileRoutesByFullPath {
   '/admin/guests': typeof AdminGuestsRoute
   '/admin/hosts': typeof AdminHostsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
+  '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/today': typeof AdminTodayRoute
   '/admin/login': typeof AdminLoginRoute
@@ -232,6 +239,7 @@ export interface FileRoutesByTo {
   '/admin/guests': typeof AdminGuestsRoute
   '/admin/hosts': typeof AdminHostsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
+  '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/today': typeof AdminTodayRoute
   '/admin/login': typeof AdminLoginRoute
@@ -264,6 +272,7 @@ export interface FileRoutesById {
   '/admin/guests': typeof AdminGuestsRoute
   '/admin/hosts': typeof AdminHostsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
+  '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/today': typeof AdminTodayRoute
   '/admin_/login': typeof AdminLoginRoute
@@ -297,6 +306,7 @@ export interface FileRouteTypes {
     | '/admin/guests'
     | '/admin/hosts'
     | '/admin/inquiries'
+    | '/admin/newsletter'
     | '/admin/settings'
     | '/admin/today'
     | '/admin/login'
@@ -327,6 +337,7 @@ export interface FileRouteTypes {
     | '/admin/guests'
     | '/admin/hosts'
     | '/admin/inquiries'
+    | '/admin/newsletter'
     | '/admin/settings'
     | '/admin/today'
     | '/admin/login'
@@ -358,6 +369,7 @@ export interface FileRouteTypes {
     | '/admin/guests'
     | '/admin/hosts'
     | '/admin/inquiries'
+    | '/admin/newsletter'
     | '/admin/settings'
     | '/admin/today'
     | '/admin_/login'
@@ -503,6 +515,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminInquiriesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/newsletter': {
+      id: '/admin/newsletter'
+      path: '/newsletter'
+      fullPath: '/admin/newsletter'
+      preLoaderRoute: typeof AdminNewsletterRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/settings': {
       id: '/admin/settings'
       path: '/settings'
@@ -613,6 +632,7 @@ interface AdminRouteChildren {
   AdminGuestsRoute: typeof AdminGuestsRoute
   AdminHostsRoute: typeof AdminHostsRoute
   AdminInquiriesRoute: typeof AdminInquiriesRoute
+  AdminNewsletterRoute: typeof AdminNewsletterRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminTodayRoute: typeof AdminTodayRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -627,6 +647,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminGuestsRoute: AdminGuestsRoute,
   AdminHostsRoute: AdminHostsRoute,
   AdminInquiriesRoute: AdminInquiriesRoute,
+  AdminNewsletterRoute: AdminNewsletterRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminTodayRoute: AdminTodayRoute,
   AdminIndexRoute: AdminIndexRoute,

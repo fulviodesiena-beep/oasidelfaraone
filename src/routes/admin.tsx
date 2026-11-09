@@ -4,7 +4,7 @@ import { syncBookingIfStale } from "@/lib/ical.functions";
 import { BookingClosureGate } from "@/components/admin/BookingClosureGate";
 import { createFileRoute, Link, Outlet, redirect, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { CalendarDays, Contact, FileText, Handshake, Inbox, KeyRound, LayoutDashboard, LogOut, Receipt, Settings, Users } from "lucide-react";
+import { CalendarDays, Contact, FileText, Handshake, Inbox, KeyRound, LayoutDashboard, LogOut, Receipt, Settings, Users, MessageCircle, Mail, Newspaper } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -49,6 +49,9 @@ const NAV = [
   { to: "/admin/hosts", label: "Host", icon: Handshake },
   { to: "/admin/documents", label: "Documenti", icon: FileText },
   { to: "/admin/expenses", label: "Spese", icon: Receipt },
+  { to: "/admin/today", label: "Da inviare oggi", icon: MessageCircle },
+  { to: "/admin/emails", label: "Email", icon: Mail },
+  { to: "/admin/newsletter", label: "Newsletter", icon: Newspaper },
   { to: "/admin/settings", label: "Impostazioni", icon: Settings },
 ] as const;
 

@@ -27,13 +27,13 @@ export type AContact = {
   consent_occasions: boolean; consent_marketing: boolean; unsubscribed_at: string | null; newsletter_status: string;
 };
 export type AInquiry = { id: string; created_at: string; guest_name: string; guest_email: string | null; contact_id: string | null; status: string; language: string | null };
-export type AOccasion = { id: string; contact_id: string; kind: string; day: number | null; month: number | null };
+export type AOccasion = { id: string; contact_id: string | null; kind: string; day: number | null; month: number | null };
 export type ALog = { dedup_key: string | null; automation: string; booking_id: string | null; step: string; channel: string; status: string; clicked_at: string | null };
 
 export type Channel = "email" | "whatsapp" | "brevo";
 export type DueItem = {
   automation: AutomationId; step: string; channel: Channel; msgKey: MessageKey; dedupKey: string;
-  bookingId?: string; contactId?: string; inquiryId?: string; lang: Lang; to: string | null; name: string; occasion?: string;
+  bookingId?: string | undefined; contactId?: string | undefined; inquiryId?: string | undefined; lang: Lang; to: string | null; name: string; occasion?: string | undefined;
 };
 
 const DAY = 86_400_000;
@@ -72,7 +72,7 @@ export function computeDue(input: {
     if (b.status !== "confirmed" || b.is_personal_use) continue;
     const c = b.contact_id ? contacts.get(b.contact_id) : undefined;
     const lang = pickLang(c?.language);
-    const name = (c?.first_name || b.guest_name || "").split(" ")[0];
+    const name = (c?.first_name || b.guest_name || "").split(" ")[0] ?? "";
     const email = c?.email || b.guest_email; const phone = c?.phone || b.guest_phone;
     const base = { bookingId: b.id, contactId: c?.id, lang, name };
     const both = (a: AutomationId, step: string, msgKey: MessageKey, chans: Channel[]) =>
@@ -101,11 +101,11 @@ export function computeDue(input: {
     const lang = pickLang(q.language ?? c?.language);
     for (const [step, d, key] of [["d2", 2, "A8a"], ["d7", 7, "A8b"]] as const)
       if (inWindow(today, addDays(q.created_at, d)))
-        push({ automation: "A8", step, channel: "email", msgKey: key, inquiryId: q.id, contactId: c?.id, lang, to: q.guest_email, name: q.guest_name.split(" ")[0], dedupKey: dedupKey("A8", step, "email", q.id) });
+        push({ automation: "A8", step, channel: "email", msgKey: key, inquiryId: q.id, contactId: c?.id, lang, to: q.guest_email, name: q.guest_name.split(" ")[0] ?? "", dedupKey: dedupKey("A8", step, "email", q.id) });
   }
 
   if (on("A7")) for (const o of input.occasions) {
-    const c = contacts.get(o.contact_id);
+    const c = o.contact_id ? contacts.get(o.contact_id) : undefined;
     if (!canOccasions(c) || !o.day || !o.month) continue;
     const date = nextOccurrence(today, o.day, o.month);
     for (const [step, d] of [["d120", 120], ["d90", 90]] as const)
