@@ -1,3 +1,4 @@
+import { useLanguage, publicPath } from "@/lib/i18n";
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Minus, Plus, ArrowRight, Car, Fish, Heart, Timer } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,7 @@ const parse = (s: string) => { const [y = 0, m = 1, d = 1] = s.split("-").map(Nu
 const mmss = (s: number) => `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
 
 export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra: (id: string) => void }) {
+  const { t, language, locale, money } = useLanguage();
   const [today] = useState(new Date());
   const [month, setMonth] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const [checkIn, setCheckIn] = useState("");
@@ -62,9 +64,9 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
   return <div className="grid items-start gap-8 lg:grid-cols-[1.1fr_1fr]">
     <div className="min-w-0">
       <div className="mb-6 flex items-center justify-between border-b border-border pb-5">
-        <Button variant="ghost" size="icon" aria-label="Mese precedente" disabled={month <= new Date(today.getFullYear(), today.getMonth(), 1)} onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))}><ChevronLeft /></Button>
+        <Button variant="ghost" size="icon" aria-label={t("Mese precedente")} disabled={month <= new Date(today.getFullYear(), today.getMonth(), 1)} onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))}><ChevronLeft /></Button>
         <h3 className="text-2xl capitalize">{month.toLocaleDateString("it-IT", { month: "long", year: "numeric" })}</h3>
-        <Button variant="ghost" size="icon" aria-label="Mese successivo" onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))}><ChevronRight /></Button>
+        <Button variant="ghost" size="icon" aria-label={t("Mese successivo")} onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))}><ChevronRight /></Button>
       </div>
       <div className="calendar-grid grid grid-cols-7 text-center">
         {["L", "M", "M", "G", "V", "S", "D"].map((d, i) => <span key={i} className="pb-3 text-xs text-muted-foreground">{d}</span>)}
@@ -77,24 +79,24 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
         })}
       </div>
       <div className="mt-5 flex gap-5 text-xs text-muted-foreground">
-        <span className="flex items-center gap-2"><span className="size-2.5 rounded-full bg-muted-foreground" />Occupato</span>
-        <span className="flex items-center gap-2"><span className="size-2.5 rounded-full bg-whatsapp" />Disponibile</span>
+        <span className="flex items-center gap-2"><span className="size-2.5 rounded-full bg-muted-foreground" />{t("Occupato")}</span>
+        <span className="flex items-center gap-2"><span className="size-2.5 rounded-full bg-whatsapp" />{t("Disponibile")}</span>
       </div>
-      {clash && <p role="alert" className="mt-3 text-sm text-destructive">Le date scelte includono giorni già occupati. Scegli un altro periodo.</p>}
-      <p className="mt-6 text-xs leading-relaxed text-muted-foreground">Disponibilità da confermare con Fulvio. Il prezzo è riferito all’intero appartamento.</p>
+      {clash && <p role="alert" className="mt-3 text-sm text-destructive">{t("Le date scelte includono giorni già occupati. Scegli un altro periodo.")}</p>}
+      <p className="mt-6 text-xs leading-relaxed text-muted-foreground">{t("Disponibilità da confermare con Fulvio. Il prezzo è riferito all’intero appartamento.")}</p>
     </div>
 
     <div className="min-w-0 border border-border bg-card p-5 sm:p-8">
       {step === "dates" || !valid || !q ? <>
-        <p className="eyebrow">1 · Date e ospiti · fino a 4 persone</p>
-        {expired && <p role="alert" className="mt-4 text-sm text-destructive">Il preventivo è scaduto. Seleziona di nuovo le date.</p>}
+        <p className="eyebrow">{t("1 · Date e ospiti · fino a 4 persone")}</p>
+        {expired && <p role="alert" className="mt-4 text-sm text-destructive">{t("Il preventivo è scaduto. Seleziona di nuovo le date.")}</p>}
         <div className="mt-6 grid grid-cols-2 gap-3">
-          <label className="text-xs text-muted-foreground">Arrivo<input aria-label="Arrivo" type="date" min={dateKey(today)} className="field mt-2" value={checkIn} onChange={e => { setCheckIn(e.target.value); editDates(); }} /></label>
-          <label className="text-xs text-muted-foreground">Partenza<input aria-label="Partenza" type="date" min={checkIn || dateKey(today)} className="field mt-2" value={checkOut} onChange={e => { setCheckOut(e.target.value); editDates(); }} /></label>
+          <label className="text-xs text-muted-foreground">{t("Arrivo")}<input aria-label={t("Arrivo")} type="date" min={dateKey(today)} className="field mt-2" value={checkIn} onChange={e => { setCheckIn(e.target.value); editDates(); }} /></label>
+          <label className="text-xs text-muted-foreground">{t("Partenza")}<input aria-label={t("Partenza")} type="date" min={checkIn || dateKey(today)} className="field mt-2" value={checkOut} onChange={e => { setCheckOut(e.target.value); editDates(); }} /></label>
         </div>
-        <div className="mt-5 grid grid-cols-2 gap-3"><Counter label="Adulti" value={adults} min={1} max={MAX_GUESTS - children} change={setAdults} /><Counter label="Bambini" value={children} min={0} max={Math.min(MAX_CHILDREN, MAX_GUESTS - adults)} change={setChildren} /></div>
-        <p className="mt-4 text-xs text-muted-foreground">Il prezzo dell’appartamento non cambia da 1 a 4 ospiti.</p>
-        <Button disabled={!valid} className="mt-6 h-12 w-full" onClick={() => { setExpired(false); setStep("details"); }}>Vedi disponibilità<ArrowRight /></Button>
+        <div className="mt-5 grid grid-cols-2 gap-3"><Counter label={t("Adulti")} value={adults} min={1} max={MAX_GUESTS - children} change={setAdults} /><Counter label={t("Bambini")} value={children} min={0} max={Math.min(MAX_CHILDREN, MAX_GUESTS - adults)} change={setChildren} /></div>
+        <p className="mt-4 text-xs text-muted-foreground">{t("Il prezzo dell’appartamento non cambia da 1 a 4 ospiti.")}</p>
+        <Button disabled={!valid} className="mt-6 h-12 w-full" onClick={() => { setExpired(false); setStep("details"); }}>{t("Vedi disponibilità")}<ArrowRight /></Button>
       </> : <form className="space-y-4" onSubmit={async e => {
         e.preventDefault(); const form = new FormData(e.currentTarget);
         const extraNames = [...EXTRAS.filter(x => extras.includes(x.id)).map(x => x.name), ...(dinner ? ["Cena romantica"] : [])];
@@ -108,31 +110,31 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
         if (tab) { tab.opener = null; tab.location.href = url; } else window.location.href = url;
         setOpened(true);
       }}>
-        <p className="eyebrow">2 · Riepilogo e contatti</p>
+        <p className="eyebrow">{t("2 · Riepilogo e contatti")}</p>
         <div className="flex items-center justify-between gap-3 border border-border p-4 text-sm">
-          <div><p>{fmt(checkIn)} → {fmt(checkOut)}</p><p className="text-xs text-muted-foreground">{q.nightsCount} notti · {adults + children} ospiti</p></div>
+          <div><p>{fmt(checkIn)} {t("→")} {fmt(checkOut)}</p><p className="text-xs text-muted-foreground">{q.nightsCount} {t("notti ·")} {adults + children} {t("ospiti")}</p></div>
           <span className="font-display text-3xl text-gold-light">{q.total === null ? "Da confermare" : `€${q.total}`}</span>
         </div>
-        {q.total !== null && <ul aria-label="Dettaglio notti" className="max-h-40 space-y-1 overflow-y-auto text-xs text-muted-foreground">{q.nights.map(n => <li key={dateKey(n.date)} className="flex justify-between"><span>{n.date.toLocaleDateString("it-IT", { weekday: "short", day: "numeric", month: "short" })}</span><span>€{n.price}</span></li>)}<li className="flex justify-between border-t border-border pt-1 text-foreground"><span>Totale alloggio · {q.nightsCount} notti</span><span>€{q.total}</span></li></ul>}
-        <p className="flex justify-between text-xs text-muted-foreground"><span>Nota: pulizia finale · pagata in reception al check-in</span><span>€{q.cleaningFee} · non inclusa</span></p>
-        {q.minStayWarning && <p role="note" className="text-xs text-warning">Soggiorno minimo consigliato: {q.minStayWarning} notti{q.touchesPeak ? " nel periodo di Picco" : ""}. Puoi comunque inviare la richiesta.</p>}
-        <p role="timer" className={`flex items-center gap-2 text-sm ${left <= 120 ? "text-destructive" : "text-gold"}`}><Timer className="size-4" />Preventivo riservato per: {mmss(left)}</p>
-        {ROOMS.length > 1 && <select name="room_id" aria-label="Stanza" className="field" defaultValue={ROOMS[0]!.id}>{ROOMS.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}</select>}
-        <input name="Nome" aria-label="Nome completo" placeholder="Nome e Cognome" required autoComplete="name" className="field" />
-        <input name="Telefono" aria-label="Telefono" type="tel" defaultValue="+39 " required autoComplete="tel" className="field" />
-        <input name="Email" aria-label="Email" type="email" placeholder="Email" required autoComplete="email" className="field" />
-        <fieldset className="space-y-2"><legend className="mb-2 text-xs text-muted-foreground">Extra (non inclusi nel totale)</legend>
+        {q.total !== null && <ul aria-label={t("Dettaglio notti")} className="max-h-40 space-y-1 overflow-y-auto text-xs text-muted-foreground">{q.nights.map(n => <li key={dateKey(n.date)} className="flex justify-between"><span>{n.date.toLocaleDateString("it-IT", { weekday: "short", day: "numeric", month: "short" })}</span><span>€{n.price}</span></li>)}<li className="flex justify-between border-t border-border pt-1 text-foreground"><span>{t("Totale alloggio ·")} {q.nightsCount} {t("notti")}</span><span>€{q.total}</span></li></ul>}
+        <p className="flex justify-between text-xs text-muted-foreground"><span>{t("Nota: pulizia finale · pagata in reception al check-in")}</span><span>€{q.cleaningFee} {t("· non inclusa")}</span></p>
+        {q.minStayWarning && <p role="note" className="text-xs text-warning">{t("Soggiorno minimo consigliato:")} {q.minStayWarning} {t("notti")}{q.touchesPeak ? " nel periodo di Picco" : ""}{t(". Puoi comunque inviare la richiesta.")}</p>}
+        <p role="timer" className={`flex items-center gap-2 text-sm ${left <= 120 ? "text-destructive" : "text-gold"}`}><Timer className="size-4" />{t("Preventivo riservato per:")} {mmss(left)}</p>
+        {ROOMS.length > 1 && <select name="room_id" aria-label={t("Stanza")} className="field" defaultValue={ROOMS[0]!.id}>{ROOMS.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}</select>}
+        <input name="Nome" aria-label={t("Nome completo")} placeholder={t("Nome e Cognome")} required autoComplete="name" className="field" />
+        <input name="Telefono" aria-label={t("Telefono")} type="tel" defaultValue="+39 " required autoComplete="tel" className="field" />
+        <input name="Email" aria-label={t("Email")} type="email" placeholder={t("Email")} required autoComplete="email" className="field" />
+        <fieldset className="space-y-2"><legend className="mb-2 text-xs text-muted-foreground">{t("Extra (non inclusi nel totale)")}</legend>
           {QUICK_EXTRAS.map(x => { const on = x.id === "cena" ? dinner : extras.includes(x.id); return <label key={x.id} className="flex cursor-pointer items-center gap-3 text-sm"><input type="checkbox" className="accent-primary" checked={on} onChange={() => x.id === "cena" ? setDinner(!dinner) : toggleExtra(x.id)} /><x.icon className="size-4 text-gold-light" />{x.name}</label>; })}
         </fieldset>
-        <input name="special_dates" aria-label="Date speciali da festeggiare a Sharm" maxLength={500} placeholder="Date speciali da festeggiare a Sharm (compleanni, anniversari) — facoltativo" className="field" />
-        {showNote ? <textarea name="Note" aria-label="Note" rows={3} maxLength={1000} className="field" placeholder="Note per Fulvio" /> : <Button type="button" variant="link" className="h-auto p-0" onClick={() => setShowNote(true)}>Aggiungi una nota</Button>}
-        <label className="flex items-start gap-3 text-xs"><input type="checkbox" name="consent_privacy" required className="mt-0.5 accent-primary" /><span>Ho letto l’<a href="/privacy" target="_blank" rel="noreferrer" className="underline">informativa privacy</a> e acconsento al trattamento dei dati per gestire la richiesta (obbligatorio).</span></label>
-        <label className="flex items-start gap-3 text-xs"><input type="checkbox" name="consent_marketing" className="mt-0.5 accent-primary" /><span>Voglio ricevere offerte e novità (facoltativo).</span></label>
-        <label className="flex items-start gap-3 text-xs"><input type="checkbox" name="consent_occasions" className="mt-0.5 accent-primary" /><span>Acconsento a ricevere offerte personalizzate in occasione delle ricorrenze mie e dei miei compagni di viaggio (facoltativo).</span></label>
-        <Button type="submit" className="h-12 w-full whitespace-normal">Richiedi prenotazione<ArrowRight /></Button>
-        <p className="text-xs leading-relaxed text-muted-foreground">Nessun pagamento online. Si apre WhatsApp con il messaggio pronto: invialo a Fulvio per ricevere conferma.</p>
-        {opened && <p role="status" className="text-sm text-gold-light">La richiesta è pronta su WhatsApp: inviala per contattare Fulvio.</p>}
-        <Button type="button" variant="link" className="h-auto p-0" onClick={editDates}>Modifica date</Button>
+        <input name="special_dates" aria-label={t("Date speciali da festeggiare a Sharm")} maxLength={500} placeholder={t("Date speciali da festeggiare a Sharm (compleanni, anniversari) — facoltativo")} className="field" />
+        {showNote ? <textarea name="Note" aria-label={t("Note")} rows={3} maxLength={1000} className="field" placeholder={t("Note per Fulvio")} /> : <Button type="button" variant="link" className="h-auto p-0" onClick={() => setShowNote(true)}>{t("Aggiungi una nota")}</Button>}
+        <label className="flex items-start gap-3 text-xs"><input type="checkbox" name="consent_privacy" required className="mt-0.5 accent-primary" /><span>{t("Ho letto l’")}<a href={publicPath(language, "privacy")} target="_blank" rel="noreferrer" className="underline">{t("informativa privacy")}</a> {t("e acconsento al trattamento dei dati per gestire la richiesta (obbligatorio).")}</span></label>
+        <label className="flex items-start gap-3 text-xs"><input type="checkbox" name="consent_marketing" className="mt-0.5 accent-primary" /><span>{t("Voglio ricevere offerte e novità (facoltativo).")}</span></label>
+        <label className="flex items-start gap-3 text-xs"><input type="checkbox" name="consent_occasions" className="mt-0.5 accent-primary" /><span>{t("Acconsento a ricevere offerte personalizzate in occasione delle ricorrenze mie e dei miei compagni di viaggio (facoltativo).")}</span></label>
+        <Button type="submit" className="h-12 w-full whitespace-normal">{t("Richiedi prenotazione")}<ArrowRight /></Button>
+        <p className="text-xs leading-relaxed text-muted-foreground">{t("Nessun pagamento online. Si apre WhatsApp con il messaggio pronto: invialo a Fulvio per ricevere conferma.")}</p>
+        {opened && <p role="status" className="text-sm text-gold-light">{t("La richiesta è pronta su WhatsApp: inviala per contattare Fulvio.")}</p>}
+        <Button type="button" variant="link" className="h-auto p-0" onClick={editDates}>{t("Modifica date")}</Button>
       </form>}
     </div>
   </div>;
