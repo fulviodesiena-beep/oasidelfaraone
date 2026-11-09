@@ -23,7 +23,7 @@ export function TemplateUploads() {
   const up = useMutation({
     mutationFn: async ({ path, file }: { path: string; file: File }) => {
       if (path.endsWith(".png") && file.type !== "image/png") throw new Error("Serve un file PNG");
-      const { error } = await supabase.storage.from("templates").upload(path, file, { upsert: true, contentType: file.type || undefined });
+      const { error } = await supabase.storage.from("templates").upload(path, file, { upsert: true, ...(file.type ? { contentType: file.type } : {}) });
       if (error) throw error;
     },
     onSuccess: () => { toast.success("File caricato"); qc.invalidateQueries({ queryKey: ["admin"] }); },

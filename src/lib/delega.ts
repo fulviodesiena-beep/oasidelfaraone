@@ -127,12 +127,13 @@ export async function buildDelegaPdf(d: DelegaData, images: { header?: Uint8Arra
 
   let n = 0;
   const field = (p: PDFPage, f: PDFForm, value: string, x: number, yy: number, w: number) => {
-    const tf = f.createTextField(`f${n++}`); tf.setText(value); tf.setFontSize(8.5);
-    tf.addToPage(p, { x, y: yy, width: w, height: 5.6 * MM, font, borderWidth: 0, backgroundColor: undefined });
+    const tf = f.createTextField(`f${n++}`); tf.setText(value);
+    tf.addToPage(p, { x, y: yy, width: w, height: 5.6 * MM, font, borderWidth: 0 });
+    tf.setFontSize(8.5);
   };
   const box = (x: number, yy: number, label: string, on: boolean) => {
     const w = Math.max(12 * MM, font.widthOfTextAtSize(label, 7.6) + 9 * MM);
-    page.drawRectangle({ x, y: yy, width: w, height: 5.6 * MM, borderColor: BLACK, borderWidth: 0.6, color: on ? YELLOW : undefined });
+    page.drawRectangle({ x, y: yy, width: w, height: 5.6 * MM, borderColor: BLACK, borderWidth: 0.6, ...(on ? { color: YELLOW } : {}) });
     const cb = form.createCheckBox(`c${n++}`);
     cb.addToPage(page, { x: x + 1.2 * MM, y: yy + 1.2 * MM, width: 3.2 * MM, height: 3.2 * MM, borderWidth: 0.5, borderColor: BLACK });
     if (on) cb.check();
