@@ -50,6 +50,13 @@
       "when": 1794164904190,
       "tag": "0006_revenue_split_expenses_ical_tracking",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1794183840217,
+      "tag": "0007_backup_before_block3a_and_option_status",
+      "breakpoints": true
     }
   ]
 }

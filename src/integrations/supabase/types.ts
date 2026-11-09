@@ -513,6 +513,7 @@ export type Database = {
         | "cancelled"
         | "personal"
         | "host_collab"
+        | "option"
       inquiry_status: "new" | "contacted" | "converted" | "lost"
       pipeline_stage:
         | "lead"
@@ -657,6 +658,7 @@ export const Constants = {
         "cancelled",
         "personal",
         "host_collab",
+        "option",
       ],
       inquiry_status: ["new", "contacted", "converted", "lost"],
       pipeline_stage: [
