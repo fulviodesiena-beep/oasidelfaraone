@@ -71,6 +71,7 @@ export type Database = {
           check_in: string
           check_out: string
           children: number
+          confirmed_at: string | null
           contact_id: string | null
           created_at: string
           delegate_email: string | null
@@ -114,6 +115,7 @@ export type Database = {
           check_in: string
           check_out: string
           children?: number
+          confirmed_at?: string | null
           contact_id?: string | null
           created_at?: string
           delegate_email?: string | null
@@ -157,6 +159,7 @@ export type Database = {
           check_in?: string
           check_out?: string
           children?: number
+          confirmed_at?: string | null
           contact_id?: string | null
           created_at?: string
           delegate_email?: string | null
@@ -210,6 +213,7 @@ export type Database = {
       }
       contacts: {
         Row: {
+          brevo_synced_at: string | null
           city: string | null
           consent_marketing: boolean
           consent_marketing_at: string | null
@@ -223,6 +227,10 @@ export type Database = {
           language: string | null
           last_name: string | null
           nationality: string | null
+          newsletter_confirmed_at: string | null
+          newsletter_ip: string | null
+          newsletter_requested_at: string | null
+          newsletter_status: string
           notes: string | null
           phone: string | null
           source: string
@@ -232,6 +240,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          brevo_synced_at?: string | null
           city?: string | null
           consent_marketing?: boolean
           consent_marketing_at?: string | null
@@ -245,6 +254,10 @@ export type Database = {
           language?: string | null
           last_name?: string | null
           nationality?: string | null
+          newsletter_confirmed_at?: string | null
+          newsletter_ip?: string | null
+          newsletter_requested_at?: string | null
+          newsletter_status?: string
           notes?: string | null
           phone?: string | null
           source?: string
@@ -254,6 +267,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          brevo_synced_at?: string | null
           city?: string | null
           consent_marketing?: boolean
           consent_marketing_at?: string | null
@@ -267,6 +281,10 @@ export type Database = {
           language?: string | null
           last_name?: string | null
           nationality?: string | null
+          newsletter_confirmed_at?: string | null
+          newsletter_ip?: string | null
+          newsletter_requested_at?: string | null
+          newsletter_status?: string
           notes?: string | null
           phone?: string | null
           source?: string
@@ -347,6 +365,69 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      email_log: {
+        Row: {
+          automation: string
+          body: string | null
+          booking_id: string | null
+          channel: string
+          clicked_at: string | null
+          contact_id: string | null
+          created_at: string
+          dedup_key: string | null
+          id: string
+          inquiry_id: string | null
+          language: string
+          provider_message_id: string | null
+          reason: string | null
+          recipient: string | null
+          sent_at: string | null
+          status: string
+          step: string
+          subject: string | null
+        }
+        Insert: {
+          automation: string
+          body?: string | null
+          booking_id?: string | null
+          channel: string
+          clicked_at?: string | null
+          contact_id?: string | null
+          created_at?: string
+          dedup_key?: string | null
+          id?: string
+          inquiry_id?: string | null
+          language?: string
+          provider_message_id?: string | null
+          reason?: string | null
+          recipient?: string | null
+          sent_at?: string | null
+          status?: string
+          step?: string
+          subject?: string | null
+        }
+        Update: {
+          automation?: string
+          body?: string | null
+          booking_id?: string | null
+          channel?: string
+          clicked_at?: string | null
+          contact_id?: string | null
+          created_at?: string
+          dedup_key?: string | null
+          id?: string
+          inquiry_id?: string | null
+          language?: string
+          provider_message_id?: string | null
+          reason?: string | null
+          recipient?: string | null
+          sent_at?: string | null
+          status?: string
+          step?: string
+          subject?: string | null
+        }
+        Relationships: []
       }
       expenses: {
         Row: {
@@ -566,6 +647,51 @@ export type Database = {
           },
         ]
       }
+      newsletter_issues: {
+        Row: {
+          approved_at: string | null
+          blocks: Json
+          brevo_campaign_id: number | null
+          created_at: string
+          id: string
+          number: number
+          preheader: string
+          scheduled_at: string | null
+          stats: Json | null
+          status: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          approved_at?: string | null
+          blocks?: Json
+          brevo_campaign_id?: number | null
+          created_at?: string
+          id?: string
+          number: number
+          preheader?: string
+          scheduled_at?: string | null
+          stats?: Json | null
+          status?: string
+          subject?: string
+          updated_at?: string
+        }
+        Update: {
+          approved_at?: string | null
+          blocks?: Json
+          brevo_campaign_id?: number | null
+          created_at?: string
+          id?: string
+          number?: number
+          preheader?: string
+          scheduled_at?: string | null
+          stats?: Json | null
+          status?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       occasions: {
         Row: {
           contact_id: string | null
@@ -685,8 +811,11 @@ export type Database = {
       }
       settings: {
         Row: {
+          automations: Json
           booking_ical_url: string | null
+          brevo_list_id: number | null
           domina_email: string
+          facebook_url: string | null
           fds_min_per_night: number | null
           fds_share_pct: number
           holder_name: string
@@ -694,18 +823,25 @@ export type Database = {
           holder_phone: string
           ical_token: string
           id: number
+          instagram_url: string | null
           last_sync_attempt_at: string | null
           last_sync_error: string | null
           last_sync_success_at: string | null
           meta_pixel_id: string | null
+          newsletter_guide_url: string | null
           owner_cap_per_night: number | null
           owner_name: string | null
+          review_url: string | null
+          template_overrides: Json
           unit_number: string
           updated_at: string
         }
         Insert: {
+          automations?: Json
           booking_ical_url?: string | null
+          brevo_list_id?: number | null
           domina_email?: string
+          facebook_url?: string | null
           fds_min_per_night?: number | null
           fds_share_pct?: number
           holder_name?: string
@@ -713,18 +849,25 @@ export type Database = {
           holder_phone?: string
           ical_token?: string
           id?: number
+          instagram_url?: string | null
           last_sync_attempt_at?: string | null
           last_sync_error?: string | null
           last_sync_success_at?: string | null
           meta_pixel_id?: string | null
+          newsletter_guide_url?: string | null
           owner_cap_per_night?: number | null
           owner_name?: string | null
+          review_url?: string | null
+          template_overrides?: Json
           unit_number?: string
           updated_at?: string
         }
         Update: {
+          automations?: Json
           booking_ical_url?: string | null
+          brevo_list_id?: number | null
           domina_email?: string
+          facebook_url?: string | null
           fds_min_per_night?: number | null
           fds_share_pct?: number
           holder_name?: string
@@ -732,12 +875,16 @@ export type Database = {
           holder_phone?: string
           ical_token?: string
           id?: number
+          instagram_url?: string | null
           last_sync_attempt_at?: string | null
           last_sync_error?: string | null
           last_sync_success_at?: string | null
           meta_pixel_id?: string | null
+          newsletter_guide_url?: string | null
           owner_cap_per_night?: number | null
           owner_name?: string | null
+          review_url?: string | null
+          template_overrides?: Json
           unit_number?: string
           updated_at?: string
         }
