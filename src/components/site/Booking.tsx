@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Minus, Plus, ArrowRight, Car, Fish, Heart, Timer } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { EXTRAS, OWNER_WHATSAPP, wa } from "@/lib/site-data";
+import { EXTRAS, OWNER_WHATSAPP, ROOMS, wa } from "@/lib/site-data";
 import { dateKey, MAX_GUESTS, quote } from "@/lib/pricing";
 import { saveInquiryWithin } from "@/lib/inquiries";
 import { trackEvent } from "@/lib/tracking";
@@ -102,7 +102,7 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
         const special = String(form.get("special_dates") ?? "").trim().slice(0, 500);
         const message = `Richiesta soggiorno — Oasi del Faraone\nNome: ${form.get("Nome")}\nEmail: ${form.get("Email")}\nTelefono: ${form.get("Telefono")}\nDate: ${checkIn} → ${checkOut}\n${q.nightsCount} notti\nOspiti: ${adults} adulti, ${children} bambini\nExtra: ${extraNames.join(", ") || "nessuno"}${note ? `\nNote: ${note}` : ""}${special ? `\nDate speciali: ${special}` : ""}\nTotale indicativo alloggio: ${q.total === null ? "da confermare" : `€${q.total}`}\nPulizia finale €${q.cleaningFee} in reception al check-in\nDisponibilità e prezzi da confermare.`;
         const tab = window.open("", "_blank");
-        await saveInquiryWithin({ guest_name: String(form.get("Nome") ?? ""), guest_email: String(form.get("Email") ?? ""), guest_phone: String(form.get("Telefono") ?? ""), check_in: checkIn, check_out: checkOut, adults, children, extras: extraNames, message, consent_privacy: form.get("consent_privacy") === "on", consent_marketing: form.get("consent_marketing") === "on", special_dates: special, consent_occasions: form.get("consent_occasions") === "on" });
+        await saveInquiryWithin({ guest_name: String(form.get("Nome") ?? ""), guest_email: String(form.get("Email") ?? ""), guest_phone: String(form.get("Telefono") ?? ""), check_in: checkIn, check_out: checkOut, adults, children, extras: extraNames, message, consent_privacy: form.get("consent_privacy") === "on", consent_marketing: form.get("consent_marketing") === "on", special_dates: special, consent_occasions: form.get("consent_occasions") === "on", room_id: String(form.get("room_id") ?? "") });
         trackEvent("Lead");
         const url = wa(OWNER_WHATSAPP, message);
         if (tab) { tab.opener = null; tab.location.href = url; } else window.location.href = url;
@@ -116,6 +116,7 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
         <p className="flex justify-between text-xs text-muted-foreground"><span>Pulizia finale · pagata in reception al check-in</span><span>€{q.cleaningFee} · non inclusa</span></p>
         {q.minStayWarning && <p role="note" className="text-xs text-warning">Soggiorno minimo consigliato: {q.minStayWarning} notti{q.touchesPeak ? " nel periodo di Picco" : ""}. Puoi comunque inviare la richiesta.</p>}
         <p role="timer" className={`flex items-center gap-2 text-sm ${left <= 120 ? "text-destructive" : "text-gold"}`}><Timer className="size-4" />Preventivo riservato per: {mmss(left)}</p>
+        {ROOMS.length > 1 && <select name="room_id" aria-label="Stanza" className="field" defaultValue={ROOMS[0]!.id}>{ROOMS.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}</select>}
         <input name="Nome" aria-label="Nome completo" placeholder="Nome e Cognome" required autoComplete="name" className="field" />
         <input name="Telefono" aria-label="Telefono" type="tel" defaultValue="+39 " required autoComplete="tel" className="field" />
         <input name="Email" aria-label="Email" type="email" placeholder="Email" required autoComplete="email" className="field" />

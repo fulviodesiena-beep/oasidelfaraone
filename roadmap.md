@@ -25,3 +25,6 @@
 - [x] Blocco 2: build corretto, Impostazioni, Spese, dashboard conti + calendario 3 mesi, sync Booking ogni 15 min, ripartizione Carmine/FDS, giorni dall'ultimo contatto
 - [x] Blocco 3A: sync 5 min + all'apertura + verifica live, opzioni con scadenza, avviso "Chiudi su Booking.com", contatti/viaggiatori/ricorrenze, delega Domina automatica, modelli e allegati, cambio BCE
 - [ ] Caricare in Impostazioni → Modelli e allegati: header Domina, firma, 4 allegati (serve Fulvio)
+- [x] Blocco 3B-A: niente didascalie foto, logo solo "Oasi del Faraone", sezione "Le stanze dell'Oasi" con storia e rito, tabella stanze, SEO e llms.txt
+- [ ] Blocco 3B-B/C: email automatiche, registro invii, task WhatsApp, newsletter — in attesa del dominio email oasidelfaraone.it e della scelta del servizio per le email promozionali
+- [ ] Sync Booking.com e Impostazioni per singola stanza (oggi una sola stanza: usa i valori attuali)

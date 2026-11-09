@@ -26,3 +26,4 @@
 - Booking.com iCal import runs from a managed 5-minute HTTP schedule on /api/public/jobs/ical-sync, on admin open (rate-limited 1/min) and live before saving date-blocking statuses; all share `syncBookingIcal`.
 - Options (status `option`) expire by timestamp: public/export queries ignore expired ones and a trigger cancels overlapping expired options on save (no polling cron).
 - `contacts` is the single deduplicated address book (email or E.164 phone, via `upsert_contact`); triggers link inquiries, bookings and guests to it, and traveler birth dates generate `occasions`.
+- Multi-room: `rooms` is the room catalogue (public column-level SELECT for anon, admin-only sensitive fields); bookings, availability_blocks and inquiries carry room_id, the no-overlap constraint is per room, each room has its own export token, and per-room unit/holder override settings in the delega. `ROOMS` in site-data mirrors it for the public site.

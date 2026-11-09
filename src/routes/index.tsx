@@ -7,11 +7,11 @@ import minaPortrait from "@/assets/mina-portrait.png.asset.json";
 import { Button } from "@/components/ui/button";
 import { Booking } from "@/components/site/Booking";
 import { PhotoCard } from "@/components/site/PhotoCard";
-import { APARTMENT_PHOTOS, EXTRAS, HERO_PHOTOS, INSTAGRAM_URL, MINA_WHATSAPP, OWNER_EMAIL, OWNER_WHATSAPP, RESTAURANTS, ROOM_AMENITIES, SPOTS, VILLAGE_PHOTOS, wa } from "@/lib/site-data";
+import { APARTMENT_PHOTOS, EXTRAS, HERO_PHOTOS, INSTAGRAM_URL, MINA_WHATSAPP, OWNER_EMAIL, OWNER_WHATSAPP, RESTAURANTS, ROOM_AMENITIES, ROOMS, SPOTS, VILLAGE_PHOTOS, wa } from "@/lib/site-data";
 import { CLEANING_FEE, SEASONS } from "@/lib/pricing";
 import { CookieConsent } from "@/components/site/CookieConsent";
 import { captureAttribution } from "@/lib/tracking";
-const TITLE = "Appartamento a Sharm el-Sheikh · Domina Coral Bay | Oasi del Faraone";
+const TITLE = "Oasi del Faraone · Appartamenti al Domina Coral Bay, Sharm el-Sheikh";
 const DESCRIPTION = "Appartamento privato fino a 4 ospiti al Domina Coral Bay, Sharm el-Sheikh. Balcone vista piscina, spiagge e piscine del resort incluse. Preventivo in 2 minuti.";
 const SITE_URL = "https://oasidelfaraone.it";
 const OG_IMAGE = `${SITE_URL}${HERO_PHOTOS[0]?.src ?? ""}`;
@@ -27,13 +27,20 @@ const FAQS: [string, ReactNode, string][] = [
 ];
 const JSONLD = [
   { "@context": "https://schema.org", "@type": ["VacationRental", "LodgingBusiness"],
-    name: "Oasi del Faraone – Elisir d'Oriente", description: DESCRIPTION, url: SITE_URL, image: OG_IMAGE,
+    name: "Oasi del Faraone", description: DESCRIPTION, url: SITE_URL, image: OG_IMAGE,
     address: { "@type": "PostalAddress", streetAddress: "Domina Coral Bay", addressLocality: "Sharm el-Sheikh", addressRegion: "South Sinai", addressCountry: "EG" },
     geo: { "@type": "GeoCoordinates", latitude: 27.95, longitude: 34.38 },
     numberOfRooms: 1, occupancy: { "@type": "QuantitativeValue", maxValue: 4 },
     floorSize: { "@type": "QuantitativeValue", value: 60, unitCode: "MTK" },
     amenityFeature: [["Aria condizionata", true], ["TV satellitare", true], ["Cassaforte", true], ["Bollitore", true], ["Microonde", true], ["Vasca e doccia", true], ["Balcone vista piscina", true], ["Wi-Fi in camera", false]].map(([name, value]) => ({ "@type": "LocationFeatureSpecification", name, value })),
     checkinTime: "15:00", checkoutTime: "11:00", telephone: "+393347328158", email: "prenotazionisharm@gmail.com" },
+  { "@context": "https://schema.org", "@type": ["Accommodation", "HotelRoom"], "@id": `${SITE_URL}/#elisir-d-oriente`,
+    name: ROOMS[0]!.name, description: ROOMS[0]!.summary, url: `${SITE_URL}/#elisir-d-oriente`, image: OG_IMAGE,
+    containedInPlace: { "@type": "Resort", name: "Domina Coral Bay", address: { "@type": "PostalAddress", addressLocality: "Sharm el-Sheikh", addressRegion: "South Sinai", addressCountry: "EG" } },
+    brand: { "@type": "Brand", name: "Oasi del Faraone" },
+    occupancy: { "@type": "QuantitativeValue", maxValue: ROOMS[0]!.maxGuests },
+    floorSize: { "@type": "QuantitativeValue", value: ROOMS[0]!.sizeSqm, unitCode: "MTK" },
+    amenityFeature: [...ROOM_AMENITIES.map(name => [name, true] as const), ["Wi-Fi in camera", false] as const].map(([name, value]) => ({ "@type": "LocationFeatureSpecification", name, value })) },
   { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: FAQS.map(([q, a, t]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: t || a } })) },
   { "@context": "https://schema.org", "@type": "Organization", name: "Oasi del Faraone", url: SITE_URL, email: "prenotazionisharm@gmail.com", telephone: "+393347328158", sameAs: ["https://www.instagram.com/oasidelfaraone/"] },
 ];
@@ -65,9 +72,9 @@ const HERO: Slide[] = HERO_PHOTOS;
 function Carousel({ slides, label, portrait = false }: { slides: Slide[]; label: string; portrait?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const go = (d: number) => ref.current?.scrollBy({ left: d * ref.current.clientWidth * .8, behavior: "smooth" });
-  return <div className={`reveal carousel ${portrait ? "carousel-portrait" : ""}`}><div ref={ref} className="carousel-track" role="region" aria-label={label} tabIndex={0}>{slides.map((s, i) => <figure key={i} className="carousel-slide"><img src={s.src} alt={s.alt} loading={i < 2 ? "eager" : "lazy"} width={portrait ? 1080 : 1200} height={portrait ? 1350 : 800} /><figcaption>{s.alt}</figcaption></figure>)}</div><div className="carousel-controls"><Button variant="outline" size="icon" aria-label="Foto precedente" onClick={() => go(-1)}><ChevronLeft /></Button><Button variant="outline" size="icon" aria-label="Foto successiva" onClick={() => go(1)}><ChevronRight /></Button></div></div>;
+  return <div className={`reveal carousel ${portrait ? "carousel-portrait" : ""}`}><div ref={ref} className="carousel-track" role="region" aria-label={label} tabIndex={0}>{slides.map((s, i) => <figure key={i} className="carousel-slide"><img src={s.src} alt={s.alt} loading={i < 2 ? "eager" : "lazy"} width={portrait ? 1080 : 1200} height={portrait ? 1350 : 800} /></figure>)}</div><div className="carousel-controls"><Button variant="outline" size="icon" aria-label="Foto precedente" onClick={() => go(-1)}><ChevronLeft /></Button><Button variant="outline" size="icon" aria-label="Foto successiva" onClick={() => go(1)}><ChevronRight /></Button></div></div>;
 }
-const NAV = [["apartment", "Appartamento"], ["resort", "Villaggio"], ["tariffe", "Tariffe"], ["extras", "Esperienze"], ["mina", "Mina"], ["faq", "FAQ"], ["investire", "Investire"]];
+const NAV = [["apartment", "Le stanze"], ["resort", "Villaggio"], ["tariffe", "Tariffe"], ["extras", "Esperienze"], ["mina", "Mina"], ["faq", "FAQ"], ["investire", "Investire"]];
 const FACILITIES = [
  { name: "Spiagge private", icon: Umbrella, description: "Le spiagge del resort sul Mar Rosso, incluse senza costi aggiuntivi.", note: "Accesso incluso" },
  { name: "Piscine", icon: Waves, description: "Più piscine nel villaggio, ognuna con il suo ritmo.", note: "Accesso incluso" },
@@ -102,20 +109,28 @@ function Index() {
   const toggleExtra = (id: string) => setExtras(x => x.includes(id) ? x.filter(e => e !== id) : [...x, id]);
   return <main>
     <header className={`site-header ${hidden && !menu ? "header-hidden" : ""} ${scrolled || menu ? "header-solid" : ""}`}><div className="site-container flex items-center justify-between gap-3">
-      <a href="#top" className="brand" onClick={() => setMenu(false)}><Cartouche /><span>Oasi del Faraone<small>ELISIR D’ORIENTE</small></span></a>
+      <a href="#top" className="brand" onClick={() => setMenu(false)}><Cartouche /><span>Oasi del Faraone<small>ESPERIENZE SUL MAR ROSSO</small></span></a>
       <nav aria-label="Navigazione principale" className="hidden items-center gap-7 lg:flex">{NAV.map(([id, name]) => <a key={id} href={`#${id}`} className="nav-link">{name}</a>)}</nav>
       <div className="flex items-center gap-2"><Button asChild className="nav-book"><a href="#book" onClick={() => setMenu(false)}>PRENOTA<ArrowUpRight /></a></Button><Button variant="ghost" size="icon" className="lg:hidden" aria-label={menu ? "Chiudi menu" : "Apri menu"} aria-expanded={menu} onClick={() => setMenu(v => !v)}>{menu ? <X /> : <Menu />}</Button></div>
     </div>{menu && <nav aria-label="Navigazione mobile" className="mobile-menu site-container">{NAV.map(([id, name]) => <a key={id} href={`#${id}`} onClick={() => setMenu(false)}>{name}</a>)}</nav>}</header>
     <section id="top" ref={heroRef} className="hero">
       <div className="hero-media">{HERO.map((h, i) => <img key={h.src} src={h.src} width={1920} height={1080} alt={h.alt} className={`hero-slide hero-slide-${i}`} fetchPriority={i === 0 ? "high" : "auto"} />)}</div><div className="hero-veil" /><div className="hero-shimmer" aria-hidden="true" />
-      <div className="site-container hero-content"><p className="eyebrow">DOMINA CORAL BAY · SHARM EL-SHEIKH</p><h1>Oasi del Faraone<span className="sr-only"> – appartamento al Domina Coral Bay, Sharm el-Sheikh</span></h1><p className="hero-subbrand">Elisir d’Oriente · Appartamento al Domina Coral Bay</p><p className="hero-tagline">Il tuo rifugio privato nel cuore del Mar Rosso</p><p className="hero-sub">Relax assoluto. Privacy totale. Esclusività che non si trova ovunque.</p><div className="hero-actions"><Button asChild className="luxury-cta"><a href="#book">Il tuo prossimo soggiorno<ArrowUpRight /></a></Button><a className="hero-discover" href="#apartment">Entra nell’oasi<ArrowDown size={16} /></a></div></div>
+      <div className="site-container hero-content"><p className="eyebrow">DOMINA CORAL BAY · SHARM EL-SHEIKH</p><h1>Oasi del Faraone<span className="sr-only"> – appartamento al Domina Coral Bay, Sharm el-Sheikh</span></h1><p className="hero-subbrand">Esperienze sul Mar Rosso · Domina Coral Bay</p><p className="hero-tagline">Il tuo rifugio privato nel cuore del Mar Rosso</p><p className="hero-sub">Relax assoluto. Privacy totale. Esclusività che non si trova ovunque.</p><div className="hero-actions"><Button asChild className="luxury-cta"><a href="#book">Il tuo prossimo soggiorno<ArrowUpRight /></a></Button><a className="hero-discover" href="#apartment">Entra nell’oasi<ArrowDown size={16} /></a></div></div>
       <div className="hero-bottom site-container"><span>27°57′ N · 34°23′ E</span><span>Mar Rosso, Egitto</span><a href="#apartment" aria-label="Scopri l’appartamento"><ArrowDown size={20} /></a></div>
     </section>
     <div className="intro-strip"><div className="site-container"><span>Il tuo rifugio privato.</span><span>Fino a 4 ospiti</span><span>Il Mar Rosso, ogni giorno.</span></div></div>
-    <Section id="apartment" eyebrow="01 / Il tuo angolo d’Oriente" title={<>L’appartamento.<br /><em>La tua casa vacanze a Sharm.</em></>} intro="Un appartamento di 60 m² per fino a 4 ospiti, con balcone vista piscina, nel villaggio Domina Coral Bay. Il punto di partenza ideale per una vacanza relax al sole sul Mar Rosso.">
+    <Section id="apartment" eyebrow="01 / Le stanze dell’Oasi" title={<>Le stanze dell’Oasi.<br /><em>Ognuna con la sua storia.</em></>} intro="Oasi del Faraone è il nostro modo di vivere il Mar Rosso. Ogni stanza prende il nome dalla zona del Domina Coral Bay in cui si trova e porta con sé un racconto e un piccolo rito.">
+      <div className="reveal room-grid">{ROOMS.map(r => <a key={r.slug} href={`#${r.slug}`} className="room-card"><img src={r.cover} alt={`${r.name}: ${r.summary}`} loading="lazy" width={1080} height={1350} /><div><p className="eyebrow">{r.zone}</p><h3>{r.name}</h3><p>{r.sizeSqm} m² · fino a {r.maxGuests} ospiti · prezzo per appartamento</p></div></a>)}</div>
+      <div id="elisir-d-oriente" className="room-detail"><div className="reveal section-heading"><p className="eyebrow">Prima stanza · zona Elisir</p><h3 className="font-display text-4xl">Elisir d’Oriente</h3><p className="section-intro">{ROOMS[0]!.summary}</p></div>
       <Carousel slides={APARTMENT_PHOTOS} label="Foto dell’appartamento" portrait />
       <div className="reveal apartment-details"><div className="room-stats">{[["60", "metri quadrati"], ["4", "ospiti massimi"], ["Balcone", "vista piscina"]].map(([v,l]) => <div key={l}><p>{v}</p><span>{l}</span></div>)}</div><ul>{ROOM_AMENITIES.map(a => <li key={a}><Check size={14} />{a}</li>)}</ul></div>
       <p className="reveal room-note">Wi-Fi non disponibile in camera. Spa a pagamento separato, bambini non ammessi. Ristoranti e bar si vivono à la carte.</p>
+      <div className="reveal room-actions"><Button asChild variant="outline"><a href="#tariffe">Tariffe</a></Button><Button asChild className="luxury-cta"><a href="#book">Calendario e disponibilità<ArrowUpRight /></a></Button></div>
+      <div className="room-tales">
+        <article className="reveal room-tale"><p className="eyebrow">Un racconto dell’Oasi</p><h3>La storia di Elisir d’Oriente</h3><p>{ROOMS[0]!.story}</p></article>
+        <article className="reveal room-tale"><p className="eyebrow">Simbolo: lo scarabeo</p><h3>Il rito: il risveglio dello scarabeo</h3><p>{ROOMS[0]!.ritual}</p></article>
+      </div>
+      </div>
     </Section>
     <Section id="resort" eyebrow="02 / Una destinazione nella destinazione" title={<>Il villaggio <em>Domina Coral Bay.</em></>} intro="Spiagge private, piscine, padel, beach volley e serate sotto le stelle. Spiagge e piscine del resort incluse, senza costi aggiuntivi; ristoranti, bar e attività a pagamento si scelgono separatamente." className="bg-secondary">
       <Carousel slides={VILLAGE_PHOTOS} label="Foto del villaggio" />
@@ -138,7 +153,7 @@ function Index() {
       </div>
     </Section>
     <section id="moovy" className="moovy-section site-section"><div className="site-container moovy-layout"><div className="reveal"><p className="eyebrow text-moovy">MOBILITÀ, CON UN’ENERGIA NUOVA</p><img className="moovy-logo" src={moovyLogo.url} alt="MOOVY — Join the Movement. Join MOOVY." loading="lazy" width={1492} height={1023} /><p className="moovy-soon">Coming Soon</p><p className="section-intro">Il progetto di mobilità elettrica di Domina Coral Bay arriva presto.</p><div className="mt-8 flex items-center gap-3 text-moovy"><Bike size={25} /><span className="text-sm">Elettrico. Leggero. Libero.</span></div></div><figure className="reveal moovy-photo"><img src={moovyBoy.url} alt="Bambino di spalle con sacca MOOVY, affacciato sul resort e sul mare" loading="lazy" width={1440} height={1920} /></figure></div></section>
-    <footer className="site-footer"><div className="site-container footer-layout"><div><a href="#top" className="brand"><Cartouche className="h-14 w-10" /><span>Oasi del Faraone<small>ELISIR D’ORIENTE</small></span></a><p className="mt-5 font-display text-xl italic text-muted-foreground">Il tuo angolo d’Oriente sul Mar Rosso</p></div><div><p className="eyebrow">Parliamone</p><p className="mt-5 text-sm">Fulvio De Siena</p><a href={`https://wa.me/${OWNER_WHATSAPP}`} className="mt-2 block text-sm text-gold-light">+39 334 732 8158</a><a href={`mailto:${OWNER_EMAIL}`} className="mt-2 block text-sm text-gold-light">{OWNER_EMAIL}</a><p className="mt-5 text-sm text-muted-foreground">Domina Coral Bay<br />Sharm el-Sheikh, Egitto</p></div><div><p className="eyebrow">Restiamo in contatto</p><div className="mt-4 flex gap-3"><Button asChild variant="outline" size="icon"><a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" aria-label="Instagram Oasi del Faraone" title="Instagram @oasidelfaraone"><Instagram /></a></Button><Button asChild variant="outline" size="icon"><a href={`https://wa.me/${OWNER_WHATSAPP}`} aria-label="WhatsApp Fulvio" title="WhatsApp Fulvio"><MessageCircle /></a></Button></div><p className="mt-3 text-xs text-muted-foreground">Instagram · @oasidelfaraone</p></div></div><div className="site-container footer-bottom"><span>© {new Date().getFullYear()} Oasi del Faraone</span><span>Un piccolo angolo d’Egitto. Un grande ricordo.</span><a href="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Privacy e cookie</a><a href="/admin" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Gestionale</a></div></footer>
+    <footer className="site-footer"><div className="site-container footer-layout"><div><a href="#top" className="brand"><Cartouche className="h-14 w-10" /><span>Oasi del Faraone<small>ESPERIENZE SUL MAR ROSSO</small></span></a><p className="mt-5 font-display text-xl italic text-muted-foreground">Il tuo angolo d’Oriente sul Mar Rosso</p></div><div><p className="eyebrow">Parliamone</p><p className="mt-5 text-sm">Fulvio De Siena</p><a href={`https://wa.me/${OWNER_WHATSAPP}`} className="mt-2 block text-sm text-gold-light">+39 334 732 8158</a><a href={`mailto:${OWNER_EMAIL}`} className="mt-2 block text-sm text-gold-light">{OWNER_EMAIL}</a><p className="mt-5 text-sm text-muted-foreground">Domina Coral Bay<br />Sharm el-Sheikh, Egitto</p></div><div><p className="eyebrow">Restiamo in contatto</p><div className="mt-4 flex gap-3"><Button asChild variant="outline" size="icon"><a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" aria-label="Instagram Oasi del Faraone" title="Instagram @oasidelfaraone"><Instagram /></a></Button><Button asChild variant="outline" size="icon"><a href={`https://wa.me/${OWNER_WHATSAPP}`} aria-label="WhatsApp Fulvio" title="WhatsApp Fulvio"><MessageCircle /></a></Button></div><p className="mt-3 text-xs text-muted-foreground">Instagram · @oasidelfaraone</p></div></div><div className="site-container footer-bottom"><span>© {new Date().getFullYear()} Oasi del Faraone</span><span>Un piccolo angolo d’Egitto. Un grande ricordo.</span><a href="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Privacy e cookie</a><a href="/admin" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Gestionale</a></div></footer>
     <CookieConsent />
   </main>;
 }
