@@ -27,7 +27,7 @@ export type AContact = {
   consent_occasions: boolean; consent_marketing: boolean; unsubscribed_at: string | null; newsletter_status: string;
 };
 export type AInquiry = { id: string; created_at: string; guest_name: string; guest_email: string | null; contact_id: string | null; status: string; language: string | null };
-export type AOccasion = { id: string; contact_id: string; kind: string; day: number | null; month: number | null };
+export type AOccasion = { id: string; contact_id: string | null; kind: string; day: number | null; month: number | null };
 export type ALog = { dedup_key: string | null; automation: string; booking_id: string | null; step: string; channel: string; status: string; clicked_at: string | null };
 
 export type Channel = "email" | "whatsapp" | "brevo";
@@ -105,7 +105,7 @@ export function computeDue(input: {
   }
 
   if (on("A7")) for (const o of input.occasions) {
-    const c = contacts.get(o.contact_id);
+    const c = o.contact_id ? contacts.get(o.contact_id) : undefined;
     if (!canOccasions(c) || !o.day || !o.month) continue;
     const date = nextOccurrence(today, o.day, o.month);
     for (const [step, d] of [["d120", 120], ["d90", 90]] as const)
