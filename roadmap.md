@@ -20,7 +20,8 @@
 
 - [x] Gestionale /admin: accesso, dashboard, prenotazioni, richieste, clienti; richieste del sito salvate prima di WhatsApp
 - [ ] Fulvio crea il suo account (prenotazionisharm@gmail.com) da Utenti → Aggiungi utente, poi verifica il pannello da loggato
-- [ ] Gestionale: PDF delega per Domina Coral Bay
 - [x] Protezione doppie prenotazioni: vincolo nel database, date occupate nel calendario pubblico con legenda, avviso nel form admin
 - [x] Prenotazione in 2 passaggi, timer 12 minuti, extra rapidi, link Gestionale nel footer (contatore visitatori non fatto: numeri finti)
 - [x] Blocco 2: build corretto, Impostazioni, Spese, dashboard conti + calendario 3 mesi, sync Booking ogni 15 min, ripartizione Carmine/FDS, giorni dall'ultimo contatto
+- [x] Blocco 3A: sync 5 min + all'apertura + verifica live, opzioni con scadenza, avviso "Chiudi su Booking.com", contatti/viaggiatori/ricorrenze, delega Domina automatica, modelli e allegati, cambio BCE
+- [ ] Caricare in Impostazioni → Modelli e allegati: header Domina, firma, 4 allegati (serve Fulvio)
