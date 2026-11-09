@@ -33,7 +33,7 @@ export type ALog = { dedup_key: string | null; automation: string; booking_id: s
 export type Channel = "email" | "whatsapp" | "brevo";
 export type DueItem = {
   automation: AutomationId; step: string; channel: Channel; msgKey: MessageKey; dedupKey: string;
-  bookingId?: string; contactId?: string; inquiryId?: string; lang: Lang; to: string | null; name: string; occasion?: string;
+  bookingId?: string | undefined; contactId?: string | undefined; inquiryId?: string | undefined; lang: Lang; to: string | null; name: string; occasion?: string | undefined;
 };
 
 const DAY = 86_400_000;

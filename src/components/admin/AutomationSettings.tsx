@@ -23,7 +23,7 @@ export function AutomationSettings({ s }: { s: Tables<"settings"> }) {
   const [lang, setLang] = useState<Lang>("it");
   const [a2, setA2] = useState("");
   useEffect(() => { setLinks({ review_url: s.review_url ?? "", facebook_url: s.facebook_url ?? "", instagram_url: s.instagram_url ?? "", newsletter_guide_url: s.newsletter_guide_url ?? "" }); }, [s]);
-  useEffect(() => { setA2(overrides.A2?.[lang] ?? MESSAGES.A2[lang].body); }, [lang, s]);
+  useEffect(() => { setA2(overrides["A2"]?.[lang] ?? MESSAGES.A2[lang].body); }, [lang, s]);
   const save = useMutation({
     mutationFn: async (patch: Partial<Tables<"settings">>) => { const { error } = await supabase.from("settings").update({ ...patch, updated_at: new Date().toISOString() }).eq("id", 1); if (error) throw error; },
     onSuccess: () => { toast.success("Salvato"); qc.invalidateQueries({ queryKey: ["admin"] }); }, onError: (e: Error) => toast.error(e.message),
@@ -53,8 +53,8 @@ export function AutomationSettings({ s }: { s: Tables<"settings"> }) {
         <Textarea rows={14} value={a2} onChange={e => setA2(e.target.value)} />
         <p className="text-xs text-muted-foreground">Segnaposto: {"{{nome_ospite}}"}, {"{{camera}}"}. La nota “Verifica sempre i requisiti aggiornati su viaggiaresicuri.it” viene aggiunta se manca.</p>
         <div className="flex gap-2">
-          <Button onClick={() => save.mutate({ template_overrides: { ...overrides, A2: { ...overrides.A2, [lang]: a2 } } })}>Salva testo {lang.toUpperCase()}</Button>
-          <Button variant="ghost" onClick={() => { const o = { ...overrides.A2 }; delete o[lang]; save.mutate({ template_overrides: { ...overrides, A2: o } }); }}>Ripristina originale</Button>
+          <Button onClick={() => save.mutate({ template_overrides: { ...overrides, A2: { ...overrides["A2"], [lang]: a2 } } })}>Salva testo {lang.toUpperCase()}</Button>
+          <Button variant="ghost" onClick={() => { const o = { ...overrides["A2"] }; delete o[lang]; save.mutate({ template_overrides: { ...overrides, A2: o } }); }}>Ripristina originale</Button>
         </div>
       </div>
 

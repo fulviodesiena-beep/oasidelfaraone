@@ -12,7 +12,7 @@ export async function brevo<T = unknown>(path: string, init: { method?: string; 
   const r = await fetch(`${BASE}${path}`, {
     method: init.method ?? "GET",
     headers: { "api-key": key, accept: "application/json", "content-type": "application/json" },
-    body: init.body === undefined ? undefined : JSON.stringify(init.body),
+    ...(init.body === undefined ? {} : { body: JSON.stringify(init.body) }),
   });
   const text = await r.text();
   if (!r.ok) throw new Error(`Brevo ${r.status}: ${text.slice(0, 300)}`);
@@ -29,7 +29,7 @@ export async function ensureList(): Promise<number> {
   return (await brevo<{ id: number }>("/contacts/lists", { method: "POST", body: { name: NEWSLETTER_LIST, folderId } })).id;
 }
 
-export type BrevoAttrs = { NOME?: string; LINGUA?: string; ULTIMO_SOGGIORNO?: string };
+export type BrevoAttrs = { NOME?: string | undefined; LINGUA?: string | undefined; ULTIMO_SOGGIORNO?: string | undefined };
 export async function upsertBrevoContact(email: string, attributes: BrevoAttrs, listIds: number[], unlinkListIds: number[] = []) {
   await brevo("/contacts", { method: "POST", body: { email, attributes, listIds, unlinkListIds, updateEnabled: true } });
 }
