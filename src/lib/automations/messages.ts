@@ -108,12 +108,12 @@ ${HR}
 ⚠️ ATTENZIONE ALL'ARRIVO
 ${HR}
 
-Appena scendi e sali le scale (mobili o fisse), troverai una fila di persone con cartelline, nomi, loghi di tour operator. Creano un po' di caos e di solito ti indicano di seguirli verso destra (la tua sinistra) per compilare i documenti al posto tuo — ovviamente a pagamento.
+Appena scendi e sali le scale (mobili o fisse), troverai una fila di persone con cartelline, nomi, loghi di tour operator. Creano un po' di caos e di solito ti indicano di seguirli verso destra (la tua sinistra) per compilare i documenti al posto tuo — ovviamente a pagamento, tipo €5 a foglio.
 
 💡 Il mio consiglio: ignorali con un sorriso, prosegui dritto e raggiungi i box della polizia locale — riconosci i poliziotti dalla divisa ufficiale. Consegni lì i moduli compilati e ti lasciano il visto. Semplice.
 
 🕐 Soggiorni superiori a 15 giorni?
-Se resti a Sharm più di 15 giorni, ricordati di acquistare il visto. Lo trovi prima dei box della polizia, in uno sportello apposito — te lo fa sempre un agente in divisa, che per ovvi motivi non accetta mance 😄
+Se resti a Sharm più di 15 giorni, ricordati di acquistare il visto da $30 (circa €28). Lo trovi prima dei box della polizia, in uno sportello apposito — te lo fa sempre un agente in divisa, che per ovvi motivi non accetta mance 😄
 
 ${HR}
 📷 Documenti
@@ -148,12 +148,12 @@ ${HR}
 ⚠️ HEADS-UP ON ARRIVAL
 ${HR}
 
-As soon as you get off and go up the stairs or escalator, you'll see people with folders, names and tour-operator logos. They create a bit of chaos and usually ask you to follow them to fill in your documents for you — for a fee, of course.
+As soon as you get off and go up the stairs or escalator, you'll see people with folders, names and tour-operator logos. They create a bit of chaos and usually ask you to follow them to fill in your documents for you — for a fee, of course — around €5 a sheet.
 
 💡 My advice: smile, ignore them, walk straight on to the local police booths — you'll recognise the officers by their official uniform. Hand in your completed forms there and they'll give you the visa. Simple.
 
 🕐 Staying longer than 15 days?
-If you stay in Sharm for more than 15 days, remember to buy the visa. You'll find a dedicated counter before the police booths — it's always issued by a uniformed officer, who of course doesn't accept tips 😄
+If you stay in Sharm for more than 15 days, remember to buy the $30 visa (about €28). You'll find a dedicated counter before the police booths — it's always issued by a uniformed officer, who of course doesn't accept tips 😄
 
 ${HR}
 📷 Documents
@@ -188,12 +188,12 @@ ${HR}
 ⚠️ ACHTUNG BEI DER ANKUNFT
 ${HR}
 
-Gleich nach dem Aussteigen und der Treppe oder Rolltreppe stehen Leute mit Mappen, Namen und Logos von Reiseveranstaltern. Sie sorgen für etwas Durcheinander und bieten an, die Formulare für dich auszufüllen — natürlich gegen Bezahlung.
+Gleich nach dem Aussteigen und der Treppe oder Rolltreppe stehen Leute mit Mappen, Namen und Logos von Reiseveranstaltern. Sie sorgen für etwas Durcheinander und bieten an, die Formulare für dich auszufüllen — natürlich gegen Bezahlung, etwa 5 € pro Blatt.
 
 💡 Mein Tipp: freundlich lächeln, ignorieren und geradeaus zu den Schaltern der örtlichen Polizei gehen — du erkennst die Beamten an der offiziellen Uniform. Dort gibst du die ausgefüllten Formulare ab und bekommst das Visum. Ganz einfach.
 
 🕐 Länger als 15 Tage?
-Wenn du länger als 15 Tage in Sharm bleibst, denk daran, das Visum zu kaufen. Es gibt einen eigenen Schalter vor den Polizeischaltern — ausgestellt immer von einem uniformierten Beamten, der natürlich kein Trinkgeld annimmt 😄
+Wenn du länger als 15 Tage in Sharm bleibst, denk daran, das Visum für 30 $ (ca. 28 €) zu kaufen. Es gibt einen eigenen Schalter vor den Polizeischaltern — ausgestellt immer von einem uniformierten Beamten, der natürlich kein Trinkgeld annimmt 😄
 
 ${HR}
 📷 Dokumente
