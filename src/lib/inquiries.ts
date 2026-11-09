@@ -6,6 +6,7 @@ export type InquiryInput = {
   check_in: string; check_out: string; adults: number; children: number;
   extras: string[]; message: string;
   consent_privacy: boolean; consent_marketing: boolean;
+  special_dates?: string; consent_occasions?: boolean;
 };
 
 export const SAVE_TIMEOUT_MS = 2000;
@@ -32,6 +33,8 @@ export async function saveInquiry(i: InquiryInput): Promise<boolean> {
       source_url: typeof window !== "undefined" ? window.location.href : null,
       consent_privacy: i.consent_privacy,
       consent_marketing: i.consent_marketing,
+      special_dates: i.special_dates?.trim().slice(0, 500) || null,
+      consent_occasions: !!i.consent_occasions,
       ...getAttribution(),
     });
     if (error) console.error("Inquiry not saved", error.message);

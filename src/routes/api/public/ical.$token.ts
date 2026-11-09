@@ -16,7 +16,7 @@ export const Route = createFileRoute("/api/public/ical/$token")({
         if (!res.ok) return new Response("Calendar unavailable", { status: 502 });
         const rows = (await res.json()) as { uid: string; start_date: string; end_date: string }[];
         return new Response(buildIcal(rows.map(r => ({ uid: r.uid, start: r.start_date, end: r.end_date }))), {
-          headers: { "content-type": "text/calendar; charset=utf-8", "cache-control": "no-store" },
+          headers: { "content-type": "text/calendar; charset=utf-8", "cache-control": "no-cache, no-store, must-revalidate, max-age=0", pragma: "no-cache", expires: "0" },
         });
       },
     },

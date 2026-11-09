@@ -6,6 +6,8 @@ import { StatusBadge } from "@/components/admin/StatusBadge";
 import { dashboardStats, occupancyBand, occupancyStats, eur, fmtDate, todayKey, type Booking } from "@/lib/admin";
 import { REVIEW_LINK_IS_PLACEHOLDER } from "@/lib/email-templates";
 import { FinancePanel } from "@/components/admin/FinancePanel";
+import { BookingClosureList, DelegaPanel } from "@/components/admin/DashboardAlerts";
+import { needsBookingClosure } from "@/lib/ical";
 
 export const Route = createFileRoute("/admin/")({ component: Dashboard });
 
@@ -37,6 +39,9 @@ function Dashboard() {
           ⚠️ Link Google Business non configurato. Aggiorna REVIEW_PLACEHOLDER in src/lib/email-templates.ts con il tuo link reale.
         </div>
       )}
+
+      <BookingClosureList />
+      <DelegaPanel />
 
       {/* Riga 1 — card esistenti */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -72,7 +77,7 @@ function Dashboard() {
         <CardContent>
           {data.upcoming.length === 0 ? <p className="text-sm text-muted-foreground">Nessuna prenotazione confermata in arrivo.</p> :
             <ul className="divide-y divide-border">{data.upcoming.map(b => (
-              <li key={b.id} className="flex flex-wrap items-center justify-between gap-2 py-3">
+              <li key={b.id} className={`flex flex-wrap items-center justify-between gap-2 py-3 ${needsBookingClosure(b, today) ? "text-destructive" : ""}`}>
                 <span>{b.guest_name}</span>
                 <span className="text-sm text-muted-foreground">{fmtDate(b.check_in)} → {fmtDate(b.check_out)} · {b.total_nights} notti</span>
                 <span className="text-sm">{eur(b.total_price)}</span><StatusBadge status={b.status} />

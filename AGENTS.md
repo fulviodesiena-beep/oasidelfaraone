@@ -20,7 +20,9 @@
 - /admin is a client-only (ssr: false) layout gated in beforeLoad by an admin row in user_roles; the login page lives at admin_.login.tsx so it is not nested under the gate.
 - Admin pages read and write through the browser client under RLS (has_role admin); public sign-up is disabled and the owner account gets the admin role via a trigger on auth.users matched by email.
 - Guest records are created or updated by a database trigger when a booking becomes confirmed (match by email or digits-only phone); balance_due is a generated column.
-- Booking documents live in the private `documents` storage bucket (admin-only RLS); the app shares them only via time-limited signed URLs, and the Domina delega PDF is built in the browser with pdf-lib from `src/lib/delega.ts`.
+- Booking documents live in the private `documents` storage bucket (admin-only RLS) and are shared only via time-limited signed URLs. The Domina delega (holder = owner from settings, delegates = travelers) is built with pdf-lib from `src/lib/delega.ts` inside the `ensureDelega` server function and regenerated when its fingerprint changes; header/signature/travel attachments live at fixed paths in the private `templates` bucket.
 - Personal-use and host-collaboration rules (zero price, host required, hosts.total_owed) are enforced by database triggers, not only the form.
 - Revenue split (owner share / FDS) lives in generated booking columns fed by snapshot columns set by a trigger; the app only displays them, and dashboard maths lives in `src/lib/finance.ts` (expenses paid by the owner reduce the owner's net, never FDS).
-- Booking.com iCal import runs from a managed 15-minute HTTP schedule on /api/public/jobs/ical-sync and from the admin "Sincronizza ora" server function; both share `syncBookingIcal`.
+- Booking.com iCal import runs from a managed 5-minute HTTP schedule on /api/public/jobs/ical-sync, on admin open (rate-limited 1/min) and live before saving date-blocking statuses; all share `syncBookingIcal`.
+- Options (status `option`) expire by timestamp: public/export queries ignore expired ones and a trigger cancels overlapping expired options on save (no polling cron).
+- `contacts` is the single deduplicated address book (email or E.164 phone, via `upsert_contact`); triggers link inquiries, bookings and guests to it, and traveler birth dates generate `occasions`.

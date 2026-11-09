@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { FileDown, FileText, MessageCircle, Upload } from "lucide-react";
+import { FileText, MessageCircle, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Field } from "@/components/admin/BookingFormDialog";
 import { DOCUMENT_TYPES, fmtDate, type Booking, type DocumentRow } from "@/lib/admin";
-import { buildDelegaPdf } from "@/lib/delega";
 
 const BUCKET = "documents";
 const SHARE_SECONDS = 60 * 60 * 24 * 7; // link valid 7 days
@@ -55,8 +54,6 @@ export function DocumentUploader({ bookingId }: { bookingId: string }) {
 }
 
 export function BookingDocuments({ booking }: { booking: Booking }) {
-  const qc = useQueryClient();
-  const [apartment, setApartment] = useState(() => (typeof window !== "undefined" && localStorage.getItem("oasi-apartment")) || "");
   const { data: docs = [] } = useQuery({
     queryKey: ["admin", "documents", booking.id],
     queryFn: async () => {
@@ -64,17 +61,6 @@ export function BookingDocuments({ booking }: { booking: Booking }) {
       if (error) throw error; return data;
     },
   });
-  const delega = useMutation({
-    mutationFn: async () => {
-      localStorage.setItem("oasi-apartment", apartment);
-      const bytes = await buildDelegaPdf(booking, apartment);
-      const blob = new Blob([bytes as BlobPart], { type: "application/pdf" });
-      await uploadDocument(booking.id, "Delega Domina", blob, `delega-${booking.check_in}.pdf`, "application/pdf");
-    },
-    onSuccess: () => { toast.success("Delega generata e salvata"); qc.invalidateQueries({ queryKey: ["admin", "documents"] }); },
-    onError: (e: Error) => toast.error(e.message),
-  });
-
   return (
     <section className="space-y-3 border-t border-border pt-4">
       <h3 className="font-display text-xl">Documenti</h3>
@@ -86,10 +72,6 @@ export function BookingDocuments({ booking }: { booking: Booking }) {
             <Button size="sm" variant="ghost" aria-label="Invia link via WhatsApp" onClick={() => shareDocument(doc, booking.guest_phone)}><MessageCircle /></Button>
           </li>))}</ul>}
       <DocumentUploader bookingId={booking.id} />
-      <div className="flex flex-wrap items-end gap-2">
-        <Field label="N. appartamento (per la delega)"><Input className="w-44" value={apartment} onChange={e => setApartment(e.target.value)} /></Field>
-        <Button size="sm" variant="outline" disabled={delega.isPending} onClick={() => delega.mutate()}><FileDown />Genera delega Domina</Button>
-      </div>
     </section>
   );
 }

@@ -53,28 +53,38 @@ export type Database = {
       bookings: {
         Row: {
           adults: number
+          arrival_time: string | null
           balance_due: number | null
           channel: string
           channel_commission: number
           check_in: string
           check_out: string
           children: number
+          contact_id: string | null
           created_at: string
+          delegate_email: string | null
+          delegate_phone: string | null
+          departure_time: string | null
           deposit_paid: number
           extras: Json
           fds_amount: number | null
           fds_min_per_night: number | null
           fds_share_pct: number | null
+          final_cleaning: boolean
           guest_email: string | null
           guest_name: string
           guest_phone: string | null
           host_amount: number
           host_id: string | null
           id: string
+          initial_cleaning: boolean
           is_personal_use: boolean
           net_accommodation: number | null
           notes: string | null
+          option_expires_at: string | null
+          ota_closed_at: string | null
           owner_cap_per_night: number | null
+          payment_verified_at: string | null
           pipeline_stage: Database["public"]["Enums"]["pipeline_stage"]
           price_per_night: number
           room_amount: number | null
@@ -85,28 +95,38 @@ export type Database = {
         }
         Insert: {
           adults?: number
+          arrival_time?: string | null
           balance_due?: number | null
           channel?: string
           channel_commission?: number
           check_in: string
           check_out: string
           children?: number
+          contact_id?: string | null
           created_at?: string
+          delegate_email?: string | null
+          delegate_phone?: string | null
+          departure_time?: string | null
           deposit_paid?: number
           extras?: Json
           fds_amount?: number | null
           fds_min_per_night?: number | null
           fds_share_pct?: number | null
+          final_cleaning?: boolean
           guest_email?: string | null
           guest_name: string
           guest_phone?: string | null
           host_amount?: number
           host_id?: string | null
           id?: string
+          initial_cleaning?: boolean
           is_personal_use?: boolean
           net_accommodation?: number | null
           notes?: string | null
+          option_expires_at?: string | null
+          ota_closed_at?: string | null
           owner_cap_per_night?: number | null
+          payment_verified_at?: string | null
           pipeline_stage?: Database["public"]["Enums"]["pipeline_stage"]
           price_per_night?: number
           room_amount?: number | null
@@ -117,28 +137,38 @@ export type Database = {
         }
         Update: {
           adults?: number
+          arrival_time?: string | null
           balance_due?: number | null
           channel?: string
           channel_commission?: number
           check_in?: string
           check_out?: string
           children?: number
+          contact_id?: string | null
           created_at?: string
+          delegate_email?: string | null
+          delegate_phone?: string | null
+          departure_time?: string | null
           deposit_paid?: number
           extras?: Json
           fds_amount?: number | null
           fds_min_per_night?: number | null
           fds_share_pct?: number | null
+          final_cleaning?: boolean
           guest_email?: string | null
           guest_name?: string
           guest_phone?: string | null
           host_amount?: number
           host_id?: string | null
           id?: string
+          initial_cleaning?: boolean
           is_personal_use?: boolean
           net_accommodation?: number | null
           notes?: string | null
+          option_expires_at?: string | null
+          ota_closed_at?: string | null
           owner_cap_per_night?: number | null
+          payment_verified_at?: string | null
           pipeline_stage?: Database["public"]["Enums"]["pipeline_stage"]
           price_per_night?: number
           room_amount?: number | null
@@ -156,6 +186,75 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      contacts: {
+        Row: {
+          city: string | null
+          consent_marketing: boolean
+          consent_marketing_at: string | null
+          consent_marketing_source: string | null
+          consent_occasions: boolean
+          consent_occasions_at: string | null
+          created_at: string
+          email: string | null
+          first_name: string | null
+          id: string
+          language: string | null
+          last_name: string | null
+          nationality: string | null
+          notes: string | null
+          phone: string | null
+          source: string
+          status: string
+          tags: string[]
+          unsubscribed_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          city?: string | null
+          consent_marketing?: boolean
+          consent_marketing_at?: string | null
+          consent_marketing_source?: string | null
+          consent_occasions?: boolean
+          consent_occasions_at?: string | null
+          created_at?: string
+          email?: string | null
+          first_name?: string | null
+          id?: string
+          language?: string | null
+          last_name?: string | null
+          nationality?: string | null
+          notes?: string | null
+          phone?: string | null
+          source?: string
+          status?: string
+          tags?: string[]
+          unsubscribed_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          city?: string | null
+          consent_marketing?: boolean
+          consent_marketing_at?: string | null
+          consent_marketing_source?: string | null
+          consent_occasions?: boolean
+          consent_occasions_at?: string | null
+          created_at?: string
+          email?: string | null
+          first_name?: string | null
+          id?: string
+          language?: string | null
+          last_name?: string | null
+          nationality?: string | null
+          notes?: string | null
+          phone?: string | null
+          source?: string
+          status?: string
+          tags?: string[]
+          unsubscribed_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       data_backups: {
         Row: {
@@ -190,7 +289,9 @@ export type Database = {
           created_at: string
           file_type: string | null
           file_url: string
+          fingerprint: string | null
           id: string
+          kind: string | null
           name: string
           uploaded_by: string
         }
@@ -199,7 +300,9 @@ export type Database = {
           created_at?: string
           file_type?: string | null
           file_url: string
+          fingerprint?: string | null
           id?: string
+          kind?: string | null
           name: string
           uploaded_by?: string
         }
@@ -208,7 +311,9 @@ export type Database = {
           created_at?: string
           file_type?: string | null
           file_url?: string
+          fingerprint?: string | null
           id?: string
+          kind?: string | null
           name?: string
           uploaded_by?: string
         }
@@ -230,6 +335,8 @@ export type Database = {
           created_at: string
           currency: string
           date: string
+          fx_date: string | null
+          fx_rate: number | null
           id: string
           note: string | null
           paid_by: string | null
@@ -242,6 +349,8 @@ export type Database = {
           created_at?: string
           currency?: string
           date?: string
+          fx_date?: string | null
+          fx_rate?: number | null
           id?: string
           note?: string | null
           paid_by?: string | null
@@ -254,6 +363,8 @@ export type Database = {
           created_at?: string
           currency?: string
           date?: string
+          fx_date?: string | null
+          fx_rate?: number | null
           id?: string
           note?: string | null
           paid_by?: string | null
@@ -263,6 +374,7 @@ export type Database = {
       }
       guests: {
         Row: {
+          contact_id: string | null
           created_at: string
           email: string | null
           id: string
@@ -274,6 +386,7 @@ export type Database = {
           total_stays: number
         }
         Insert: {
+          contact_id?: string | null
           created_at?: string
           email?: string | null
           id?: string
@@ -285,6 +398,7 @@ export type Database = {
           total_stays?: number
         }
         Update: {
+          contact_id?: string | null
           created_at?: string
           email?: string | null
           id?: string
@@ -337,7 +451,9 @@ export type Database = {
           check_out: string | null
           children: number
           consent_marketing: boolean
+          consent_occasions: boolean
           consent_privacy: boolean
+          contact_id: string | null
           created_at: string
           extras: Json
           guest_email: string | null
@@ -351,6 +467,7 @@ export type Database = {
           next_follow_up_at: string | null
           referrer: string | null
           source_url: string | null
+          special_dates: string | null
           status: Database["public"]["Enums"]["inquiry_status"]
           utm_campaign: string | null
           utm_medium: string | null
@@ -362,7 +479,9 @@ export type Database = {
           check_out?: string | null
           children?: number
           consent_marketing?: boolean
+          consent_occasions?: boolean
           consent_privacy?: boolean
+          contact_id?: string | null
           created_at?: string
           extras?: Json
           guest_email?: string | null
@@ -376,6 +495,7 @@ export type Database = {
           next_follow_up_at?: string | null
           referrer?: string | null
           source_url?: string | null
+          special_dates?: string | null
           status?: Database["public"]["Enums"]["inquiry_status"]
           utm_campaign?: string | null
           utm_medium?: string | null
@@ -387,7 +507,9 @@ export type Database = {
           check_out?: string | null
           children?: number
           consent_marketing?: boolean
+          consent_occasions?: boolean
           consent_privacy?: boolean
+          contact_id?: string | null
           created_at?: string
           extras?: Json
           guest_email?: string | null
@@ -401,6 +523,7 @@ export type Database = {
           next_follow_up_at?: string | null
           referrer?: string | null
           source_url?: string | null
+          special_dates?: string | null
           status?: Database["public"]["Enums"]["inquiry_status"]
           utm_campaign?: string | null
           utm_medium?: string | null
@@ -408,11 +531,69 @@ export type Database = {
         }
         Relationships: []
       }
+      occasions: {
+        Row: {
+          contact_id: string | null
+          created_at: string
+          day: number
+          id: string
+          kind: string
+          month: number
+          note: string | null
+          source: string
+          traveler_id: string | null
+          year: number | null
+        }
+        Insert: {
+          contact_id?: string | null
+          created_at?: string
+          day: number
+          id?: string
+          kind: string
+          month: number
+          note?: string | null
+          source?: string
+          traveler_id?: string | null
+          year?: number | null
+        }
+        Update: {
+          contact_id?: string | null
+          created_at?: string
+          day?: number
+          id?: string
+          kind?: string
+          month?: number
+          note?: string | null
+          source?: string
+          traveler_id?: string | null
+          year?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "occasions_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "occasions_traveler_id_fkey"
+            columns: ["traveler_id"]
+            isOneToOne: false
+            referencedRelation: "travelers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       settings: {
         Row: {
           booking_ical_url: string | null
+          domina_email: string
           fds_min_per_night: number | null
           fds_share_pct: number
+          holder_name: string
+          holder_passport: string
+          holder_phone: string
           ical_token: string
           id: number
           last_sync_attempt_at: string | null
@@ -421,12 +602,17 @@ export type Database = {
           meta_pixel_id: string | null
           owner_cap_per_night: number | null
           owner_name: string | null
+          unit_number: string
           updated_at: string
         }
         Insert: {
           booking_ical_url?: string | null
+          domina_email?: string
           fds_min_per_night?: number | null
           fds_share_pct?: number
+          holder_name?: string
+          holder_passport?: string
+          holder_phone?: string
           ical_token?: string
           id?: number
           last_sync_attempt_at?: string | null
@@ -435,12 +621,17 @@ export type Database = {
           meta_pixel_id?: string | null
           owner_cap_per_night?: number | null
           owner_name?: string | null
+          unit_number?: string
           updated_at?: string
         }
         Update: {
           booking_ical_url?: string | null
+          domina_email?: string
           fds_min_per_night?: number | null
           fds_share_pct?: number
+          holder_name?: string
+          holder_passport?: string
+          holder_phone?: string
           ical_token?: string
           id?: number
           last_sync_attempt_at?: string | null
@@ -449,9 +640,67 @@ export type Database = {
           meta_pixel_id?: string | null
           owner_cap_per_night?: number | null
           owner_name?: string | null
+          unit_number?: string
           updated_at?: string
         }
         Relationships: []
+      }
+      travelers: {
+        Row: {
+          birth_date: string | null
+          booking_id: string
+          contact_id: string | null
+          created_at: string
+          document_number: string | null
+          document_type: string
+          first_name: string
+          id: string
+          last_name: string
+          nationality: string | null
+          position: number
+        }
+        Insert: {
+          birth_date?: string | null
+          booking_id: string
+          contact_id?: string | null
+          created_at?: string
+          document_number?: string | null
+          document_type?: string
+          first_name: string
+          id?: string
+          last_name: string
+          nationality?: string | null
+          position?: number
+        }
+        Update: {
+          birth_date?: string | null
+          booking_id?: string
+          contact_id?: string | null
+          created_at?: string
+          document_number?: string | null
+          document_type?: string
+          first_name?: string
+          id?: string
+          last_name?: string
+          nationality?: string | null
+          position?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "travelers_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "travelers_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
@@ -504,6 +753,20 @@ export type Database = {
           uid: string
         }[]
       }
+      normalize_phone: { Args: { _p: string }; Returns: string }
+      release_expired_options: { Args: never; Returns: number }
+      upsert_contact: {
+        Args: {
+          _email: string
+          _marketing?: boolean
+          _name: string
+          _occasions?: boolean
+          _phone: string
+          _source: string
+          _status: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       app_role: "admin"
@@ -513,6 +776,7 @@ export type Database = {
         | "cancelled"
         | "personal"
         | "host_collab"
+        | "option"
       inquiry_status: "new" | "contacted" | "converted" | "lost"
       pipeline_stage:
         | "lead"
@@ -657,6 +921,7 @@ export const Constants = {
         "cancelled",
         "personal",
         "host_collab",
+        "option",
       ],
       inquiry_status: ["new", "contacted", "converted", "lost"],
       pipeline_stage: [

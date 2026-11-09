@@ -7,6 +7,7 @@ const TONE: Record<string, string> = {
   host_collab: "status-host",
   converted: "border-primary/60 bg-primary/15 text-gold-light",
   pending: "status-pending",
+  option: "border-warning bg-warning/15 text-warning",
   new: "border-primary bg-primary text-primary-foreground",
   contacted: "border-border bg-secondary text-foreground",
   cancelled: "status-cancelled",

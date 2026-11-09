@@ -6,11 +6,14 @@ export type Inquiry = Tables<"inquiries">;
 export type Guest = Tables<"guests">;
 export type Host = Tables<"hosts">;
 export type DocumentRow = Tables<"documents">;
+export type Traveler = Tables<"travelers">;
+export type Contact = Tables<"contacts">;
 
 export const DOCUMENT_TYPES = ["Documento identità", "Contratto", "Delega Domina", "Altro"] as const;
 
 export const BOOKING_STATUS_LABEL: Record<Booking["status"], string> = {
   pending: "In attesa",
+  option: "Opzionata",
   confirmed: "Confermata",
   cancelled: "Annullata",
   personal: "Uso personale",

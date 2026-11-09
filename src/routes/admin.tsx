@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { syncBookingIfStale } from "@/lib/ical.functions";
+import { BookingClosureGate } from "@/components/admin/BookingClosureGate";
 import { createFileRoute, Link, Outlet, redirect, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { CalendarDays, FileText, Handshake, Inbox, KeyRound, LayoutDashboard, LogOut, Receipt, Settings, Users } from "lucide-react";
+import { CalendarDays, Contact, FileText, Handshake, Inbox, KeyRound, LayoutDashboard, LogOut, Receipt, Settings, Users } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -42,6 +45,7 @@ const NAV = [
   { to: "/admin/bookings", label: "Prenotazioni", icon: CalendarDays },
   { to: "/admin/inquiries", label: "Richieste", icon: Inbox },
   { to: "/admin/guests", label: "Clienti", icon: Users },
+  { to: "/admin/contacts", label: "Contatti", icon: Contact },
   { to: "/admin/hosts", label: "Host", icon: Handshake },
   { to: "/admin/documents", label: "Documenti", icon: FileText },
   { to: "/admin/expenses", label: "Spese", icon: Receipt },
@@ -61,6 +65,11 @@ function AdminLayout() {
     },
   });
   const current = NAV.find(n => n.to === path) ?? NAV[0];
+  const syncIfStale = useServerFn(syncBookingIfStale);
+  useEffect(() => {
+    if (path !== "/admin" && path !== "/admin/bookings") return;
+    syncIfStale().then(r => { if (!r.skipped) qc.invalidateQueries({ queryKey: ["admin"] }); }).catch(() => {});
+  }, [path]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function logout() {
     await qc.cancelQueries(); qc.clear();
@@ -99,6 +108,7 @@ function AdminLayout() {
             <Button variant="outline" size="sm" onClick={logout}><LogOut />Esci</Button>
           </header>
           <main className="flex-1 p-4 sm:p-6"><Outlet /></main>
+          <BookingClosureGate />
         </div>
       </div>
       <Toaster />

@@ -13,6 +13,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { balanceDue, BOOKING_STATUS_LABEL, eur, nightsFor, SOURCE_LABEL, type Booking } from "@/lib/admin";
 import { quote } from "@/lib/pricing";
 import { previewSplit, suggestedCommission } from "@/lib/finance";
+import { useServerFn } from "@tanstack/react-start";
+import { checkAvailabilityLive, syncBookingIfStale } from "@/lib/ical.functions";
+
+/** Statuses that block dates: a live Booking.com sync must pass before saving them. */
+export const NEEDS_LIVE_CHECK = (s: string) => s === "confirmed" || s === "option" || s === "host_collab";
+export const defaultOptionExpiry = () => { const d = new Date(Date.now() + 48 * 3600e3); d.setSeconds(0, 0); return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16); };
 
 export type BookingDraft = {
   guest_name: string; guest_email: string; guest_phone: string;
@@ -22,6 +28,7 @@ export type BookingDraft = {
   price_per_night: number; total_price: number; deposit_paid: number;
   notes: string; source: string;
   channel: string; channel_commission: number;
+  option_expires_at: string;
 };
 
 export const emptyDraft = (): BookingDraft => ({
@@ -29,7 +36,7 @@ export const emptyDraft = (): BookingDraft => ({
   adults: 2, children: 0, extras: [], status: "pending",
   price_per_night: 0, total_price: 0, deposit_paid: 0, notes: "", source: "manual",
   is_personal_use: false, host_id: "", host_amount: 0,
-  channel: "diretto", channel_commission: 0,
+  channel: "diretto", channel_commission: 0, option_expires_at: "",
 });
 
 /** Suggests a nightly rate from the site's seasonal pricing; 0 when on request. */
@@ -45,6 +52,9 @@ export function BookingFormDialog({ open, onOpenChange, initial, inquiryId }: {
   const qc = useQueryClient();
   const [d, setD] = useState<BookingDraft>(initial);
   useEffect(() => { if (open) setD(initial); }, [open, initial]);
+  const live = useServerFn(checkAvailabilityLive);
+  const syncIfStale = useServerFn(syncBookingIfStale);
+  useEffect(() => { if (open) syncIfStale().catch(() => {}); }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
   const nights = nightsFor(d.check_in, d.check_out);
   const set = <K extends keyof BookingDraft>(k: K, v: BookingDraft[K]) => setD(p => ({ ...p, [k]: v }));
 
@@ -83,7 +93,13 @@ export function BookingFormDialog({ open, onOpenChange, initial, inquiryId }: {
 
   const save = useMutation({
     mutationFn: async () => {
+      if (NEEDS_LIVE_CHECK(d.status)) {
+        const r = await live({ data: { checkIn: d.check_in, checkOut: d.check_out } });
+        if (r.conflicts.length) throw new Error(`Date non disponibili (verifica in tempo reale): ${r.conflicts.join("; ")}`);
+        if (r.syncError) toast.warning(`Booking.com non verificato: ${r.syncError}`);
+      }
       const row: TablesInsert<"bookings"> = {
+        option_expires_at: d.status === "option" && d.option_expires_at ? new Date(d.option_expires_at).toISOString() : null,
         guest_name: d.guest_name.trim(), guest_email: d.guest_email.trim() || null, guest_phone: d.guest_phone.trim() || null,
         check_in: d.check_in, check_out: d.check_out, adults: d.adults, children: d.children, extras: d.extras,
         status: d.status, total_nights: nights, price_per_night: d.price_per_night, total_price: d.total_price,
@@ -125,11 +141,12 @@ export function BookingFormDialog({ open, onOpenChange, initial, inquiryId }: {
           <Field label="Caparra ricevuta (€)"><Input disabled={lock} type="number" min={0} step="0.01" value={d.deposit_paid} onChange={e => set("deposit_paid", Number(e.target.value))} /></Field>
           <Field label="Saldo da ricevere"><p className="flex h-9 items-center text-sm text-gold-light">{eur(balanceDue(d.total_price, d.deposit_paid))}</p></Field>
           <Field label="Stato">
-            <Select disabled={lock} value={d.status} onValueChange={v => set("status", v as BookingDraft["status"])}>
+            <Select disabled={lock} value={d.status} onValueChange={v => setD(p => ({ ...p, status: v as BookingDraft["status"], option_expires_at: v === "option" ? p.option_expires_at || defaultOptionExpiry() : p.option_expires_at }))}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>{Object.entries(BOOKING_STATUS_LABEL).map(([k, l]) => <SelectItem key={k} value={k}>{l}</SelectItem>)}</SelectContent>
             </Select>
           </Field>
+          {d.status === "option" && <Field label="Opzione valida fino a"><Input type="datetime-local" required value={d.option_expires_at || defaultOptionExpiry()} onChange={e => set("option_expires_at", e.target.value)} onFocus={() => { if (!d.option_expires_at) set("option_expires_at", defaultOptionExpiry()); }} /></Field>}
           <Field label="Origine">
             <Select disabled={lock} value={d.source} onValueChange={v => setD(p => ({ ...p, source: v, status: v === "host" ? "host_collab" : p.status }))}>
               <SelectTrigger><SelectValue /></SelectTrigger>
