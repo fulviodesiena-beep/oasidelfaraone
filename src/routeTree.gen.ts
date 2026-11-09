@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as DeRouteImport } from './routes/de'
+import { Route as DisiscrizioneRouteImport } from './routes/disiscrizione'
 import { Route as EnRouteImport } from './routes/en'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -24,8 +25,11 @@ import { Route as AdminHostsRouteImport } from './routes/admin.hosts'
 import { Route as AdminInquiriesRouteImport } from './routes/admin.inquiries'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminLoginRouteImport } from './routes/admin_.login'
+import { Route as DeAbmeldenRouteImport } from './routes/de_.abmelden'
 import { Route as DePrivacyRouteImport } from './routes/de_.privacy'
 import { Route as EnPrivacyRouteImport } from './routes/en_.privacy'
+import { Route as EnUnsubscribeRouteImport } from './routes/en_.unsubscribe'
+import { Route as NewsletterConfermaRouteImport } from './routes/newsletter.conferma'
 import { Route as ApiPublicBrevoWebhookRouteImport } from './routes/api/public/brevo-webhook'
 import { Route as ApiPublicIcalTokenRouteImport } from './routes/api/public/ical.$token'
 import { Route as ApiPublicJobsAutomationsRouteImport } from './routes/api/public/jobs/automations'
@@ -46,6 +50,11 @@ const AdminRoute = AdminRouteImport.update({
 const DeRoute = DeRouteImport.update({
   id: '/de',
   path: '/de',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DisiscrizioneRoute = DisiscrizioneRouteImport.update({
+  id: '/disiscrizione',
+  path: '/disiscrizione',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnRoute = EnRouteImport.update({
@@ -108,6 +117,11 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DeAbmeldenRoute = DeAbmeldenRouteImport.update({
+  id: '/de_/abmelden',
+  path: '/de/abmelden',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DePrivacyRoute = DePrivacyRouteImport.update({
   id: '/de_/privacy',
   path: '/de/privacy',
@@ -116,6 +130,16 @@ const DePrivacyRoute = DePrivacyRouteImport.update({
 const EnPrivacyRoute = EnPrivacyRouteImport.update({
   id: '/en_/privacy',
   path: '/en/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnUnsubscribeRoute = EnUnsubscribeRouteImport.update({
+  id: '/en_/unsubscribe',
+  path: '/en/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsletterConfermaRoute = NewsletterConfermaRouteImport.update({
+  id: '/newsletter/conferma',
+  path: '/newsletter/conferma',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicBrevoWebhookRoute = ApiPublicBrevoWebhookRouteImport.update({
@@ -155,6 +179,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/de': typeof DeRoute
+  '/disiscrizione': typeof DisiscrizioneRoute
   '/en': typeof EnRoute
   '/privacy': typeof PrivacyRoute
   '/admin/bookings': typeof AdminBookingsRoute
@@ -166,8 +191,11 @@ export interface FileRoutesByFullPath {
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/login': typeof AdminLoginRoute
+  '/de/abmelden': typeof DeAbmeldenRoute
   '/de/privacy': typeof DePrivacyRoute
   '/en/privacy': typeof EnPrivacyRoute
+  '/en/unsubscribe': typeof EnUnsubscribeRoute
+  '/newsletter/conferma': typeof NewsletterConfermaRoute
   '/admin/': typeof AdminIndexRoute
   '/api/public/brevo-webhook': typeof ApiPublicBrevoWebhookRoute
   '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
@@ -179,6 +207,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/de': typeof DeRoute
+  '/disiscrizione': typeof DisiscrizioneRoute
   '/en': typeof EnRoute
   '/privacy': typeof PrivacyRoute
   '/admin/bookings': typeof AdminBookingsRoute
@@ -190,8 +219,11 @@ export interface FileRoutesByTo {
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/login': typeof AdminLoginRoute
+  '/de/abmelden': typeof DeAbmeldenRoute
   '/de/privacy': typeof DePrivacyRoute
   '/en/privacy': typeof EnPrivacyRoute
+  '/en/unsubscribe': typeof EnUnsubscribeRoute
+  '/newsletter/conferma': typeof NewsletterConfermaRoute
   '/admin': typeof AdminIndexRoute
   '/api/public/brevo-webhook': typeof ApiPublicBrevoWebhookRoute
   '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
@@ -205,6 +237,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/de': typeof DeRoute
+  '/disiscrizione': typeof DisiscrizioneRoute
   '/en': typeof EnRoute
   '/privacy': typeof PrivacyRoute
   '/admin/bookings': typeof AdminBookingsRoute
@@ -216,8 +249,11 @@ export interface FileRoutesById {
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin_/login': typeof AdminLoginRoute
+  '/de_/abmelden': typeof DeAbmeldenRoute
   '/de_/privacy': typeof DePrivacyRoute
   '/en_/privacy': typeof EnPrivacyRoute
+  '/en_/unsubscribe': typeof EnUnsubscribeRoute
+  '/newsletter/conferma': typeof NewsletterConfermaRoute
   '/admin/': typeof AdminIndexRoute
   '/api/public/brevo-webhook': typeof ApiPublicBrevoWebhookRoute
   '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
@@ -232,6 +268,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/de'
+    | '/disiscrizione'
     | '/en'
     | '/privacy'
     | '/admin/bookings'
@@ -243,8 +280,11 @@ export interface FileRouteTypes {
     | '/admin/inquiries'
     | '/admin/settings'
     | '/admin/login'
+    | '/de/abmelden'
     | '/de/privacy'
     | '/en/privacy'
+    | '/en/unsubscribe'
+    | '/newsletter/conferma'
     | '/admin/'
     | '/api/public/brevo-webhook'
     | '/api/public/ical/$token'
@@ -256,6 +296,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/de'
+    | '/disiscrizione'
     | '/en'
     | '/privacy'
     | '/admin/bookings'
@@ -267,8 +308,11 @@ export interface FileRouteTypes {
     | '/admin/inquiries'
     | '/admin/settings'
     | '/admin/login'
+    | '/de/abmelden'
     | '/de/privacy'
     | '/en/privacy'
+    | '/en/unsubscribe'
+    | '/newsletter/conferma'
     | '/admin'
     | '/api/public/brevo-webhook'
     | '/api/public/ical/$token'
@@ -281,6 +325,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/de'
+    | '/disiscrizione'
     | '/en'
     | '/privacy'
     | '/admin/bookings'
@@ -292,8 +337,11 @@ export interface FileRouteTypes {
     | '/admin/inquiries'
     | '/admin/settings'
     | '/admin_/login'
+    | '/de_/abmelden'
     | '/de_/privacy'
     | '/en_/privacy'
+    | '/en_/unsubscribe'
+    | '/newsletter/conferma'
     | '/admin/'
     | '/api/public/brevo-webhook'
     | '/api/public/ical/$token'
@@ -307,11 +355,15 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   DeRoute: typeof DeRoute
+  DisiscrizioneRoute: typeof DisiscrizioneRoute
   EnRoute: typeof EnRoute
   PrivacyRoute: typeof PrivacyRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  DeAbmeldenRoute: typeof DeAbmeldenRoute
   DePrivacyRoute: typeof DePrivacyRoute
   EnPrivacyRoute: typeof EnPrivacyRoute
+  EnUnsubscribeRoute: typeof EnUnsubscribeRoute
+  NewsletterConfermaRoute: typeof NewsletterConfermaRoute
   ApiPublicBrevoWebhookRoute: typeof ApiPublicBrevoWebhookRoute
   ApiPublicIcalTokenRoute: typeof ApiPublicIcalTokenRoute
   ApiPublicJobsAutomationsRoute: typeof ApiPublicJobsAutomationsRoute
@@ -341,6 +393,13 @@ declare module '@tanstack/react-router' {
       path: '/de'
       fullPath: '/de'
       preLoaderRoute: typeof DeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/disiscrizione': {
+      id: '/disiscrizione'
+      path: '/disiscrizione'
+      fullPath: '/disiscrizione'
+      preLoaderRoute: typeof DisiscrizioneRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/en': {
@@ -427,6 +486,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/de_/abmelden': {
+      id: '/de_/abmelden'
+      path: '/de/abmelden'
+      fullPath: '/de/abmelden'
+      preLoaderRoute: typeof DeAbmeldenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/de_/privacy': {
       id: '/de_/privacy'
       path: '/de/privacy'
@@ -439,6 +505,20 @@ declare module '@tanstack/react-router' {
       path: '/en/privacy'
       fullPath: '/en/privacy'
       preLoaderRoute: typeof EnPrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en_/unsubscribe': {
+      id: '/en_/unsubscribe'
+      path: '/en/unsubscribe'
+      fullPath: '/en/unsubscribe'
+      preLoaderRoute: typeof EnUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/newsletter/conferma': {
+      id: '/newsletter/conferma'
+      path: '/newsletter/conferma'
+      fullPath: '/newsletter/conferma'
+      preLoaderRoute: typeof NewsletterConfermaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/brevo-webhook': {
@@ -516,11 +596,15 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   DeRoute: DeRoute,
+  DisiscrizioneRoute: DisiscrizioneRoute,
   EnRoute: EnRoute,
   PrivacyRoute: PrivacyRoute,
   AdminLoginRoute: AdminLoginRoute,
+  DeAbmeldenRoute: DeAbmeldenRoute,
   DePrivacyRoute: DePrivacyRoute,
   EnPrivacyRoute: EnPrivacyRoute,
+  EnUnsubscribeRoute: EnUnsubscribeRoute,
+  NewsletterConfermaRoute: NewsletterConfermaRoute,
   ApiPublicBrevoWebhookRoute: ApiPublicBrevoWebhookRoute,
   ApiPublicIcalTokenRoute: ApiPublicIcalTokenRoute,
   ApiPublicJobsAutomationsRoute: ApiPublicJobsAutomationsRoute,
