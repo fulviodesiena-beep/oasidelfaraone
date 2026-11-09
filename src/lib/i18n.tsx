@@ -3,11 +3,12 @@ import it from "./locales/it.json";
 import en from "./locales/en.json";
 import de from "./locales/de.json";
 
-export const LOCALES = {
+export type LocaleDefinition = { name: string; flag: string; format: string; og: string; dir: "ltr" | "rtl" };
+export const LOCALES: Record<"it" | "en" | "de", LocaleDefinition> = {
   it: { name: "Italiano", flag: "🇮🇹", format: "it-IT", og: "it_IT", dir: "ltr" },
   en: { name: "English", flag: "🇬🇧", format: "en-GB", og: "en_GB", dir: "ltr" },
   de: { name: "Deutsch", flag: "🇩🇪", format: "de-DE", og: "de_DE", dir: "ltr" },
-} as const;
+};
 export type Language = keyof typeof LOCALES;
 export const DICTIONARIES: Record<Language, Record<string, string>> = { it, en, de };
 export const LANGUAGE_STORAGE_KEY = "odf_language";

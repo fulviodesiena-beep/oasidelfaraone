@@ -1,5 +1,5 @@
 # Redesign e correzioni
-- [ ] Multilingua: traduzioni IT/EN/DE, selettore, URL/SEO, lingua richiesta/contatto e verifiche.
+- [x] Multilingua: traduzioni IT/EN/DE, selettore, URL/SEO, lingua richiesta/contatto; 89 test e verifica desktop/mobile con richiesta reale poi rimossa.
 - [x] Aggiornare design, scorrimento e navigazione italiana.
 - [x] Correggere camera: 4 ospiti, balcone, niente Wi-Fi/caffè/spa inclusa né Corona.
 - [x] Aggiornare tariffe e richieste WhatsApp.
