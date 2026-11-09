@@ -4,7 +4,7 @@ import { balanceDue, dashboardStats, nightsFor, type Booking } from "@/lib/admin
 const b = (o: Partial<Booking>): Booking => ({
   id: Math.random().toString(), created_at: "", guest_name: "X", guest_email: null, guest_phone: null,
   check_in: "2026-11-10", check_out: "2026-11-12", adults: 2, children: 0, extras: [], status: "confirmed",
-  total_nights: 2, price_per_night: 95, total_price: 190, deposit_paid: 0, balance_due: 190, notes: null, source: "manual", is_personal_use: false, host_id: null, host_amount: 0, pipeline_stage: "lead", channel: "diretto", channel_commission: 0, fds_share_pct: null, net_accommodation: null, fds_amount: null, room_amount: null, owner_cap_per_night: null, fds_min_per_night: null, option_expires_at: null, ota_closed_at: null, payment_verified_at: null, contact_id: null, arrival_time: null, departure_time: null, delegate_email: null, delegate_phone: null, initial_cleaning: false, final_cleaning: true, ...o,
+  total_nights: 2, price_per_night: 95, total_price: 190, deposit_paid: 0, balance_due: 190, notes: null, source: "manual", is_personal_use: false, host_id: null, host_amount: 0, pipeline_stage: "lead", channel: "diretto", channel_commission: 0, fds_share_pct: null, net_accommodation: null, fds_amount: null, room_amount: null, owner_cap_per_night: null, fds_min_per_night: null, option_expires_at: null, ota_closed_at: null, payment_verified_at: null, contact_id: null, arrival_time: null, departure_time: null, delegate_email: null, delegate_phone: null, initial_cleaning: false, final_cleaning: true, room_id: "r1", ...o,
 });
 
 describe("admin rules", () => {

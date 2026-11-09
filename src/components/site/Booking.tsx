@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Minus, Plus, ArrowRight, Car, Fish, Heart, Timer } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { EXTRAS, OWNER_WHATSAPP, wa } from "@/lib/site-data";
+import { EXTRAS, OWNER_WHATSAPP, ROOMS, wa } from "@/lib/site-data";
 import { dateKey, MAX_GUESTS, quote } from "@/lib/pricing";
 import { saveInquiryWithin } from "@/lib/inquiries";
 import { trackEvent } from "@/lib/tracking";
