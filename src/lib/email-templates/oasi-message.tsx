@@ -44,7 +44,7 @@ export const OasiMessage = ({ subject, preheader, body = '', sections, links = [
 
 export const template = {
   component: OasiMessage,
-  subject: (d: Record<string, any>) => d.subject || 'Oasi del Faraone',
+  subject: (d: Record<string, any>) => d['subject'] || 'Oasi del Faraone',
   displayName: 'Messaggio Oasi (automazioni)',
   previewData: { subject: '✅ Prenotazione confermata', body: 'Ciao Maria! 🎉\n\nLa tua prenotazione è confermata.', links: [{ label: 'Instagram @oasidelfaraone', url: 'https://www.instagram.com/oasidelfaraone' }] },
 } satisfies TemplateEntry

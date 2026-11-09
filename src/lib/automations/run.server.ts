@@ -22,7 +22,7 @@ export async function unsubscribeUrl(contactId: string, lang: Lang) {
   return `${SITE}${unsubscribePath(lang)}?t=${encodeURIComponent(await signToken("unsub", contactId))}`;
 }
 
-export type Rendered = { subject: string; text: string; html: string; links: { label: string; url: string }[]; props: OasiMessageProps; whatsapp?: string };
+export type Rendered = { subject: string; text: string; html: string; links: { label: string; url: string }[]; props: OasiMessageProps; whatsapp?: string | undefined };
 
 type Settings = Database["public"]["Tables"]["settings"]["Row"];
 async function roomOf(db: DB, roomId: string | null | undefined, s: Settings) {
@@ -87,6 +87,7 @@ export async function loadAutomationContext(db: DB, now: Date) {
   ]);
   const err = s.error ?? b.error ?? c.error ?? q.error ?? o.error ?? l.error;
   if (err) throw new Error(err.message);
+  if (!s.data) throw new Error("Impostazioni mancanti");
   return { settings: s.data, bookings: b.data as ABooking[], contacts: c.data, inquiries: q.data, occasions: o.data, logs: l.data };
 }
 

@@ -72,7 +72,7 @@ export function computeDue(input: {
     if (b.status !== "confirmed" || b.is_personal_use) continue;
     const c = b.contact_id ? contacts.get(b.contact_id) : undefined;
     const lang = pickLang(c?.language);
-    const name = (c?.first_name || b.guest_name || "").split(" ")[0];
+    const name = (c?.first_name || b.guest_name || "").split(" ")[0] ?? "";
     const email = c?.email || b.guest_email; const phone = c?.phone || b.guest_phone;
     const base = { bookingId: b.id, contactId: c?.id, lang, name };
     const both = (a: AutomationId, step: string, msgKey: MessageKey, chans: Channel[]) =>
@@ -101,7 +101,7 @@ export function computeDue(input: {
     const lang = pickLang(q.language ?? c?.language);
     for (const [step, d, key] of [["d2", 2, "A8a"], ["d7", 7, "A8b"]] as const)
       if (inWindow(today, addDays(q.created_at, d)))
-        push({ automation: "A8", step, channel: "email", msgKey: key, inquiryId: q.id, contactId: c?.id, lang, to: q.guest_email, name: q.guest_name.split(" ")[0], dedupKey: dedupKey("A8", step, "email", q.id) });
+        push({ automation: "A8", step, channel: "email", msgKey: key, inquiryId: q.id, contactId: c?.id, lang, to: q.guest_email, name: q.guest_name.split(" ")[0] ?? "", dedupKey: dedupKey("A8", step, "email", q.id) });
   }
 
   if (on("A7")) for (const o of input.occasions) {

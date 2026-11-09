@@ -72,7 +72,7 @@ describe("consents", () => {
     expect(ids(run("2026-12-08", { bookings: [], inquiries: [q] }))).toEqual(["A8:d7/email"]);
     expect(run("2026-12-12", { bookings: [], inquiries: [q] })).toEqual([]);
     expect(run("2026-12-03", { bookings: [booking({ contact_id: "c9" })], inquiries: [q] }).filter(x => x.automation === "A8")).toEqual([]);
-    expect(run("2026-12-03", { bookings: [], inquiries: [q] })[0].lang).toBe("en");
+    expect(run("2026-12-03", { bookings: [], inquiries: [q] })[0]?.lang).toBe("en");
   });
 });
 
@@ -80,7 +80,7 @@ describe("language and content", () => {
   it("every message exists in it/en/de", () => { for (const m of Object.values(MESSAGES)) for (const l of LANGS) expect(m[l].body.length).toBeGreaterThan(20); });
   it("template language follows the contact, default Italian", () => {
     expect(pickLang("de")).toBe("de"); expect(pickLang(null)).toBe("it"); expect(pickLang("ru")).toBe("it");
-    expect(run("2026-12-05", { contacts: [contact({ language: "de" })] })[0].lang).toBe("de");
+    expect(run("2026-12-05", { contacts: [contact({ language: "de" })] })[0]?.lang).toBe("de");
     expect(messageText("A1", "de", { nome_ospite: "Anna" }).body).toContain("Hallo Anna");
   });
   it("A2 always ends with the viaggiaresicuri.it check, even when edited", () => {
