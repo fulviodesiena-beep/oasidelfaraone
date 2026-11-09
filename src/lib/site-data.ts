@@ -123,3 +123,13 @@ export const VILLAGE_PHOTOS: { src: string; alt: string }[] = [
   { src: villageBeachClubNight.url, alt: "Beach club sul mare illuminato di sera" },
   { src: villageEveningShow.url, alt: "Spettacolo serale con gli artisti davanti agli ospiti a cena" },
 ];
+
+/** Rooms of the Oasi del Faraone brand (mirrors the `rooms` table; Elisir d'Oriente is the first). */
+export const ELISIR_ROOM_ID = "0e11a5e0-0000-4000-8000-000000000001";
+export const ROOMS = [{
+  id: ELISIR_ROOM_ID, slug: "elisir-d-oriente", name: "Elisir d’Oriente", zone: "Zona Elisir · Domina Coral Bay",
+  maxGuests: 4, sizeSqm: 60, cover: APARTMENT_PHOTOS[0]!.src,
+  summary: "60 m² con balcone vista piscina, fino a 4 ospiti, a pochi passi dal Mar Rosso: un unico prezzo per tutto l’appartamento.",
+  story: "Si racconta che lungo le vie dei mercanti che attraversavano il Sinai, tra le spezie, l’incenso e le stoffe, viaggiasse un’ampolla che nessuno vendeva mai. Conteneva l’Elisir d’Oriente: non un profumo, ma un’abitudine. Fermarsi. Guardare il mare all’alba. Esprimere un desiderio prima che il sole fosse del tutto sorto. Chi lo faceva, dicevano, tornava sempre. Noi l’ampolla non l’abbiamo trovata. Ma abbiamo trovato il posto in cui l’abitudine ha senso: un balcone sulla piscina, a pochi passi dal Mar Rosso, nella zona del villaggio che porta il suo nome.",
+  ritual: "Nell’antico Egitto lo scarabeo era il simbolo di Khepri, il sole che sorge, e della rinascita. All’arrivo troverai in camera un piccolo scarabeo, la storia della stanza su papiro e una cartolina per il tuo desiderio. Alla prima alba esci sul balcone, tieni lo scarabeo controluce, giralo tre volte ed esprimi un desiderio. Scrivilo sul papiro e lascialo nello Scrigno dell’Elisir: lo ritroverai se tornerai. Lo scarabeo è tuo. Condividi il momento con #RisveglioDelloScarabeo e @oasidelfaraone.",
+}] as const;

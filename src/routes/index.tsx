@@ -125,6 +125,12 @@ function Index() {
       <Carousel slides={APARTMENT_PHOTOS} label="Foto dell’appartamento" portrait />
       <div className="reveal apartment-details"><div className="room-stats">{[["60", "metri quadrati"], ["4", "ospiti massimi"], ["Balcone", "vista piscina"]].map(([v,l]) => <div key={l}><p>{v}</p><span>{l}</span></div>)}</div><ul>{ROOM_AMENITIES.map(a => <li key={a}><Check size={14} />{a}</li>)}</ul></div>
       <p className="reveal room-note">Wi-Fi non disponibile in camera. Spa a pagamento separato, bambini non ammessi. Ristoranti e bar si vivono à la carte.</p>
+      <div className="reveal room-actions"><Button asChild variant="outline"><a href="#tariffe">Tariffe</a></Button><Button asChild className="luxury-cta"><a href="#book">Calendario e disponibilità<ArrowUpRight /></a></Button></div>
+      <div className="room-tales">
+        <article className="reveal room-tale"><p className="eyebrow">Un racconto dell’Oasi</p><h3>La storia di Elisir d’Oriente</h3><p>{ROOMS[0]!.story}</p></article>
+        <article className="reveal room-tale"><p className="eyebrow">Simbolo: lo scarabeo</p><h3>Il rito: il risveglio dello scarabeo</h3><p>{ROOMS[0]!.ritual}</p></article>
+      </div>
+      </div>
     </Section>
     <Section id="resort" eyebrow="02 / Una destinazione nella destinazione" title={<>Il villaggio <em>Domina Coral Bay.</em></>} intro="Spiagge private, piscine, padel, beach volley e serate sotto le stelle. Spiagge e piscine del resort incluse, senza costi aggiuntivi; ristoranti, bar e attività a pagamento si scelgono separatamente." className="bg-secondary">
       <Carousel slides={VILLAGE_PHOTOS} label="Foto del villaggio" />
