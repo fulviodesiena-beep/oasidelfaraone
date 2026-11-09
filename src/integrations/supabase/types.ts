@@ -21,6 +21,7 @@ export type Database = {
           external_uid: string | null
           id: string
           reason: string | null
+          room_id: string
           source: string
           start_date: string
           status: string
@@ -32,6 +33,7 @@ export type Database = {
           external_uid?: string | null
           id?: string
           reason?: string | null
+          room_id?: string
           source?: string
           start_date: string
           status?: string
@@ -43,12 +45,21 @@ export type Database = {
           external_uid?: string | null
           id?: string
           reason?: string | null
+          room_id?: string
           source?: string
           start_date?: string
           status?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "availability_blocks_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "rooms"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       bookings: {
         Row: {
@@ -88,6 +99,7 @@ export type Database = {
           pipeline_stage: Database["public"]["Enums"]["pipeline_stage"]
           price_per_night: number
           room_amount: number | null
+          room_id: string
           source: string
           status: Database["public"]["Enums"]["booking_status"]
           total_nights: number
@@ -130,6 +142,7 @@ export type Database = {
           pipeline_stage?: Database["public"]["Enums"]["pipeline_stage"]
           price_per_night?: number
           room_amount?: number | null
+          room_id?: string
           source?: string
           status?: Database["public"]["Enums"]["booking_status"]
           total_nights?: number
@@ -172,6 +185,7 @@ export type Database = {
           pipeline_stage?: Database["public"]["Enums"]["pipeline_stage"]
           price_per_night?: number
           room_amount?: number | null
+          room_id?: string
           source?: string
           status?: Database["public"]["Enums"]["booking_status"]
           total_nights?: number
@@ -183,6 +197,13 @@ export type Database = {
             columns: ["host_id"]
             isOneToOne: false
             referencedRelation: "hosts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "rooms"
             referencedColumns: ["id"]
           },
         ]
@@ -466,6 +487,7 @@ export type Database = {
           message: string | null
           next_follow_up_at: string | null
           referrer: string | null
+          room_id: string | null
           source_url: string | null
           special_dates: string | null
           status: Database["public"]["Enums"]["inquiry_status"]
@@ -494,6 +516,7 @@ export type Database = {
           message?: string | null
           next_follow_up_at?: string | null
           referrer?: string | null
+          room_id?: string | null
           source_url?: string | null
           special_dates?: string | null
           status?: Database["public"]["Enums"]["inquiry_status"]
@@ -522,6 +545,7 @@ export type Database = {
           message?: string | null
           next_follow_up_at?: string | null
           referrer?: string | null
+          room_id?: string | null
           source_url?: string | null
           special_dates?: string | null
           status?: Database["public"]["Enums"]["inquiry_status"]
@@ -529,7 +553,15 @@ export type Database = {
           utm_medium?: string | null
           utm_source?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "inquiries_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "rooms"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       occasions: {
         Row: {
@@ -584,6 +616,69 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      rooms: {
+        Row: {
+          active: boolean
+          amenities: string[]
+          booking_ical_url: string | null
+          created_at: string
+          holder_name: string | null
+          holder_passport: string | null
+          ical_token: string
+          id: string
+          max_guests: number
+          name: string
+          ritual: string | null
+          size_sqm: number | null
+          slug: string
+          sort_order: number
+          story: string | null
+          symbol: string | null
+          unit_number: string | null
+          zone: string | null
+        }
+        Insert: {
+          active?: boolean
+          amenities?: string[]
+          booking_ical_url?: string | null
+          created_at?: string
+          holder_name?: string | null
+          holder_passport?: string | null
+          ical_token?: string
+          id?: string
+          max_guests?: number
+          name: string
+          ritual?: string | null
+          size_sqm?: number | null
+          slug: string
+          sort_order?: number
+          story?: string | null
+          symbol?: string | null
+          unit_number?: string | null
+          zone?: string | null
+        }
+        Update: {
+          active?: boolean
+          amenities?: string[]
+          booking_ical_url?: string | null
+          created_at?: string
+          holder_name?: string | null
+          holder_passport?: string | null
+          ical_token?: string
+          id?: string
+          max_guests?: number
+          name?: string
+          ritual?: string | null
+          size_sqm?: number | null
+          slug?: string
+          sort_order?: number
+          story?: string | null
+          symbol?: string | null
+          unit_number?: string | null
+          zone?: string | null
+        }
+        Relationships: []
       }
       settings: {
         Row: {
@@ -736,6 +831,13 @@ export type Database = {
         Args: never
         Returns: {
           meta_pixel_id: string
+        }[]
+      }
+      get_room_occupied_ranges: {
+        Args: { _room: string }
+        Returns: {
+          check_in: string
+          check_out: string
         }[]
       }
       has_role: {
