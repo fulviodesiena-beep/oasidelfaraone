@@ -113,7 +113,8 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
           <div><p>{fmt(checkIn)} → {fmt(checkOut)}</p><p className="text-xs text-muted-foreground">{q.nightsCount} notti · {adults + children} ospiti</p></div>
           <span className="font-display text-3xl text-gold-light">{q.total === null ? "Da confermare" : `€${q.total}`}</span>
         </div>
-        <p className="flex justify-between text-xs text-muted-foreground"><span>Pulizia finale · pagata in reception al check-in</span><span>€{q.cleaningFee} · non inclusa</span></p>
+        {q.total !== null && <ul aria-label="Dettaglio notti" className="max-h-40 space-y-1 overflow-y-auto text-xs text-muted-foreground">{q.nights.map(n => <li key={dateKey(n.date)} className="flex justify-between"><span>{n.date.toLocaleDateString("it-IT", { weekday: "short", day: "numeric", month: "short" })}</span><span>€{n.price}</span></li>)}<li className="flex justify-between border-t border-border pt-1 text-foreground"><span>Totale alloggio · {q.nightsCount} notti</span><span>€{q.total}</span></li></ul>}
+        <p className="flex justify-between text-xs text-muted-foreground"><span>Nota: pulizia finale · pagata in reception al check-in</span><span>€{q.cleaningFee} · non inclusa</span></p>
         {q.minStayWarning && <p role="note" className="text-xs text-warning">Soggiorno minimo consigliato: {q.minStayWarning} notti{q.touchesPeak ? " nel periodo di Picco" : ""}. Puoi comunque inviare la richiesta.</p>}
         <p role="timer" className={`flex items-center gap-2 text-sm ${left <= 120 ? "text-destructive" : "text-gold"}`}><Timer className="size-4" />Preventivo riservato per: {mmss(left)}</p>
         {ROOMS.length > 1 && <select name="room_id" aria-label="Stanza" className="field" defaultValue={ROOMS[0]!.id}>{ROOMS.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}</select>}
