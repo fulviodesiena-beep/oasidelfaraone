@@ -1,9 +1,9 @@
-import { useLanguage, publicPath } from "@/lib/i18n";
+import { useLanguage } from "@/lib/i18n";
 import { useState } from "react";
 import { Plus, Check, X, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 export function PhotoCard({ title, description, image, photo, price, focus, selected, onAdd }: { title: string; description: string; image: string; photo: string; price?: string | undefined; focus?: string | undefined; selected?: boolean | undefined; onAdd?: () => void }) {
-  const { t, language, locale, money } = useLanguage();
+  const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   return <article className={`photo-card reveal ${open ? "photo-open" : ""} ${selected ? "photo-selected" : ""}`}>
     <img src={image} alt={photo} loading="lazy" width={1000} height={1000} style={focus ? { objectPosition: focus } : undefined} />

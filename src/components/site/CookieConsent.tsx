@@ -6,7 +6,7 @@ import { loadMetaPixel, readConsent, trackEvent, writeConsent, type Consent } fr
 
 /** GDPR banner: no tracking script loads until the visitor accepts. Rejecting keeps the site fully usable. */
 export function CookieConsent() {
-  const { t, language, locale, money } = useLanguage();
+  const { t, language } = useLanguage();
   const [consent, setConsent] = useState<Consent | "unknown">("unknown");
   const [pixelId, setPixelId] = useState<string | null>(null);
   useEffect(() => {
