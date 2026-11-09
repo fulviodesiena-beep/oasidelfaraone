@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, type ReactNode } from "react";
 import it from "./locales/it.json";
 import en from "./locales/en.json";
 import de from "./locales/de.json";
@@ -21,7 +21,7 @@ export function publicPath(language: Language, page: "home" | "privacy" = "home"
   const prefix = language === "it" ? "" : `/${language}`;
   return page === "home" ? prefix || "/" : `${prefix}/privacy`;
 }
-export function translate(language: Language, key: string, values: Record<string, string | number> = {}) {
+export function translate(language: Language, key: string = "", values: Record<string, string | number> = {}) {
   let text = DICTIONARIES[language][key] ?? key;
   for (const [name, value] of Object.entries(values)) text = text.replaceAll(`{${name}}`, String(value));
   return text;
@@ -29,7 +29,7 @@ export function translate(language: Language, key: string, values: Record<string
 const LanguageContext = createContext<Language>("it");
 export function useLanguage() {
   const language = useContext(LanguageContext);
-  return { language, locale: LOCALES[language], t: (key: string, values?: Record<string, string | number>) => translate(language, key, values), money: (amount: number) => new Intl.NumberFormat(LOCALES[language].format, { style: "currency", currency: "EUR", maximumFractionDigits: 2 }).format(amount) };
+  return { language, locale: LOCALES[language], t: (key: string = "", values?: Record<string, string | number>) => translate(language, key, values), money: (amount: number) => new Intl.NumberFormat(LOCALES[language].format, { style: "currency", currency: "EUR", maximumFractionDigits: 2 }).format(amount) };
 }
 export function LanguageProvider({ language, children }: { language: Language; children: ReactNode }) {
   return <LanguageContext.Provider value={language}><LanguageEffects language={language} />{children}</LanguageContext.Provider>;
@@ -49,16 +49,4 @@ function LanguageEffects({ language }: { language: Language }) {
     } catch { /* Storage can be disabled; the URL remains authoritative. */ }
   }, [language]);
   return null;
-}
-
-// Localized route navigation retains the mounted booking component and its chosen dates.
-export function usePublicNavigation(language: Language, page: "home" | "privacy" = "home") {
-  const [current, setCurrent] = useState(language);
-  const changeLanguage = (next: Language) => {
-    try { localStorage.setItem(LANGUAGE_STORAGE_KEY, next); } catch { /* optional persistence */ }
-    const target = `${publicPath(next, page)}${window.location.search}${window.location.hash}`;
-    window.location.assign(target);
-    setCurrent(next);
-  };
-  return { current, changeLanguage };
 }
