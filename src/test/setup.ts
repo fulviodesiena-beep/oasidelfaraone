@@ -1,4 +1,5 @@
 import "@testing-library/jest-dom/vitest";
+Object.defineProperty(navigator, "languages", { configurable: true, value: ["it-IT"] });
 
 Object.defineProperty(window, "scrollTo", {
   writable: true,
