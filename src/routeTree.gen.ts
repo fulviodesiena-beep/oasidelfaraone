@@ -26,8 +26,11 @@ import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminLoginRouteImport } from './routes/admin_.login'
 import { Route as DePrivacyRouteImport } from './routes/de_.privacy'
 import { Route as EnPrivacyRouteImport } from './routes/en_.privacy'
+import { Route as ApiPublicBrevoWebhookRouteImport } from './routes/api/public/brevo-webhook'
 import { Route as ApiPublicIcalTokenRouteImport } from './routes/api/public/ical.$token'
+import { Route as ApiPublicJobsAutomationsRouteImport } from './routes/api/public/jobs/automations'
 import { Route as ApiPublicJobsIcalSyncRouteImport } from './routes/api/public/jobs/ical-sync'
+import { Route as ApiPublicRIdRouteImport } from './routes/api/public/r.$id'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
 const IndexRoute = IndexRouteImport.update({
@@ -115,14 +118,30 @@ const EnPrivacyRoute = EnPrivacyRouteImport.update({
   path: '/en/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicBrevoWebhookRoute = ApiPublicBrevoWebhookRouteImport.update({
+  id: '/api/public/brevo-webhook',
+  path: '/api/public/brevo-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicIcalTokenRoute = ApiPublicIcalTokenRouteImport.update({
   id: '/api/public/ical/$token',
   path: '/api/public/ical/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicJobsAutomationsRoute =
+  ApiPublicJobsAutomationsRouteImport.update({
+    id: '/api/public/jobs/automations',
+    path: '/api/public/jobs/automations',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicJobsIcalSyncRoute = ApiPublicJobsIcalSyncRouteImport.update({
   id: '/api/public/jobs/ical-sync',
   path: '/api/public/jobs/ical-sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicRIdRoute = ApiPublicRIdRouteImport.update({
+  id: '/api/public/r/$id',
+  path: '/api/public/r/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LovableEmailTransactionalPreviewRoute =
@@ -150,8 +169,11 @@ export interface FileRoutesByFullPath {
   '/de/privacy': typeof DePrivacyRoute
   '/en/privacy': typeof EnPrivacyRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/public/brevo-webhook': typeof ApiPublicBrevoWebhookRoute
   '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
+  '/api/public/jobs/automations': typeof ApiPublicJobsAutomationsRoute
   '/api/public/jobs/ical-sync': typeof ApiPublicJobsIcalSyncRoute
+  '/api/public/r/$id': typeof ApiPublicRIdRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesByTo {
@@ -171,8 +193,11 @@ export interface FileRoutesByTo {
   '/de/privacy': typeof DePrivacyRoute
   '/en/privacy': typeof EnPrivacyRoute
   '/admin': typeof AdminIndexRoute
+  '/api/public/brevo-webhook': typeof ApiPublicBrevoWebhookRoute
   '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
+  '/api/public/jobs/automations': typeof ApiPublicJobsAutomationsRoute
   '/api/public/jobs/ical-sync': typeof ApiPublicJobsIcalSyncRoute
+  '/api/public/r/$id': typeof ApiPublicRIdRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesById {
@@ -194,8 +219,11 @@ export interface FileRoutesById {
   '/de_/privacy': typeof DePrivacyRoute
   '/en_/privacy': typeof EnPrivacyRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/public/brevo-webhook': typeof ApiPublicBrevoWebhookRoute
   '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
+  '/api/public/jobs/automations': typeof ApiPublicJobsAutomationsRoute
   '/api/public/jobs/ical-sync': typeof ApiPublicJobsIcalSyncRoute
+  '/api/public/r/$id': typeof ApiPublicRIdRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRouteTypes {
@@ -218,8 +246,11 @@ export interface FileRouteTypes {
     | '/de/privacy'
     | '/en/privacy'
     | '/admin/'
+    | '/api/public/brevo-webhook'
     | '/api/public/ical/$token'
+    | '/api/public/jobs/automations'
     | '/api/public/jobs/ical-sync'
+    | '/api/public/r/$id'
     | '/lovable/email/transactional/preview'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -239,8 +270,11 @@ export interface FileRouteTypes {
     | '/de/privacy'
     | '/en/privacy'
     | '/admin'
+    | '/api/public/brevo-webhook'
     | '/api/public/ical/$token'
+    | '/api/public/jobs/automations'
     | '/api/public/jobs/ical-sync'
+    | '/api/public/r/$id'
     | '/lovable/email/transactional/preview'
   id:
     | '__root__'
@@ -261,8 +295,11 @@ export interface FileRouteTypes {
     | '/de_/privacy'
     | '/en_/privacy'
     | '/admin/'
+    | '/api/public/brevo-webhook'
     | '/api/public/ical/$token'
+    | '/api/public/jobs/automations'
     | '/api/public/jobs/ical-sync'
+    | '/api/public/r/$id'
     | '/lovable/email/transactional/preview'
   fileRoutesById: FileRoutesById
 }
@@ -275,8 +312,11 @@ export interface RootRouteChildren {
   AdminLoginRoute: typeof AdminLoginRoute
   DePrivacyRoute: typeof DePrivacyRoute
   EnPrivacyRoute: typeof EnPrivacyRoute
+  ApiPublicBrevoWebhookRoute: typeof ApiPublicBrevoWebhookRoute
   ApiPublicIcalTokenRoute: typeof ApiPublicIcalTokenRoute
+  ApiPublicJobsAutomationsRoute: typeof ApiPublicJobsAutomationsRoute
   ApiPublicJobsIcalSyncRoute: typeof ApiPublicJobsIcalSyncRoute
+  ApiPublicRIdRoute: typeof ApiPublicRIdRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
 
@@ -401,6 +441,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnPrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/brevo-webhook': {
+      id: '/api/public/brevo-webhook'
+      path: '/api/public/brevo-webhook'
+      fullPath: '/api/public/brevo-webhook'
+      preLoaderRoute: typeof ApiPublicBrevoWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/ical/$token': {
       id: '/api/public/ical/$token'
       path: '/api/public/ical/$token'
@@ -408,11 +455,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicIcalTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/jobs/automations': {
+      id: '/api/public/jobs/automations'
+      path: '/api/public/jobs/automations'
+      fullPath: '/api/public/jobs/automations'
+      preLoaderRoute: typeof ApiPublicJobsAutomationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/jobs/ical-sync': {
       id: '/api/public/jobs/ical-sync'
       path: '/api/public/jobs/ical-sync'
       fullPath: '/api/public/jobs/ical-sync'
       preLoaderRoute: typeof ApiPublicJobsIcalSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/r/$id': {
+      id: '/api/public/r/$id'
+      path: '/api/public/r/$id'
+      fullPath: '/api/public/r/$id'
+      preLoaderRoute: typeof ApiPublicRIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lovable/email/transactional/preview': {
@@ -460,8 +521,11 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLoginRoute: AdminLoginRoute,
   DePrivacyRoute: DePrivacyRoute,
   EnPrivacyRoute: EnPrivacyRoute,
+  ApiPublicBrevoWebhookRoute: ApiPublicBrevoWebhookRoute,
   ApiPublicIcalTokenRoute: ApiPublicIcalTokenRoute,
+  ApiPublicJobsAutomationsRoute: ApiPublicJobsAutomationsRoute,
   ApiPublicJobsIcalSyncRoute: ApiPublicJobsIcalSyncRoute,
+  ApiPublicRIdRoute: ApiPublicRIdRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
 export const routeTree = rootRouteImport
