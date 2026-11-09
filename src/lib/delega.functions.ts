@@ -20,6 +20,9 @@ export const ensureDelega = createServerFn({ method: "POST" })
       db.from("documents").select("id, file_url, fingerprint").eq("booking_id", data.bookingId).eq("kind", "delega"),
     ]);
     if (b.error || t.error || s.error || docs.error) throw new Error((b.error ?? t.error ?? s.error ?? docs.error)!.message);
+    // Per-room unit and holder override the global settings when set.
+    const { data: room } = await db.from("rooms").select("unit_number, holder_name, holder_passport").eq("id", b.data.room_id).maybeSingle();
+    if (room) s.data = { ...s.data, unit_number: room.unit_number || s.data.unit_number, holder_name: room.holder_name || s.data.holder_name, holder_passport: room.holder_passport || s.data.holder_passport };
     const state = delegaState(b.data, t.data);
     if (state.kind !== "ready") return { status: state.kind, missing: "missing" in state ? state.missing : 0, documentId: null as string | null };
     const fp = delegaFingerprint(b.data, t.data, s.data);

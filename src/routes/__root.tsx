@@ -78,9 +78,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Oasi del Faraone — Elisir d'Oriente" },
+      { title: "Oasi del Faraone · Esperienze sul Mar Rosso" },
       { name: "description", content: "Appartamento privato al Domina Coral Bay, Sharm el-Sheikh, fino a 4 ospiti." },
-      { property: "og:title", content: "Oasi del Faraone — Elisir d'Oriente" },
+      { property: "og:title", content: "Oasi del Faraone · Esperienze sul Mar Rosso" },
       { property: "og:description", content: "Appartamento privato al Domina Coral Bay, Sharm el-Sheikh, fino a 4 ospiti." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
