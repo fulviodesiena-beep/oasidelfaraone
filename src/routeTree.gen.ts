@@ -19,11 +19,13 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminBookingsRouteImport } from './routes/admin.bookings'
 import { Route as AdminContactsRouteImport } from './routes/admin.contacts'
 import { Route as AdminDocumentsRouteImport } from './routes/admin.documents'
+import { Route as AdminEmailsRouteImport } from './routes/admin.emails'
 import { Route as AdminExpensesRouteImport } from './routes/admin.expenses'
 import { Route as AdminGuestsRouteImport } from './routes/admin.guests'
 import { Route as AdminHostsRouteImport } from './routes/admin.hosts'
 import { Route as AdminInquiriesRouteImport } from './routes/admin.inquiries'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminTodayRouteImport } from './routes/admin.today'
 import { Route as AdminLoginRouteImport } from './routes/admin_.login'
 import { Route as DeAbmeldenRouteImport } from './routes/de_.abmelden'
 import { Route as DePrivacyRouteImport } from './routes/de_.privacy'
@@ -87,6 +89,11 @@ const AdminDocumentsRoute = AdminDocumentsRouteImport.update({
   path: '/documents',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminEmailsRoute = AdminEmailsRouteImport.update({
+  id: '/emails',
+  path: '/emails',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminExpensesRoute = AdminExpensesRouteImport.update({
   id: '/expenses',
   path: '/expenses',
@@ -110,6 +117,11 @@ const AdminInquiriesRoute = AdminInquiriesRouteImport.update({
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTodayRoute = AdminTodayRouteImport.update({
+  id: '/today',
+  path: '/today',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
@@ -185,11 +197,13 @@ export interface FileRoutesByFullPath {
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/contacts': typeof AdminContactsRoute
   '/admin/documents': typeof AdminDocumentsRoute
+  '/admin/emails': typeof AdminEmailsRoute
   '/admin/expenses': typeof AdminExpensesRoute
   '/admin/guests': typeof AdminGuestsRoute
   '/admin/hosts': typeof AdminHostsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/today': typeof AdminTodayRoute
   '/admin/login': typeof AdminLoginRoute
   '/de/abmelden': typeof DeAbmeldenRoute
   '/de/privacy': typeof DePrivacyRoute
@@ -213,11 +227,13 @@ export interface FileRoutesByTo {
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/contacts': typeof AdminContactsRoute
   '/admin/documents': typeof AdminDocumentsRoute
+  '/admin/emails': typeof AdminEmailsRoute
   '/admin/expenses': typeof AdminExpensesRoute
   '/admin/guests': typeof AdminGuestsRoute
   '/admin/hosts': typeof AdminHostsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/today': typeof AdminTodayRoute
   '/admin/login': typeof AdminLoginRoute
   '/de/abmelden': typeof DeAbmeldenRoute
   '/de/privacy': typeof DePrivacyRoute
@@ -243,11 +259,13 @@ export interface FileRoutesById {
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/contacts': typeof AdminContactsRoute
   '/admin/documents': typeof AdminDocumentsRoute
+  '/admin/emails': typeof AdminEmailsRoute
   '/admin/expenses': typeof AdminExpensesRoute
   '/admin/guests': typeof AdminGuestsRoute
   '/admin/hosts': typeof AdminHostsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/today': typeof AdminTodayRoute
   '/admin_/login': typeof AdminLoginRoute
   '/de_/abmelden': typeof DeAbmeldenRoute
   '/de_/privacy': typeof DePrivacyRoute
@@ -274,11 +292,13 @@ export interface FileRouteTypes {
     | '/admin/bookings'
     | '/admin/contacts'
     | '/admin/documents'
+    | '/admin/emails'
     | '/admin/expenses'
     | '/admin/guests'
     | '/admin/hosts'
     | '/admin/inquiries'
     | '/admin/settings'
+    | '/admin/today'
     | '/admin/login'
     | '/de/abmelden'
     | '/de/privacy'
@@ -302,11 +322,13 @@ export interface FileRouteTypes {
     | '/admin/bookings'
     | '/admin/contacts'
     | '/admin/documents'
+    | '/admin/emails'
     | '/admin/expenses'
     | '/admin/guests'
     | '/admin/hosts'
     | '/admin/inquiries'
     | '/admin/settings'
+    | '/admin/today'
     | '/admin/login'
     | '/de/abmelden'
     | '/de/privacy'
@@ -331,11 +353,13 @@ export interface FileRouteTypes {
     | '/admin/bookings'
     | '/admin/contacts'
     | '/admin/documents'
+    | '/admin/emails'
     | '/admin/expenses'
     | '/admin/guests'
     | '/admin/hosts'
     | '/admin/inquiries'
     | '/admin/settings'
+    | '/admin/today'
     | '/admin_/login'
     | '/de_/abmelden'
     | '/de_/privacy'
@@ -444,6 +468,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDocumentsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/emails': {
+      id: '/admin/emails'
+      path: '/emails'
+      fullPath: '/admin/emails'
+      preLoaderRoute: typeof AdminEmailsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/expenses': {
       id: '/admin/expenses'
       path: '/expenses'
@@ -477,6 +508,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/admin/settings'
       preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/today': {
+      id: '/admin/today'
+      path: '/today'
+      fullPath: '/admin/today'
+      preLoaderRoute: typeof AdminTodayRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin_/login': {
@@ -570,11 +608,13 @@ interface AdminRouteChildren {
   AdminBookingsRoute: typeof AdminBookingsRoute
   AdminContactsRoute: typeof AdminContactsRoute
   AdminDocumentsRoute: typeof AdminDocumentsRoute
+  AdminEmailsRoute: typeof AdminEmailsRoute
   AdminExpensesRoute: typeof AdminExpensesRoute
   AdminGuestsRoute: typeof AdminGuestsRoute
   AdminHostsRoute: typeof AdminHostsRoute
   AdminInquiriesRoute: typeof AdminInquiriesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminTodayRoute: typeof AdminTodayRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -582,11 +622,13 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminBookingsRoute: AdminBookingsRoute,
   AdminContactsRoute: AdminContactsRoute,
   AdminDocumentsRoute: AdminDocumentsRoute,
+  AdminEmailsRoute: AdminEmailsRoute,
   AdminExpensesRoute: AdminExpensesRoute,
   AdminGuestsRoute: AdminGuestsRoute,
   AdminHostsRoute: AdminHostsRoute,
   AdminInquiriesRoute: AdminInquiriesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
+  AdminTodayRoute: AdminTodayRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
