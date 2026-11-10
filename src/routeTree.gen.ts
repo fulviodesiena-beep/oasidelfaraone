@@ -15,6 +15,7 @@ import { Route as DeRouteImport } from './routes/de'
 import { Route as DisiscrizioneRouteImport } from './routes/disiscrizione'
 import { Route as EnRouteImport } from './routes/en'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as RitoRouteImport } from './routes/rito'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminBookingsRouteImport } from './routes/admin.bookings'
 import { Route as AdminContactsRouteImport } from './routes/admin.contacts'
@@ -31,7 +32,9 @@ import { Route as AdminLoginRouteImport } from './routes/admin_.login'
 import { Route as AdminResetPasswordRouteImport } from './routes/admin_.reset-password'
 import { Route as DeAbmeldenRouteImport } from './routes/de_.abmelden'
 import { Route as DePrivacyRouteImport } from './routes/de_.privacy'
+import { Route as DeRitualRouteImport } from './routes/de_.ritual'
 import { Route as EnPrivacyRouteImport } from './routes/en_.privacy'
+import { Route as EnRitualRouteImport } from './routes/en_.ritual'
 import { Route as EnUnsubscribeRouteImport } from './routes/en_.unsubscribe'
 import { Route as NewsletterConfermaRouteImport } from './routes/newsletter.conferma'
 import { Route as ApiPublicBrevoWebhookRouteImport } from './routes/api/public/brevo-webhook'
@@ -71,6 +74,11 @@ const EnRoute = EnRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RitoRoute = RitoRouteImport.update({
+  id: '/rito',
+  path: '/rito',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -153,9 +161,19 @@ const DePrivacyRoute = DePrivacyRouteImport.update({
   path: '/de/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DeRitualRoute = DeRitualRouteImport.update({
+  id: '/de_/ritual',
+  path: '/de/ritual',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnPrivacyRoute = EnPrivacyRouteImport.update({
   id: '/en_/privacy',
   path: '/en/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnRitualRoute = EnRitualRouteImport.update({
+  id: '/en_/ritual',
+  path: '/en/ritual',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnUnsubscribeRoute = EnUnsubscribeRouteImport.update({
@@ -218,6 +236,7 @@ export interface FileRoutesByFullPath {
   '/disiscrizione': typeof DisiscrizioneRoute
   '/en': typeof EnRoute
   '/privacy': typeof PrivacyRoute
+  '/rito': typeof RitoRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/contacts': typeof AdminContactsRoute
   '/admin/documents': typeof AdminDocumentsRoute
@@ -233,7 +252,9 @@ export interface FileRoutesByFullPath {
   '/admin/reset-password': typeof AdminResetPasswordRoute
   '/de/abmelden': typeof DeAbmeldenRoute
   '/de/privacy': typeof DePrivacyRoute
+  '/de/ritual': typeof DeRitualRoute
   '/en/privacy': typeof EnPrivacyRoute
+  '/en/ritual': typeof EnRitualRoute
   '/en/unsubscribe': typeof EnUnsubscribeRoute
   '/newsletter/conferma': typeof NewsletterConfermaRoute
   '/admin/': typeof AdminIndexRoute
@@ -252,6 +273,7 @@ export interface FileRoutesByTo {
   '/disiscrizione': typeof DisiscrizioneRoute
   '/en': typeof EnRoute
   '/privacy': typeof PrivacyRoute
+  '/rito': typeof RitoRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/contacts': typeof AdminContactsRoute
   '/admin/documents': typeof AdminDocumentsRoute
@@ -267,7 +289,9 @@ export interface FileRoutesByTo {
   '/admin/reset-password': typeof AdminResetPasswordRoute
   '/de/abmelden': typeof DeAbmeldenRoute
   '/de/privacy': typeof DePrivacyRoute
+  '/de/ritual': typeof DeRitualRoute
   '/en/privacy': typeof EnPrivacyRoute
+  '/en/ritual': typeof EnRitualRoute
   '/en/unsubscribe': typeof EnUnsubscribeRoute
   '/newsletter/conferma': typeof NewsletterConfermaRoute
   '/admin': typeof AdminIndexRoute
@@ -288,6 +312,7 @@ export interface FileRoutesById {
   '/disiscrizione': typeof DisiscrizioneRoute
   '/en': typeof EnRoute
   '/privacy': typeof PrivacyRoute
+  '/rito': typeof RitoRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/contacts': typeof AdminContactsRoute
   '/admin/documents': typeof AdminDocumentsRoute
@@ -303,7 +328,9 @@ export interface FileRoutesById {
   '/admin_/reset-password': typeof AdminResetPasswordRoute
   '/de_/abmelden': typeof DeAbmeldenRoute
   '/de_/privacy': typeof DePrivacyRoute
+  '/de_/ritual': typeof DeRitualRoute
   '/en_/privacy': typeof EnPrivacyRoute
+  '/en_/ritual': typeof EnRitualRoute
   '/en_/unsubscribe': typeof EnUnsubscribeRoute
   '/newsletter/conferma': typeof NewsletterConfermaRoute
   '/admin/': typeof AdminIndexRoute
@@ -325,6 +352,7 @@ export interface FileRouteTypes {
     | '/disiscrizione'
     | '/en'
     | '/privacy'
+    | '/rito'
     | '/admin/bookings'
     | '/admin/contacts'
     | '/admin/documents'
@@ -340,7 +368,9 @@ export interface FileRouteTypes {
     | '/admin/reset-password'
     | '/de/abmelden'
     | '/de/privacy'
+    | '/de/ritual'
     | '/en/privacy'
+    | '/en/ritual'
     | '/en/unsubscribe'
     | '/newsletter/conferma'
     | '/admin/'
@@ -359,6 +389,7 @@ export interface FileRouteTypes {
     | '/disiscrizione'
     | '/en'
     | '/privacy'
+    | '/rito'
     | '/admin/bookings'
     | '/admin/contacts'
     | '/admin/documents'
@@ -374,7 +405,9 @@ export interface FileRouteTypes {
     | '/admin/reset-password'
     | '/de/abmelden'
     | '/de/privacy'
+    | '/de/ritual'
     | '/en/privacy'
+    | '/en/ritual'
     | '/en/unsubscribe'
     | '/newsletter/conferma'
     | '/admin'
@@ -394,6 +427,7 @@ export interface FileRouteTypes {
     | '/disiscrizione'
     | '/en'
     | '/privacy'
+    | '/rito'
     | '/admin/bookings'
     | '/admin/contacts'
     | '/admin/documents'
@@ -409,7 +443,9 @@ export interface FileRouteTypes {
     | '/admin_/reset-password'
     | '/de_/abmelden'
     | '/de_/privacy'
+    | '/de_/ritual'
     | '/en_/privacy'
+    | '/en_/ritual'
     | '/en_/unsubscribe'
     | '/newsletter/conferma'
     | '/admin/'
@@ -430,11 +466,14 @@ export interface RootRouteChildren {
   DisiscrizioneRoute: typeof DisiscrizioneRoute
   EnRoute: typeof EnRoute
   PrivacyRoute: typeof PrivacyRoute
+  RitoRoute: typeof RitoRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminResetPasswordRoute: typeof AdminResetPasswordRoute
   DeAbmeldenRoute: typeof DeAbmeldenRoute
   DePrivacyRoute: typeof DePrivacyRoute
+  DeRitualRoute: typeof DeRitualRoute
   EnPrivacyRoute: typeof EnPrivacyRoute
+  EnRitualRoute: typeof EnRitualRoute
   EnUnsubscribeRoute: typeof EnUnsubscribeRoute
   NewsletterConfermaRoute: typeof NewsletterConfermaRoute
   ApiPublicBrevoWebhookRoute: typeof ApiPublicBrevoWebhookRoute
@@ -489,6 +528,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rito': {
+      id: '/rito'
+      path: '/rito'
+      fullPath: '/rito'
+      preLoaderRoute: typeof RitoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -603,11 +649,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DePrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/de_/ritual': {
+      id: '/de_/ritual'
+      path: '/de/ritual'
+      fullPath: '/de/ritual'
+      preLoaderRoute: typeof DeRitualRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en_/privacy': {
       id: '/en_/privacy'
       path: '/en/privacy'
       fullPath: '/en/privacy'
       preLoaderRoute: typeof EnPrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en_/ritual': {
+      id: '/en_/ritual'
+      path: '/en/ritual'
+      fullPath: '/en/ritual'
+      preLoaderRoute: typeof EnRitualRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/en_/unsubscribe': {
@@ -722,11 +782,14 @@ const rootRouteChildren: RootRouteChildren = {
   DisiscrizioneRoute: DisiscrizioneRoute,
   EnRoute: EnRoute,
   PrivacyRoute: PrivacyRoute,
+  RitoRoute: RitoRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminResetPasswordRoute: AdminResetPasswordRoute,
   DeAbmeldenRoute: DeAbmeldenRoute,
   DePrivacyRoute: DePrivacyRoute,
+  DeRitualRoute: DeRitualRoute,
   EnPrivacyRoute: EnPrivacyRoute,
+  EnRitualRoute: EnRitualRoute,
   EnUnsubscribeRoute: EnUnsubscribeRoute,
   NewsletterConfermaRoute: NewsletterConfermaRoute,
   ApiPublicBrevoWebhookRoute: ApiPublicBrevoWebhookRoute,
