@@ -13,14 +13,14 @@ export type EmailBooking = {
   camera?: string;
   servizi?: string;
   delega_url?: string | null;
+  /** Link recensioni da settings.review_url (pagina recensioni Facebook). */
+  review_url?: string | null;
 };
 
 const CAMERA_DEFAULT = "Elisir d'Oriente 65135";
 const MINA_DISPLAY = "+39 348 180 4764";
-// TODO: sostituisci con il link reale da Google Business → https://business.google.com
-const REVIEW_PLACEHOLDER = "https://g.page/r/oasidelfaraone";
-// Finché il link resta quello segnaposto, la dashboard admin mostra un avviso giallo.
-export const REVIEW_LINK_IS_PLACEHOLDER = REVIEW_PLACEHOLDER.includes("g.page/r/oasidelfaraone");
+/** Il link recensioni vive in settings.review_url: la dashboard avvisa solo quando è vuoto. */
+export const reviewLinkMissing = (url: string | null | undefined) => !url?.trim();
 const COUPON_CODE = "ELISIR10";
 
 const esc = (s: string) =>
@@ -237,7 +237,7 @@ ${pre(`Codice: ${COUPON_CODE}\nBasta comunicarcelo al momento della prossima pre
 ${sep()}
 <p>⭐ <strong>Un piccolo favore:</strong><br>
 Lasciaci una recensione su come è stata la tua esperienza con noi. Non importa che sia lunga o elaborata — anche solo qualche riga sincera ci aiuta enormemente.</p>
-<p>${btn(REVIEW_PLACEHOLDER, "Lascia una recensione su Google")}</p>
+${reviewLinkMissing(b.review_url) ? "" : `<p>${btn(b.review_url!.trim(), "Lascia una recensione")}</p>`}
 <p style="margin-top:24px">Grazie davvero. A presto — magari già il prossimo anno! 🌊☀️<br>
 <em>Fulvio — ${camera}, Domina Coral Bay, Sharm el Sheikh</em></p>`);
 }
@@ -260,10 +260,10 @@ Basta comunicarcelo al momento della prossima prenotazione e lo scaleremo subito
 
 Lasciaci una recensione — anche solo qualche riga sincera ci aiuta enormemente:
 
-👉 Clicca sul link qui sotto: si apre la scheda Google dell'Oasi del Faraone.
-${REVIEW_PLACEHOLDER}
+${reviewLinkMissing(b.review_url) ? "" : `👉 Clicca sul link qui sotto: si apre la pagina delle recensioni dell'Oasi del Faraone.
+${b.review_url!.trim()}
 
-📝 Lì in alto trovi le stelle: toccale (5 se ti sei trovato bene) e scrivi anche solo due righe di commento. Ci vuole meno di un minuto.
+`}📝 Scrivi anche solo due righe su come ti sei trovato. Ci vuole meno di un minuto.
 
 Grazie davvero. A presto — magari già il prossimo anno! 🌊☀️
 Fulvio — ${camera}, Domina Coral Bay, Sharm el Sheikh`;

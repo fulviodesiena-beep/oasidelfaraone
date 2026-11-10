@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Eye, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,10 +12,14 @@ import type { EmailBooking } from "@/lib/email-templates";
 
 export function BookingCommunications({ booking }: { booking: Booking }) {
   const [preview, setPreview] = useState<ScheduledMessage | null>(null);
+  const { data: settings } = useQuery({
+    queryKey: ["admin", "settings"],
+    queryFn: async () => { const { data, error } = await supabase.from("settings").select("*").eq("id", 1).single(); if (error) throw error; return data; },
+  });
   const data: EmailBooking = {
     guest_name: booking.guest_name, check_in: fmtDate(booking.check_in), check_out: fmtDate(booking.check_out),
     total_nights: booking.total_nights, total_price: booking.total_price, deposit_paid: booking.deposit_paid,
-    servizi: extrasList(booking.extras).join(", "),
+    servizi: extrasList(booking.extras).join(", "), review_url: settings?.review_url,
   };
   const phone = booking.guest_phone;
   return (
