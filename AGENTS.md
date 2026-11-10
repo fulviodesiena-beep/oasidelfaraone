@@ -11,6 +11,7 @@
 
 ## Public booking architecture
 - Public languages share page components and complete local dictionaries; locale routes own their SEO and only new inquiries propagate language to contacts via a dedicated trigger, to keep admin, existing records and pricing untouched.
+- First-visit browser-language redirects apply only to Italian entry URLs listed in `AUTO_LANGUAGE_PAGES` (home and the in-room QR page /rito) and always keep the query string, so QR/UTM attribution survives.
 - Keep centralized browser-safe pricing and content modules separate from visual sections so factual rules remain testable.
 - The booking form saves an inquiry row (anon insert-only) before opening WhatsApp, and saving must never block WhatsApp; investment forms only compose WhatsApp. Never imply a message was sent automatically.
 - Missing seasonal rates must yield on-request quotes rather than fabricated rates; calculate Easter dates each year.
