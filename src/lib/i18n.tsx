@@ -18,10 +18,14 @@ export function detectLanguage(values: readonly string[]): Language {
   for (const value of values) { const code = value.toLowerCase().split("-")[0]; if (isLanguage(code)) return code; }
   return "it";
 }
-export function publicPath(language: Language, page: "home" | "privacy" = "home") {
+export type PublicPage = "home" | "privacy" | "ritual";
+export function publicPath(language: Language, page: PublicPage = "home") {
   const prefix = language === "it" ? "" : `/${language}`;
+  if (page === "ritual") return language === "it" ? "/rito" : `${prefix}/ritual`;
   return page === "home" ? prefix || "/" : `${prefix}/privacy`;
 }
+/** Italian entry URLs where a first visit may follow the browser language (home and the in-room QR page). */
+const AUTO_LANGUAGE_PAGES: Record<string, PublicPage> = { "/": "home", "/rito": "ritual" };
 export function translate(language: Language, key: string = "", values: Record<string, string | number> = {}) {
   let text = DICTIONARIES[language][key] ?? key;
   for (const [name, value] of Object.entries(values)) text = text.replaceAll(`{${name}}`, String(value));
@@ -41,10 +45,12 @@ function LanguageEffects({ language }: { language: Language }) {
     document.documentElement.dir = LOCALES[language].dir;
     try {
       const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-      // Explicit localized links win. Browser preference applies only to the first home visit.
-      if (window.location.pathname === "/") {
+      // Explicit localized links win. Browser preference applies only to the Italian home and QR ritual entry URLs.
+      // Query strings (e.g. utm_* from the room QR) are carried over unchanged.
+      const autoPage = AUTO_LANGUAGE_PAGES[window.location.pathname];
+      if (autoPage) {
         const preferred = isLanguage(saved) ? saved : detectLanguage(navigator.languages);
-        if (preferred !== "it") { window.location.replace(`${publicPath(preferred)}${window.location.search}${window.location.hash}`); return; }
+        if (preferred !== "it") { window.location.replace(`${publicPath(preferred, autoPage)}${window.location.search}${window.location.hash}`); return; }
       }
       localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
     } catch { /* Storage can be disabled; the URL remains authoritative. */ }

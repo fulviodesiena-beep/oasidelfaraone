@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
-import { HERO_PHOTOS, ROOM_AMENITIES, ROOMS } from "./site-data";
-import { translate, LOCALES, languages, publicPath, type Language } from "./i18n";
+import { APARTMENT_PHOTOS, HERO_PHOTOS, ROOM_AMENITIES, ROOMS } from "./site-data";
+import { translate, LOCALES, languages, publicPath, type Language, type PublicPage } from "./i18n";
 const TITLE = "Oasi del Faraone · Appartamenti al Domina Coral Bay, Sharm el-Sheikh";
 const DESCRIPTION = "Appartamento privato fino a 4 ospiti al Domina Coral Bay, Sharm el-Sheikh. Balcone vista piscina, spiagge e piscine del resort incluse. Preventivo in 2 minuti.";
 const SITE_URL = "https://oasidelfaraone.it";
@@ -41,7 +41,18 @@ function localize(value: unknown, language: Language): unknown {
  if (value && typeof value === "object") return Object.fromEntries(Object.entries(value).map(([k,v])=>[k,localize(v,language)])); return value;
 }
 export function localizedFaqs(language: Language): [string, string][] { return FAQS.map(([q,a,t]) => [translate(language,q),translate(language,t || String(a))]); }
-export function alternateLinks(language: Language, page: "home" | "privacy" = "home") { return [{rel:"canonical",href:SITE_URL+publicPath(language,page)},...languages.map(code=>({rel:"alternate",hrefLang:code,href:SITE_URL+publicPath(code,page)})),{rel:"alternate",hrefLang:"x-default",href:SITE_URL+publicPath("it",page)}]; }
+export function alternateLinks(language: Language, page: PublicPage = "home") { return [{rel:"canonical",href:SITE_URL+publicPath(language,page)},...languages.map(code=>({rel:"alternate",hrefLang:code,href:SITE_URL+publicPath(code,page)})),{rel:"alternate",hrefLang:"x-default",href:SITE_URL+publicPath("it",page)}]; }
+export const RITUAL_TITLE = "Elisir d’Oriente · Il risveglio dello scarabeo";
+const RITUAL_DESCRIPTION = "Il piccolo rito dell’alba di Elisir d’Oriente al Domina Coral Bay: la storia dell’ampolla, lo scarabeo di Khepri e un desiderio dal balcone sulla piscina.";
+/** Same balcony photo the ritual page shows, as an absolute URL for share previews. */
+export const RITUAL_IMAGE = APARTMENT_PHOTOS.find(p => p.src.includes("balcony")) ?? APARTMENT_PHOTOS[0];
+export function ritualHead(language: Language) {
+ const title = `${translate(language, RITUAL_TITLE)} | Oasi del Faraone`; const description = translate(language, RITUAL_DESCRIPTION);
+ const image = RITUAL_IMAGE ? SITE_URL + RITUAL_IMAGE.src : null; const url = SITE_URL + publicPath(language, "ritual");
+ return { meta: [{ title }, { name: "description", content: description }, { property: "og:title", content: title }, { property: "og:description", content: description }, { property: "og:type", content: "article" }, { property: "og:locale", content: LOCALES[language].og }, { property: "og:site_name", content: "Oasi del Faraone" }, { property: "og:url", content: url }, { name: "twitter:card", content: "summary_large_image" }, { name: "twitter:title", content: title }, { name: "twitter:description", content: description }, ...(image ? [{ property: "og:image", content: image }, { name: "twitter:image", content: image }] : [])],
+  links: alternateLinks(language, "ritual"),
+  scripts: [{ type: "application/ld+json", children: JSON.stringify({ "@context": "https://schema.org", "@type": "Article", headline: translate(language, RITUAL_TITLE), description, url, inLanguage: LOCALES[language].format, ...(image ? { image } : {}), publisher: { "@type": "Organization", name: "Oasi del Faraone", url: SITE_URL } }) }] };
+}
 export function publicHead(language: Language, page: "home" | "privacy" = "home") {
  const privacy=page==="privacy"; const title=translate(language,privacy?"Informativa privacy e cookie | Oasi del Faraone":TITLE); const description=translate(language,privacy?"Come Oasi del Faraone tratta i dati delle richieste di soggiorno e i cookie di misurazione.":DESCRIPTION);
  return {meta:[{title},{name:"description",content:description},{property:"og:title",content:title},{property:"og:description",content:description},{property:"og:type",content:privacy?"article":"website"},{property:"og:locale",content:LOCALES[language].og},{property:"og:site_name",content:"Oasi del Faraone"},{property:"og:url",content:SITE_URL+publicPath(language,page)},{name:"twitter:card",content:privacy?"summary":"summary_large_image"},{name:"twitter:title",content:title},{name:"twitter:description",content:description},...(!privacy?[{property:"og:image",content:OG_IMAGE},{name:"twitter:image",content:OG_IMAGE}]:[])],links:alternateLinks(language,page),scripts:privacy?[]:JSONLD.map(j=>({type:"application/ld+json",children:JSON.stringify({...localize(j,language) as object,inLanguage:LOCALES[language].format})}))};
