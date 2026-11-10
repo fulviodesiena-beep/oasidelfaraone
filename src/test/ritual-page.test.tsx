@@ -1,4 +1,6 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+vi.mock("@/integrations/supabase/client", () => ({ supabase: { rpc: () => Promise.resolve({ data: [], error: null }) } }));
+vi.mock("@tanstack/react-start", async (orig) => ({ ...(await orig<object>()), useServerFn: () => vi.fn() }));
 import { readFileSync } from "node:fs";
 import { render, screen } from "@testing-library/react";
 import { QueryClient } from "@tanstack/react-query";
@@ -6,7 +8,7 @@ import { createRouter, rootRouteId } from "@tanstack/react-router";
 import { routeTree } from "@/routeTree.gen";
 import { DICTIONARIES, languages, publicPath, translate } from "@/lib/i18n";
 import { ritualHead, RITUAL_TITLE } from "@/lib/public-head";
-import { RITUAL_STEPS, RITUAL_TEXTS } from "@/components/site/PublicRitual";
+import { PublicRitual, RITUAL_STEPS, RITUAL_TEXTS } from "@/components/site/PublicRitual";
 import { attributionFrom } from "@/lib/tracking";
 
 const QR = "utm_source=qr&utm_medium=stanza&utm_campaign=elisir";
@@ -57,5 +59,15 @@ describe("pagina del rito", () => {
       for (const key of RITUAL_TEXTS) expect(translate(l, key)).not.toMatch(PRICE);
       expect(JSON.stringify(ritualHead(l))).not.toMatch(PRICE);
     }
+  });
+  it("mostra un solo titolo, i 4 passi, Instagram e i link in fondo (inglese)", () => {
+    const { container } = render(<PublicRitual language="en" />);
+    expect(container.querySelectorAll("h1")).toHaveLength(1);
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Elisir d’Oriente · The awakening of the scarab");
+    expect(container.querySelectorAll("ol > li")).toHaveLength(4);
+    expect(screen.getByRole("link", { name: /Open Instagram/ })).toHaveAttribute("href", expect.stringContaining("instagram.com/oasidelfaraone"));
+    expect(screen.getByRole("link", { name: "Back to the Oasi del Faraone home page" })).toHaveAttribute("href", "/en");
+    expect(screen.getByRole("form", { name: /Letters from the Oasis|Lettere/ })).toBeInTheDocument();
+    expect(container.textContent).not.toMatch(PRICE);
   });
 });
