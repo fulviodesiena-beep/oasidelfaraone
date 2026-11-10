@@ -9,7 +9,7 @@ import { EmailChangeEmail } from '@/lib/email-templates/email-change'
 import { ReauthenticationEmail } from '@/lib/email-templates/reauthentication'
 
 // Configuration
-const SITE_NAME = "Oasidelfaraone"
+const SITE_NAME = "Oasi del Faraone"
 const SENDER_DOMAIN = "notify.oasidelfaraone.it"
 const ROOT_DOMAIN = "oasidelfaraone.it"
 const FROM_DOMAIN = "notify.oasidelfaraone.it"
@@ -24,11 +24,12 @@ export const Route = createFileRoute("/lovable/email/auth/webhook")({
         const handler = createAuthEmailHandler({
           apiKey: process.env['LOVABLE_API_KEY']!,
           from: { name: SITE_NAME, address: `noreply@${FROM_DOMAIN}` },
+          replyTo: 'prenotazionisharm@gmail.com',
           senderDomain: SENDER_DOMAIN,
           sendUrl: process.env['LOVABLE_SEND_URL'],
           emails: {
             signup: {
-              subject: 'Confirm your email',
+              subject: 'Conferma la tua email — Oasi del Faraone',
               render: (data) =>
                 React.createElement(SignupEmail, {
                   siteName: SITE_NAME,
@@ -38,7 +39,7 @@ export const Route = createFileRoute("/lovable/email/auth/webhook")({
                 }),
             },
             invite: {
-              subject: "You've been invited",
+              subject: 'Il tuo invito — Oasi del Faraone',
               render: (data) =>
                 React.createElement(InviteEmail, {
                   siteName: SITE_NAME,
@@ -47,7 +48,7 @@ export const Route = createFileRoute("/lovable/email/auth/webhook")({
                 }),
             },
             magiclink: {
-              subject: 'Your login link',
+              subject: 'Il tuo link di accesso — Oasi del Faraone',
               render: (data) =>
                 React.createElement(MagicLinkEmail, {
                   siteName: SITE_NAME,
@@ -55,7 +56,7 @@ export const Route = createFileRoute("/lovable/email/auth/webhook")({
                 }),
             },
             recovery: {
-              subject: 'Reset your password',
+              subject: 'Reimposta la password — Oasi del Faraone',
               render: (data) =>
                 React.createElement(RecoveryEmail, {
                   siteName: SITE_NAME,
@@ -63,7 +64,7 @@ export const Route = createFileRoute("/lovable/email/auth/webhook")({
                 }),
             },
             email_change: {
-              subject: 'Confirm your new email',
+              subject: 'Conferma il nuovo indirizzo email — Oasi del Faraone',
               render: (data) =>
                 React.createElement(EmailChangeEmail, {
                   siteName: SITE_NAME,
@@ -74,7 +75,7 @@ export const Route = createFileRoute("/lovable/email/auth/webhook")({
                 }),
             },
             reauthentication: {
-              subject: 'Your verification code',
+              subject: 'Il tuo codice di verifica — Oasi del Faraone',
               render: (data) =>
                 React.createElement(ReauthenticationEmail, { token: data.token ?? '' }),
             },
