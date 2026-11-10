@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { FileDown, Mail, Plus, RefreshCw, Trash2 } from "lucide-react";
@@ -53,12 +53,20 @@ export function BookingTravelers({ booking }: { booking: Booking }) {
     queryKey: ["admin", "documents", "delega", booking.id],
     queryFn: async () => { const { data } = await supabase.from("documents").select("*").eq("booking_id", booking.id).eq("kind", "delega").maybeSingle(); return data; },
   });
+  const [genError, setGenError] = useState<string | null>(null);
   const regen = useMutation({
-    mutationFn: () => gen({ data: { bookingId: booking.id, force: true } }),
-    onSuccess: r => { r.status === "ready" ? toast.success("Delega generata") : toast.error("Delega non ancora generabile"); refresh(); },
-    onError: (e: Error) => toast.error(e.message),
+    mutationFn: (force: boolean) => gen({ data: { bookingId: booking.id, force } }),
+    onSuccess: r => { setGenError(null); r.status === "ready" ? toast.success("Delega generata") : toast.error("Delega non ancora generabile: controlla stato, pagamento e documenti"); refresh(); },
+    onError: (e: unknown) => { const m = delegaErrorMessage(e); setGenError(m); toast.error(m); },
   });
   const state = delegaState(booking, travelers);
+  // Generates automatically the first time the rules are met and no delega exists yet.
+  const autoTried = useRef(false);
+  useEffect(() => {
+    if (state.kind !== "ready" || delegaDoc !== null || autoTried.current || regen.isPending) return;
+    autoTried.current = true;
+    regen.mutate(false);
+  }, [state.kind, delegaDoc, regen]);
   const full = booking.adults + booking.children;
 
   return (
@@ -85,11 +93,11 @@ export function BookingTravelers({ booking }: { booking: Booking }) {
 
       <div className="space-y-2 border-t border-border pt-3">
         <h3 className="font-display text-xl">Delega Domina</h3>
-        <DelegaStatusLine state={state} hasDoc={!!delegaDoc} />
+        <DelegaStatusLine state={state} hasDoc={!!delegaDoc} error={genError} pending={regen.isPending} />
         <div className="flex flex-wrap gap-2">
           {delegaDoc && <Button size="sm" variant="outline" onClick={() => openDocument(delegaDoc)}><FileDown />Scarica</Button>}
           {delegaDoc && settings && <Button size="sm" variant="outline" asChild><a href={dominaMailto(settings, delegaDoc.name)}><Mail />Prepara email al Domina</a></Button>}
-          {state.kind === "ready" && <Button size="sm" variant="ghost" disabled={regen.isPending} onClick={() => regen.mutate()}><RefreshCw />Rigenera</Button>}
+          {state.kind === "ready" && <Button size="sm" variant="ghost" disabled={regen.isPending} onClick={() => regen.mutate(true)}><RefreshCw />{delegaDoc ? "Rigenera" : "Genera ora"}</Button>}
         </div>
         {delegaDoc && <p className="text-xs text-muted-foreground">Ricorda di allegare il PDF scaricato all'email.</p>}
       </div>
@@ -97,9 +105,16 @@ export function BookingTravelers({ booking }: { booking: Booking }) {
   );
 }
 
-export function DelegaStatusLine({ state, hasDoc }: { state: ReturnType<typeof delegaState>; hasDoc: boolean }) {
+/** Readable message for any server-function failure (never an empty toast). */
+export function delegaErrorMessage(e: unknown) {
+  const m = e instanceof Error ? e.message : typeof e === "string" ? e : typeof e === "object" && e && "message" in e ? String((e as { message: unknown }).message) : "";
+  return m.trim() || "Errore sconosciuto durante la generazione della delega: riprova o controlla la connessione.";
+}
+
+export function DelegaStatusLine({ state, hasDoc, error, pending }: { state: ReturnType<typeof delegaState>; hasDoc: boolean; error?: string | null; pending?: boolean }) {
   if (state.kind === "not_eligible") return <p className="text-sm text-muted-foreground">La delega si prepara quando la prenotazione è confermata.</p>;
   if (state.kind === "unpaid") return <p className="text-sm text-warning">Delega in attesa: pagamento non ancora verificato.</p>;
   if (state.kind === "missing_docs") return <p className="text-sm text-destructive">Delega: mancano i documenti di {state.missing} viaggiatori.</p>;
-  return <p className="text-sm text-success">{hasDoc ? "Delega pronta" : "Delega in preparazione…"}{state.missing > 0 && <span className="text-warning"> · mancano i documenti di {state.missing} viaggiatori</span>}</p>;
+  if (error && !hasDoc) return <p role="alert" className="text-sm text-destructive">{error}</p>;
+  return <p className="text-sm text-success">{hasDoc ? "Delega pronta" : pending ? "Delega in preparazione…" : "Delega non ancora generata: premi «Genera ora»."}{state.missing > 0 && <span className="text-warning"> · mancano i documenti di {state.missing} viaggiatori</span>}</p>;
 }
