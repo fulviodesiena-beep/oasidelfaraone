@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { dashboardStats, occupancyBand, occupancyStats, eur, fmtDate, todayKey, type Booking } from "@/lib/admin";
-import { REVIEW_LINK_IS_PLACEHOLDER } from "@/lib/email-templates";
+import { reviewLinkMissing } from "@/lib/email-templates";
 import { FinancePanel } from "@/components/admin/FinancePanel";
 import { BookingClosureList, DelegaPanel } from "@/components/admin/DashboardAlerts";
 import { needsBookingClosure } from "@/lib/ical";
@@ -25,6 +25,10 @@ function Dashboard() {
       return { ...dashboardStats(b.data, i.data, today), occ: occupancyStats(b.data, today) };
     },
   });
+  const { data: settings } = useQuery({
+    queryKey: ["admin", "settings"],
+    queryFn: async () => { const { data, error } = await supabase.from("settings").select("*").eq("id", 1).single(); if (error) throw error; return data; },
+  });
   if (error) return <p className="text-destructive">Impossibile caricare i dati.</p>;
   if (isLoading || !data) return <p className="text-muted-foreground">Caricamento…</p>;
 
@@ -34,9 +38,9 @@ function Dashboard() {
 
   return (
     <div className="space-y-6">
-      {REVIEW_LINK_IS_PLACEHOLDER && (
+      {settings && reviewLinkMissing(settings.review_url) && (
         <div className="rounded-md border border-warning/45 bg-warning/10 px-4 py-3 text-sm text-warning" role="alert">
-          ⚠️ Link Google Business non configurato. Aggiorna REVIEW_PLACEHOLDER in src/lib/email-templates.ts con il tuo link reale.
+          ⚠️ Link recensioni non configurato. Inseriscilo in <Link to="/admin/settings" className="underline">Impostazioni</Link> → “Link recensione”.
         </div>
       )}
 

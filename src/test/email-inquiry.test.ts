@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 vi.mock("@/integrations/supabase/client", () => ({ supabase: { from: () => ({ insert: () => new Promise(() => {}) }) } }));
 import { saveInquiryWithin } from "@/lib/inquiries";
-import { REVIEW_LINK_IS_PLACEHOLDER, confirmationEmail, departureDayWhatsApp, getWhatsAppText, preArrivalEmail, thankYouWhatsApp } from "@/lib/email-templates";
+import { reviewLinkMissing, confirmationEmail, thankYouEmail, departureDayWhatsApp, getWhatsAppText, preArrivalEmail, thankYouWhatsApp } from "@/lib/email-templates";
 import { messageSchedule, whatsappLink } from "@/lib/communications";
 
 const b = { guest_name: "Anna <b>", check_in: "2026-12-01", check_out: "2026-12-08", total_nights: 7, total_price: 700, deposit_paid: 50 };
@@ -32,15 +32,22 @@ describe("email templates", () => {
   it("thank-you WhatsApp carries the coupon", () => {
     expect(thankYouWhatsApp(b)).toContain("ELISIR10");
   });
-  it("thank-you WhatsApp tells the guest how to leave the review", () => {
-    const t = thankYouWhatsApp(b);
+  it("thank-you messages use settings.review_url (Facebook reviews page)", () => {
+    const url = "https://www.facebook.com/oasidelfaraone/reviews";
+    const t = thankYouWhatsApp({ ...b, review_url: url });
     expect(t).toContain("Lasciaci una recensione");
-    expect(t).toContain("Clicca sul link qui sotto");
-    expect(t).toContain("toccale (5 se ti sei trovato bene)");
-    expect(t.indexOf("Clicca sul link qui sotto")).toBeLessThan(t.indexOf("g.page/r/oasidelfaraone"));
+    expect(t.indexOf("Clicca sul link qui sotto")).toBeLessThan(t.indexOf(url));
+    expect(thankYouEmail({ ...b, review_url: url })).toContain(url);
+    expect(t).not.toContain("g.page");
   });
-  it("admin banner flag agrees with the review link in the message", () => {
-    expect(REVIEW_LINK_IS_PLACEHOLDER).toBe(thankYouWhatsApp(b).includes("g.page/r/oasidelfaraone"));
+  it("without review_url no placeholder link is sent", () => {
+    expect(thankYouWhatsApp(b)).not.toMatch(/https?:\/\/(g\.page|www\.facebook)/);
+    expect(thankYouEmail(b)).not.toContain("g.page");
+  });
+  it("admin warning appears only when review_url is empty", () => {
+    expect(reviewLinkMissing(null)).toBe(true);
+    expect(reviewLinkMissing("  ")).toBe(true);
+    expect(reviewLinkMissing("https://www.facebook.com/oasidelfaraone/reviews")).toBe(false);
   });
   it("getWhatsAppText routes checkin_day", () => {
     expect(getWhatsAppText("checkin_day", b)).toContain("65135");

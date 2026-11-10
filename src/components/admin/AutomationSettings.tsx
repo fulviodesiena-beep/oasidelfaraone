@@ -42,7 +42,7 @@ export function AutomationSettings({ s }: { s: Tables<"settings"> }) {
       <p className="text-xs text-muted-foreground">Controllo automatico ogni ora. Le email sul soggiorno partono solo per prenotazioni confermate da adesso in poi; i messaggi WhatsApp compaiono in “Da inviare oggi”.</p>
 
       <div className="grid gap-3 sm:grid-cols-2">
-        {([["review_url", "Link recensione (es. Google)"], ["instagram_url", "Instagram"], ["facebook_url", "Facebook"], ["newsletter_guide_url", "Guida 12 ristoranti (PDF)"]] as const).map(([k, l]) => (
+        {([["review_url", "Link recensione (pagina recensioni Facebook)"], ["instagram_url", "Instagram"], ["facebook_url", "Facebook"], ["newsletter_guide_url", "Guida 12 ristoranti (PDF)"]] as const).map(([k, l]) => (
           <Field key={k} label={l}><Input placeholder="https://…" value={links[k]} onChange={e => setLinks({ ...links, [k]: e.target.value.trim() })} /></Field>))}
       </div>
       <Button disabled={!Object.values(links).every(okUrl)} onClick={() => save.mutate({ review_url: links.review_url || null, instagram_url: links.instagram_url || null, facebook_url: links.facebook_url || null, newsletter_guide_url: links.newsletter_guide_url || null })}>Salva link</Button>
