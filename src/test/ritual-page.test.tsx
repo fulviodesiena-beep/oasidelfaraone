@@ -20,7 +20,7 @@ describe("pagina del rito", () => {
     expect(languages.map(l => publicPath(l, "ritual"))).toEqual(["/rito", "/en/ritual", "/de/ritual"]);
     const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
     for (const [path, id] of [["/rito", "/rito"], ["/en/ritual", "/en_/ritual"], ["/de/ritual", "/de_/ritual"]]) {
-      const match = router.matchRoutes(`${path}?${QR}`).at(-1);
+      const match = router.matchRoutes(path, Object.fromEntries(new URLSearchParams(QR))).at(-1);
       expect(match?.routeId).not.toBe(rootRouteId);
       expect(match?.routeId).toBe(id);
     }
