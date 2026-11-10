@@ -19,7 +19,7 @@ describe("pagina del rito", () => {
   it("ha le rotte /rito, /en/ritual, /de/ritual anche con i parametri del QR", () => {
     expect(languages.map(l => publicPath(l, "ritual"))).toEqual(["/rito", "/en/ritual", "/de/ritual"]);
     const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
-    for (const [path, id] of [["/rito", "/rito"], ["/en/ritual", "/en_/ritual"], ["/de/ritual", "/de_/ritual"]]) {
+    for (const [path, id] of [["/rito", "/rito"], ["/en/ritual", "/en_/ritual"], ["/de/ritual", "/de_/ritual"]] as const) {
       const match = router.matchRoutes(path, Object.fromEntries(new URLSearchParams(QR))).at(-1);
       expect(match?.routeId).not.toBe(rootRouteId);
       expect(match?.routeId).toBe(id);
