@@ -28,6 +28,7 @@ import { Route as AdminNewsletterRouteImport } from './routes/admin.newsletter'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminTodayRouteImport } from './routes/admin.today'
 import { Route as AdminLoginRouteImport } from './routes/admin_.login'
+import { Route as AdminResetPasswordRouteImport } from './routes/admin_.reset-password'
 import { Route as DeAbmeldenRouteImport } from './routes/de_.abmelden'
 import { Route as DePrivacyRouteImport } from './routes/de_.privacy'
 import { Route as EnPrivacyRouteImport } from './routes/en_.privacy'
@@ -137,6 +138,11 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminResetPasswordRoute = AdminResetPasswordRouteImport.update({
+  id: '/admin_/reset-password',
+  path: '/admin/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DeAbmeldenRoute = DeAbmeldenRouteImport.update({
   id: '/de_/abmelden',
   path: '/de/abmelden',
@@ -224,6 +230,7 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/today': typeof AdminTodayRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/reset-password': typeof AdminResetPasswordRoute
   '/de/abmelden': typeof DeAbmeldenRoute
   '/de/privacy': typeof DePrivacyRoute
   '/en/privacy': typeof EnPrivacyRoute
@@ -257,6 +264,7 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/today': typeof AdminTodayRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/reset-password': typeof AdminResetPasswordRoute
   '/de/abmelden': typeof DeAbmeldenRoute
   '/de/privacy': typeof DePrivacyRoute
   '/en/privacy': typeof EnPrivacyRoute
@@ -292,6 +300,7 @@ export interface FileRoutesById {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/today': typeof AdminTodayRoute
   '/admin_/login': typeof AdminLoginRoute
+  '/admin_/reset-password': typeof AdminResetPasswordRoute
   '/de_/abmelden': typeof DeAbmeldenRoute
   '/de_/privacy': typeof DePrivacyRoute
   '/en_/privacy': typeof EnPrivacyRoute
@@ -328,6 +337,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/today'
     | '/admin/login'
+    | '/admin/reset-password'
     | '/de/abmelden'
     | '/de/privacy'
     | '/en/privacy'
@@ -361,6 +371,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/today'
     | '/admin/login'
+    | '/admin/reset-password'
     | '/de/abmelden'
     | '/de/privacy'
     | '/en/privacy'
@@ -395,6 +406,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/today'
     | '/admin_/login'
+    | '/admin_/reset-password'
     | '/de_/abmelden'
     | '/de_/privacy'
     | '/en_/privacy'
@@ -419,6 +431,7 @@ export interface RootRouteChildren {
   EnRoute: typeof EnRoute
   PrivacyRoute: typeof PrivacyRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminResetPasswordRoute: typeof AdminResetPasswordRoute
   DeAbmeldenRoute: typeof DeAbmeldenRoute
   DePrivacyRoute: typeof DePrivacyRoute
   EnPrivacyRoute: typeof EnPrivacyRoute
@@ -569,6 +582,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin_/reset-password': {
+      id: '/admin_/reset-password'
+      path: '/admin/reset-password'
+      fullPath: '/admin/reset-password'
+      preLoaderRoute: typeof AdminResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/de_/abmelden': {
       id: '/de_/abmelden'
       path: '/de/abmelden'
@@ -703,6 +723,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnRoute: EnRoute,
   PrivacyRoute: PrivacyRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AdminResetPasswordRoute: AdminResetPasswordRoute,
   DeAbmeldenRoute: DeAbmeldenRoute,
   DePrivacyRoute: DePrivacyRoute,
   EnPrivacyRoute: EnPrivacyRoute,
