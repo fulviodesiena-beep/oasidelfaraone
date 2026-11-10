@@ -31,3 +31,5 @@
 - [ ] Chiave Brevo da inserire (serve Fulvio), poi verificare mittente/dominio su Brevo, sincronizzare contatti e attivare ricezione disiscrizioni
 - [ ] Link recensione Google, Facebook e PDF guida ristoranti in Impostazioni (serve Fulvio)
 - [ ] Sync Booking.com e Impostazioni per singola stanza (oggi una sola stanza: usa i valori attuali)
+
+- [x] Delega Domina: corretto salvataggio (non partiva per un valore non ammesso), errori chiari in gestionale, delega di test generata; casella offerte del modulo prenotazione avvia la doppia conferma newsletter

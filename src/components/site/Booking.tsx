@@ -4,7 +4,9 @@ import { ChevronLeft, ChevronRight, Minus, Plus, ArrowRight, Car, Fish, Heart, T
 import { Button } from "@/components/ui/button";
 import { EXTRAS, OWNER_WHATSAPP, ROOMS, wa } from "@/lib/site-data";
 import { dateKey, MAX_GUESTS, quote } from "@/lib/pricing";
-import { saveInquiryWithin } from "@/lib/inquiries";
+import { requestNewsletterIfConsented, saveInquiryWithin, type InquiryInput } from "@/lib/inquiries";
+import { useServerFn } from "@tanstack/react-start";
+import { subscribeNewsletter } from "@/lib/newsletter.functions";
 import { trackEvent } from "@/lib/tracking";
 import { isOccupied, rangeHitsOccupied, type Range } from "@/lib/availability";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,6 +23,7 @@ const mmss = (s: number) => `${String(Math.floor(s / 60)).padStart(2, "0")}:${St
 
 export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra: (id: string) => void }) {
   const { t, language, locale, money } = useLanguage();
+  const subscribe = useServerFn(subscribeNewsletter);
   const [today] = useState(new Date());
   const [month, setMonth] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const [checkIn, setCheckIn] = useState("");
@@ -104,7 +107,9 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
         const special = String(form.get("special_dates") ?? "").trim().slice(0, 500);
         const message = `${t("Richiesta soggiorno — Oasi del Faraone")}\n${t("Nome")}: ${form.get("Nome")}\n${t("Email")}: ${form.get("Email")}\n${t("Telefono")}: ${form.get("Telefono")}\n${t("Date")}: ${fmt(checkIn)} → ${fmt(checkOut)}\n${q.nightsCount} ${t("notti")}\n${t("Ospiti")}: ${adults} ${t("Adulti")}, ${children} ${t("Bambini")}\n${t("Extra")}: ${extraNames.join(", ") || t("nessuno")}${note ? `\n${t("Note")}: ${note}` : ""}${special ? `\n${t("Date speciali")}: ${special}` : ""}\n${t("Totale indicativo alloggio")}: ${q.total === null ? t("da confermare") : money(q.total)}\n${t("Pulizia finale")} ${money(q.cleaningFee)} ${t("in reception al check-in")}\n${t("Disponibilità e prezzi da confermare.")}`;
         const tab = window.open("", "_blank");
-        await saveInquiryWithin({ guest_name: String(form.get("Nome") ?? ""), guest_email: String(form.get("Email") ?? ""), guest_phone: String(form.get("Telefono") ?? ""), check_in: checkIn, check_out: checkOut, adults, children, extras: extraNames, message, consent_privacy: form.get("consent_privacy") === "on", consent_marketing: form.get("consent_marketing") === "on", special_dates: special, consent_occasions: form.get("consent_occasions") === "on", room_id: String(form.get("room_id") ?? ""), language });
+        const inquiry: InquiryInput = { guest_name: String(form.get("Nome") ?? ""), guest_email: String(form.get("Email") ?? ""), guest_phone: String(form.get("Telefono") ?? ""), check_in: checkIn, check_out: checkOut, adults, children, extras: extraNames, message, consent_privacy: form.get("consent_privacy") === "on", consent_marketing: form.get("consent_marketing") === "on", special_dates: special, consent_occasions: form.get("consent_occasions") === "on", room_id: String(form.get("room_id") ?? ""), language };
+        await saveInquiryWithin(inquiry);
+        requestNewsletterIfConsented(inquiry, subscribe);
         trackEvent("Lead");
         const url = wa(OWNER_WHATSAPP, message);
         if (tab) { tab.opener = null; tab.location.href = url; } else window.location.href = url;
