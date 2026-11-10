@@ -48,3 +48,16 @@ export async function saveInquiry(i: InquiryInput): Promise<boolean> {
     return false;
   }
 }
+
+type NewsletterSubscribe = (args: { data: { email: string; lang: string; consent: boolean } }) => Promise<unknown>;
+
+/** "Voglio ricevere offerte e novità" starts the same double opt-in as "Lettere dall'Oasi" (status pending until the
+ *  guest clicks the confirmation link). Fire-and-forget: never throws and never delays WhatsApp. */
+export function requestNewsletterIfConsented(i: Pick<InquiryInput, "consent_marketing" | "guest_email" | "language">, subscribe: NewsletterSubscribe): boolean {
+  const email = i.guest_email.trim();
+  if (!i.consent_marketing || !email) return false;
+  try {
+    void subscribe({ data: { email, lang: i.language ?? "it", consent: true } }).catch(e => console.error("Newsletter opt-in not started", e));
+  } catch (e) { console.error("Newsletter opt-in not started", e); }
+  return true;
+}
