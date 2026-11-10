@@ -111,7 +111,7 @@ export function delegaErrorMessage(e: unknown) {
   return m.trim() || "Errore sconosciuto durante la generazione della delega: riprova o controlla la connessione.";
 }
 
-export function DelegaStatusLine({ state, hasDoc, error, pending }: { state: ReturnType<typeof delegaState>; hasDoc: boolean; error?: string | null; pending?: boolean }) {
+export function DelegaStatusLine({ state, hasDoc, error, pending }: { state: ReturnType<typeof delegaState>; hasDoc: boolean; error?: string | null | undefined; pending?: boolean | undefined }) {
   if (state.kind === "not_eligible") return <p className="text-sm text-muted-foreground">La delega si prepara quando la prenotazione è confermata.</p>;
   if (state.kind === "unpaid") return <p className="text-sm text-warning">Delega in attesa: pagamento non ancora verificato.</p>;
   if (state.kind === "missing_docs") return <p className="text-sm text-destructive">Delega: mancano i documenti di {state.missing} viaggiatori.</p>;
