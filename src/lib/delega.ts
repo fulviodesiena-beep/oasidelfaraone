@@ -190,3 +190,20 @@ export async function buildDelegaPdf(d: DelegaData, images: { header?: Uint8Arra
   }
   return pdf.save();
 }
+
+/** documents.uploaded_by only accepts 'owner' | 'guest' (DB check): generated delegas are stored as the owner's. */
+export const DELEGA_UPLOADER = "owner" as const;
+
+/** Lists what is missing in Settings before a delega can be generated (empty = ok). */
+export function delegaSetupMissing(s: Partial<DelegaSettings> | null | undefined, images: { header?: unknown; signature?: unknown }) {
+  const missing: string[] = [];
+  if (!s?.holder_name?.trim()) missing.push("nome del titolare");
+  if (!s?.holder_passport?.trim()) missing.push("passaporto del titolare");
+  if (!s?.unit_number?.trim()) missing.push("numero unità");
+  if (!images.header) missing.push("header Domina (header.png)");
+  if (!images.signature) missing.push("firma (signature.png)");
+  return missing;
+}
+
+export const delegaSetupError = (missing: string[]) =>
+  `Delega non generabile: manca ${missing.join(", ")}. Completa Impostazioni → Modelli e allegati.`;
