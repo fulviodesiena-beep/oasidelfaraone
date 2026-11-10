@@ -18,7 +18,7 @@
 - Downloaded photos are referenced through asset pointers; owner-supplied real photos replace every placeholder or illustrative image for the subject they show, and only genuinely generic photography carries the illustrative label.
 
 ## Admin panel
-- /admin is a client-only (ssr: false) layout gated in beforeLoad by an admin row in user_roles; the login page lives at admin_.login.tsx so it is not nested under the gate.
+- /admin is a client-only (ssr: false) layout gated in beforeLoad by an admin row in user_roles; the login and password-reset pages live at admin_.login.tsx and admin_.reset-password.tsx so they are not nested under the gate.
 - Admin pages read and write through the browser client under RLS (has_role admin); public sign-up is disabled and the owner account gets the admin role via a trigger on auth.users matched by email.
 - Guest records are created or updated by a database trigger when a booking becomes confirmed (match by email or digits-only phone); balance_due is a generated column.
 - Booking documents live in the private `documents` storage bucket (admin-only RLS) and are shared only via time-limited signed URLs. The Domina delega (holder = owner from settings, delegates = travelers) is built with pdf-lib from `src/lib/delega.ts` inside the `ensureDelega` server function and regenerated when its fingerprint changes; header/signature/travel attachments live at fixed paths in the private `templates` bucket.

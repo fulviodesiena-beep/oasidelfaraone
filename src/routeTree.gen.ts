@@ -28,6 +28,7 @@ import { Route as AdminNewsletterRouteImport } from './routes/admin.newsletter'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminTodayRouteImport } from './routes/admin.today'
 import { Route as AdminLoginRouteImport } from './routes/admin_.login'
+import { Route as AdminResetPasswordRouteImport } from './routes/admin_.reset-password'
 import { Route as DeAbmeldenRouteImport } from './routes/de_.abmelden'
 import { Route as DePrivacyRouteImport } from './routes/de_.privacy'
 import { Route as EnPrivacyRouteImport } from './routes/en_.privacy'
@@ -38,6 +39,8 @@ import { Route as ApiPublicIcalTokenRouteImport } from './routes/api/public/ical
 import { Route as ApiPublicJobsAutomationsRouteImport } from './routes/api/public/jobs/automations'
 import { Route as ApiPublicJobsIcalSyncRouteImport } from './routes/api/public/jobs/ical-sync'
 import { Route as ApiPublicRIdRouteImport } from './routes/api/public/r.$id'
+import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
 const IndexRoute = IndexRouteImport.update({
@@ -135,6 +138,11 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminResetPasswordRoute = AdminResetPasswordRouteImport.update({
+  id: '/admin_/reset-password',
+  path: '/admin/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DeAbmeldenRoute = DeAbmeldenRouteImport.update({
   id: '/de_/abmelden',
   path: '/de/abmelden',
@@ -186,6 +194,16 @@ const ApiPublicRIdRoute = ApiPublicRIdRouteImport.update({
   path: '/api/public/r/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
+  id: '/lovable/email/auth/preview',
+  path: '/lovable/email/auth/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
+  id: '/lovable/email/auth/webhook',
+  path: '/lovable/email/auth/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LovableEmailTransactionalPreviewRoute =
   LovableEmailTransactionalPreviewRouteImport.update({
     id: '/lovable/email/transactional/preview',
@@ -212,6 +230,7 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/today': typeof AdminTodayRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/reset-password': typeof AdminResetPasswordRoute
   '/de/abmelden': typeof DeAbmeldenRoute
   '/de/privacy': typeof DePrivacyRoute
   '/en/privacy': typeof EnPrivacyRoute
@@ -223,6 +242,8 @@ export interface FileRoutesByFullPath {
   '/api/public/jobs/automations': typeof ApiPublicJobsAutomationsRoute
   '/api/public/jobs/ical-sync': typeof ApiPublicJobsIcalSyncRoute
   '/api/public/r/$id': typeof ApiPublicRIdRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesByTo {
@@ -243,6 +264,7 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/today': typeof AdminTodayRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/reset-password': typeof AdminResetPasswordRoute
   '/de/abmelden': typeof DeAbmeldenRoute
   '/de/privacy': typeof DePrivacyRoute
   '/en/privacy': typeof EnPrivacyRoute
@@ -254,6 +276,8 @@ export interface FileRoutesByTo {
   '/api/public/jobs/automations': typeof ApiPublicJobsAutomationsRoute
   '/api/public/jobs/ical-sync': typeof ApiPublicJobsIcalSyncRoute
   '/api/public/r/$id': typeof ApiPublicRIdRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesById {
@@ -276,6 +300,7 @@ export interface FileRoutesById {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/today': typeof AdminTodayRoute
   '/admin_/login': typeof AdminLoginRoute
+  '/admin_/reset-password': typeof AdminResetPasswordRoute
   '/de_/abmelden': typeof DeAbmeldenRoute
   '/de_/privacy': typeof DePrivacyRoute
   '/en_/privacy': typeof EnPrivacyRoute
@@ -287,6 +312,8 @@ export interface FileRoutesById {
   '/api/public/jobs/automations': typeof ApiPublicJobsAutomationsRoute
   '/api/public/jobs/ical-sync': typeof ApiPublicJobsIcalSyncRoute
   '/api/public/r/$id': typeof ApiPublicRIdRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRouteTypes {
@@ -310,6 +337,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/today'
     | '/admin/login'
+    | '/admin/reset-password'
     | '/de/abmelden'
     | '/de/privacy'
     | '/en/privacy'
@@ -321,6 +349,8 @@ export interface FileRouteTypes {
     | '/api/public/jobs/automations'
     | '/api/public/jobs/ical-sync'
     | '/api/public/r/$id'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -341,6 +371,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/today'
     | '/admin/login'
+    | '/admin/reset-password'
     | '/de/abmelden'
     | '/de/privacy'
     | '/en/privacy'
@@ -352,6 +383,8 @@ export interface FileRouteTypes {
     | '/api/public/jobs/automations'
     | '/api/public/jobs/ical-sync'
     | '/api/public/r/$id'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
   id:
     | '__root__'
@@ -373,6 +406,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/today'
     | '/admin_/login'
+    | '/admin_/reset-password'
     | '/de_/abmelden'
     | '/de_/privacy'
     | '/en_/privacy'
@@ -384,6 +418,8 @@ export interface FileRouteTypes {
     | '/api/public/jobs/automations'
     | '/api/public/jobs/ical-sync'
     | '/api/public/r/$id'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
   fileRoutesById: FileRoutesById
 }
@@ -395,6 +431,7 @@ export interface RootRouteChildren {
   EnRoute: typeof EnRoute
   PrivacyRoute: typeof PrivacyRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminResetPasswordRoute: typeof AdminResetPasswordRoute
   DeAbmeldenRoute: typeof DeAbmeldenRoute
   DePrivacyRoute: typeof DePrivacyRoute
   EnPrivacyRoute: typeof EnPrivacyRoute
@@ -405,6 +442,8 @@ export interface RootRouteChildren {
   ApiPublicJobsAutomationsRoute: typeof ApiPublicJobsAutomationsRoute
   ApiPublicJobsIcalSyncRoute: typeof ApiPublicJobsIcalSyncRoute
   ApiPublicRIdRoute: typeof ApiPublicRIdRoute
+  LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
+  LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
 
@@ -543,6 +582,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin_/reset-password': {
+      id: '/admin_/reset-password'
+      path: '/admin/reset-password'
+      fullPath: '/admin/reset-password'
+      preLoaderRoute: typeof AdminResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/de_/abmelden': {
       id: '/de_/abmelden'
       path: '/de/abmelden'
@@ -613,6 +659,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicRIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/auth/preview': {
+      id: '/lovable/email/auth/preview'
+      path: '/lovable/email/auth/preview'
+      fullPath: '/lovable/email/auth/preview'
+      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/auth/webhook': {
+      id: '/lovable/email/auth/webhook'
+      path: '/lovable/email/auth/webhook'
+      fullPath: '/lovable/email/auth/webhook'
+      preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/transactional/preview': {
       id: '/lovable/email/transactional/preview'
       path: '/lovable/email/transactional/preview'
@@ -663,6 +723,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnRoute: EnRoute,
   PrivacyRoute: PrivacyRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AdminResetPasswordRoute: AdminResetPasswordRoute,
   DeAbmeldenRoute: DeAbmeldenRoute,
   DePrivacyRoute: DePrivacyRoute,
   EnPrivacyRoute: EnPrivacyRoute,
@@ -673,6 +734,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicJobsAutomationsRoute: ApiPublicJobsAutomationsRoute,
   ApiPublicJobsIcalSyncRoute: ApiPublicJobsIcalSyncRoute,
   ApiPublicRIdRoute: ApiPublicRIdRoute,
+  LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
+  LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
 export const routeTree = rootRouteImport
