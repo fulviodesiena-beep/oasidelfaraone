@@ -1,7 +1,7 @@
 import { type ReactNode } from "react";
 import { APARTMENT_PHOTOS, HERO_PHOTOS, ROOM_AMENITIES, ROOMS } from "./site-data";
 import { translate, LOCALES, languages, publicPath, type Language, type PublicPage } from "./i18n";
-const TITLE = "Oasi del Faraone · Appartamenti al Domina Coral Bay, Sharm el-Sheikh";
+const TITLE = "Oasi del Faraone · Appartamento al Domina Coral Bay, Sharm el-Sheikh";
 const DESCRIPTION = "Appartamento privato fino a 4 ospiti al Domina Coral Bay, Sharm el-Sheikh. Balcone vista piscina, spiagge e piscine del resort incluse. Preventivo in 2 minuti.";
 const SITE_URL = "https://oasidelfaraone.it";
 const OG_IMAGE = `${SITE_URL}${HERO_PHOTOS[0]?.src ?? ""}`;

@@ -1,5 +1,5 @@
 {
-  "Oasi del Faraone · Appartamenti al Domina Coral Bay, Sharm el-Sheikh": "Oasi del Faraone · Apartments at Domina Coral Bay, Sharm el-Sheikh",
+  "Oasi del Faraone · Appartamento al Domina Coral Bay, Sharm el-Sheikh": "Oasi del Faraone · Apartment at Domina Coral Bay, Sharm el-Sheikh",
   "Appartamento privato fino a 4 ospiti al Domina Coral Bay, Sharm el-Sheikh. Balcone vista piscina, spiagge e piscine del resort incluse. Preventivo in 2 minuti.": "Private apartment for up to 4 guests at Domina Coral Bay, Sharm el-Sheikh. Pool-view balcony, resort beaches and pools included. Get your quote.",
   "Cosa è incluso nel soggiorno?": "What is included in your stay?",
   "Spiagge, piscine, padel, beach volley e animazione del resort Domina Coral Bay sono inclusi, senza costi aggiuntivi. Ristoranti e bar sono à la carte; spa e casinò sono a pagamento.": "The beaches, pools, padel, beach volleyball and entertainment at Domina Coral Bay are included at no extra cost. Restaurants and bars are à la carte; the spa and casino cost extra.",
@@ -128,7 +128,7 @@
   "Una buona tavola fa parte del viaggio. Questi sono gli indirizzi che condividiamo con chi viene a trovarci.": "Good food is part of the journey. These are the addresses we share with everyone who stays with us.",
   "Tipo di cucina": "Cuisine",
   "Per orari, menu e prenotazioni aggiornati, chiedi a Mina.": "Ask Mina for current opening times, menus and reservations.",
-  "08 / Ci vediamo sul Mar Rosso": "08 / See you by the Red Sea",
+  "07 / Ci vediamo sul Mar Rosso": "07 / See you by the Red Sea",
   "Prenota il tuo soggiorno.": "Book your stay.",
   "Il tuo prossimo ricordo.": "Your next memory.",
   "Prima di partire": "Before you travel",
@@ -199,7 +199,6 @@
   "Le date scelte includono giorni già occupati. Scegli un altro periodo.": "Your chosen dates include occupied days. Please choose another period.",
   "Disponibilità da confermare con Fulvio. Il prezzo è riferito all’intero appartamento.": "Availability will be confirmed by Fulvio. The price is for the whole apartment.",
   "1 · Date e ospiti · fino a 4 persone": "1 · Dates and guests · up to 4 people",
-  "Il preventivo è scaduto. Seleziona di nuovo le date.": "Your quote has expired. Please choose your dates again.",
   "Arrivo": "Arrival",
   "Partenza": "Departure",
   "Adulti": "Adults",
@@ -223,12 +222,11 @@
   "Soggiorno minimo consigliato:": "Recommended minimum stay:",
   " nel periodo di Picco": " during peak dates",
   ". Puoi comunque inviare la richiesta.": ". You can still send your inquiry.",
-  "Preventivo riservato per:": "Quote reserved for:",
   "Nome completo": "Full name",
   "Nome e Cognome": "First and last name",
   "Extra (non inclusi nel totale)": "Extras (not included in the total)",
   "Date speciali da festeggiare a Sharm": "Special occasions to celebrate in Sharm",
-  "Date speciali da festeggiare a Sharm (compleanni, anniversari) — facoltativo": "Special occasions in Sharm (birthdays, anniversaries) — optional",
+  "Compleanni o anniversari durante il soggiorno? (facoltativo)": "Birthdays or anniversaries during your stay? (optional)",
   "Note per Fulvio": "Notes for Fulvio",
   "Aggiungi una nota": "Add a note",
   "Ho letto l’": "I have read the",
@@ -418,5 +416,8 @@
   "Apri Instagram": "Open Instagram",
   "Ogni mese ricondividiamo, con il tuo permesso, le foto più belle.": "Every month, with your permission, we reshare the most beautiful photos.",
   "Una nota gentile": "A gentle note",
-  "Torna alla home dell’Oasi del Faraone": "Back to the Oasi del Faraone home page"
+  "Torna alla home dell’Oasi del Faraone": "Back to the Oasi del Faraone home page",
+  "Scegli il giorno di arrivo sul calendario.": "Choose your arrival day on the calendar.",
+  "Ora scegli il giorno di partenza.": "Now choose your departure day.",
+  "Tocca un altro giorno per cambiare le date.": "Tap another day to change your dates."
 }

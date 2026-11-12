@@ -1,6 +1,6 @@
 import { useLanguage, publicPath } from "@/lib/i18n";
 import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, Minus, Plus, ArrowRight, Car, Fish, Heart, Timer } from "lucide-react";
+import { ChevronLeft, ChevronRight, Minus, Plus, ArrowRight, Car, Fish, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EXTRAS, OWNER_WHATSAPP, ROOMS, wa } from "@/lib/site-data";
 import { dateKey, MAX_GUESTS, quote } from "@/lib/pricing";
@@ -11,7 +11,6 @@ import { trackEvent } from "@/lib/tracking";
 import { isOccupied, rangeHitsOccupied, type Range } from "@/lib/availability";
 import { supabase } from "@/integrations/supabase/client";
 
-export const QUOTE_HOLD_SECONDS = 12 * 60;
 export const MAX_CHILDREN = 3;
 const QUICK_EXTRAS = [
   { id: "transfer", name: "Transfer aeroporto", icon: Car },
@@ -19,7 +18,10 @@ const QUICK_EXTRAS = [
   { id: "cena", name: "Cena romantica", icon: Heart },
 ] as const;
 const parse = (s: string) => { const [y = 0, m = 1, d = 1] = s.split("-").map(Number); return new Date(y, m - 1, d); };
-const mmss = (s: number) => `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
+/** Default phone prefix per site language: guests on EN pages come from many countries, so no prefix there. */
+export const PHONE_PREFIX: Record<string, string> = { it: "+39 ", de: "+49 ", en: "+" };
+/** One summary line when every night has the same price; otherwise the night-by-night list. */
+export const uniformNightPrice = (nights: { price: number | null }[]) => nights.length > 0 && nights.every(n => n.price !== null && n.price === nights[0]?.price) ? nights[0]!.price : null;
 
 export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra: (id: string) => void }) {
   const { t, language, locale, money } = useLanguage();
@@ -32,8 +34,6 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
   const [children, setChildren] = useState(0);
   const [step, setStep] = useState<"dates" | "details">("dates");
   const [opened, setOpened] = useState(false);
-  const [expired, setExpired] = useState(false);
-  const [left, setLeft] = useState(QUOTE_HOLD_SECONDS);
   const [dinner, setDinner] = useState(false);
   const [showNote, setShowNote] = useState(false);
   const [occupied, setOccupied] = useState<Range[]>([]);
@@ -41,23 +41,10 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
     supabase.rpc("get_occupied_ranges").then(({ data, error }) => { if (!error && data) setOccupied(data); }, () => {});
   }, []);
 
-  // 12-minute hold, React state only; restarts every time the details step opens.
-  useEffect(() => {
-    if (step !== "details") return;
-    const end = Date.now() + QUOTE_HOLD_SECONDS * 1000;
-    setLeft(QUOTE_HOLD_SECONDS);
-    const t = setInterval(() => {
-      const s = Math.max(0, Math.round((end - Date.now()) / 1000));
-      setLeft(s);
-      if (s === 0) { clearInterval(t); setExpired(true); setStep("dates"); setCheckIn(""); setCheckOut(""); setOpened(false); }
-    }, 1000);
-    return () => clearInterval(t);
-  }, [step]);
-
   const q = checkIn && checkOut ? quote(parse(checkIn), parse(checkOut)) : null;
   const clash = Boolean(checkIn && checkOut && rangeHitsOccupied(checkIn, checkOut, occupied));
   const valid = Boolean(q && q.nightsCount > 0 && checkIn >= dateKey(today) && !clash);
-  const editDates = () => { setStep("dates"); setOpened(false); setExpired(false); };
+  const editDates = () => { setStep("dates"); setOpened(false); };
   const pick = (d: Date) => { const key = dateKey(d); editDates(); if (!checkIn || checkOut || key <= checkIn) { setCheckIn(key); setCheckOut(""); } else setCheckOut(key); };
   const first = (month.getDay() + 6) % 7;
   const count = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
@@ -78,7 +65,7 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
           const key = dateKey(d);
           const selected = key === checkIn || key === checkOut || Boolean(checkIn && checkOut && key > checkIn && key < checkOut);
           const busy = isOccupied(key, occupied);
-          return <Button key={key} variant="ghost" disabled={key < dateKey(today) || busy} aria-label={`${d.toLocaleDateString(locale.format, { day: "numeric", month: "long", year: "numeric" })}${busy ? ` — ${t("Occupato")}` : ""}`} aria-pressed={selected} onClick={() => pick(d)} className={`calendar-day ${selected ? "bg-primary text-primary-foreground hover:bg-primary/90" : busy ? "text-muted-foreground line-through" : "text-foreground"}`}>{d.getDate()}</Button>;
+          return <Button key={key} variant="ghost" disabled={key < dateKey(today) || busy} aria-label={`${d.toLocaleDateString(locale.format, { day: "numeric", month: "long", year: "numeric" })}${busy ? ` — ${t("Occupato")}` : ""}`} aria-pressed={selected} onClick={() => pick(d)} className={`calendar-day ${selected ? "bg-primary text-primary-foreground hover:bg-primary/90" : busy ? "text-muted-foreground line-through" : key < dateKey(today) ? "text-muted-foreground" : "calendar-day-free text-foreground"}`}>{d.getDate()}</Button>;
         })}
       </div>
       <div className="mt-5 flex gap-5 text-xs text-muted-foreground">
@@ -92,14 +79,14 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
     <div className="min-w-0 border border-border bg-card p-5 sm:p-8">
       {step === "dates" || !valid || !q ? <>
         <p className="eyebrow">{t("1 · Date e ospiti · fino a 4 persone")}</p>
-        {expired && <p role="alert" className="mt-4 text-sm text-destructive">{t("Il preventivo è scaduto. Seleziona di nuovo le date.")}</p>}
-        <div className="mt-6 grid grid-cols-2 gap-3">
-          <label className="text-xs text-muted-foreground">{t("Arrivo")}<input aria-label={t("Arrivo")} type="date" min={dateKey(today)} className="field mt-2" value={checkIn} onChange={e => { setCheckIn(e.target.value); editDates(); }} /></label>
-          <label className="text-xs text-muted-foreground">{t("Partenza")}<input aria-label={t("Partenza")} type="date" min={checkIn || dateKey(today)} className="field mt-2" value={checkOut} onChange={e => { setCheckOut(e.target.value); editDates(); }} /></label>
+        <div className="mt-6 grid grid-cols-2 gap-3" aria-live="polite">
+          <div className="date-pick"><p className="text-xs text-muted-foreground">{t("Arrivo")}</p><p data-testid="check-in" className="mt-1 text-base">{checkIn ? fmt(checkIn) : "—"}</p></div>
+          <div className="date-pick"><p className="text-xs text-muted-foreground">{t("Partenza")}</p><p data-testid="check-out" className="mt-1 text-base">{checkOut ? fmt(checkOut) : "—"}</p></div>
         </div>
+        <p className="mt-3 text-xs text-muted-foreground">{!checkIn ? t("Scegli il giorno di arrivo sul calendario.") : !checkOut ? t("Ora scegli il giorno di partenza.") : t("Tocca un altro giorno per cambiare le date.")}</p>
         <div className="mt-5 grid grid-cols-2 gap-3"><Counter label={t("Adulti")} value={adults} min={1} max={MAX_GUESTS - children} change={setAdults} /><Counter label={t("Bambini")} value={children} min={0} max={Math.min(MAX_CHILDREN, MAX_GUESTS - adults)} change={setChildren} /></div>
         <p className="mt-4 text-xs text-muted-foreground">{t("Il prezzo dell’appartamento non cambia da 1 a 4 ospiti.")}</p>
-        <Button disabled={!valid} className="mt-6 h-12 w-full" onClick={() => { setExpired(false); setStep("details"); }}>{t("Vedi disponibilità")}<ArrowRight /></Button>
+        <Button disabled={!valid} className="mt-6 h-12 w-full" onClick={() => setStep("details")}>{t("Vedi disponibilità")}<ArrowRight /></Button>
       </> : <form className="space-y-4" onSubmit={async e => {
         e.preventDefault(); const form = new FormData(e.currentTarget);
         const extraNames = [...EXTRAS.filter(x => extras.includes(x.id)).map(x => t(x.name)), ...(dinner ? [t("Cena romantica")] : [])];
@@ -120,18 +107,18 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
           <div><p>{fmt(checkIn)} {t("→")} {fmt(checkOut)}</p><p className="text-xs text-muted-foreground">{q.nightsCount} {t("notti ·")} {adults + children} {t("ospiti")}</p></div>
           <span className="font-display text-3xl text-gold-light">{q.total === null ? t("Da confermare") : money(q.total)}</span>
         </div>
-        {q.total !== null && <ul aria-label={t("Dettaglio notti")} className="max-h-40 space-y-1 overflow-y-auto text-xs text-muted-foreground">{q.nights.map(n => <li key={dateKey(n.date)} className="flex justify-between"><span>{n.date.toLocaleDateString(locale.format, { weekday: "short", day: "numeric", month: "short" })}</span><span>{money(n.price ?? 0)}</span></li>)}<li className="flex justify-between border-t border-border pt-1 text-foreground"><span>{t("Totale alloggio ·")} {q.nightsCount} {t("notti")}</span><span>{money(q.total)}</span></li></ul>}
+        {q.total !== null && uniformNightPrice(q.nights) !== null && <p className="flex justify-between text-xs text-muted-foreground"><span>{q.nightsCount} {t("notti")} × {money(uniformNightPrice(q.nights) ?? 0)}</span><span>{money(q.total)}</span></p>}
+        {q.total !== null && uniformNightPrice(q.nights) === null && <ul aria-label={t("Dettaglio notti")} className="nights-list max-h-40 space-y-1 overflow-y-auto text-xs text-muted-foreground">{q.nights.map(n => <li key={dateKey(n.date)} className="flex justify-between"><span>{n.date.toLocaleDateString(locale.format, { weekday: "short", day: "numeric", month: "short" })}</span><span>{money(n.price ?? 0)}</span></li>)}<li className="flex justify-between border-t border-border pt-1 text-foreground"><span>{t("Totale alloggio ·")} {q.nightsCount} {t("notti")}</span><span>{money(q.total)}</span></li></ul>}
         <p className="flex flex-wrap justify-between gap-2 text-xs text-muted-foreground"><span>{t("Nota: pulizia finale · pagata in reception al check-in")}</span><span>{money(q.cleaningFee)} {t("· non inclusa")}</span></p>
         {q.minStayWarning && <p role="note" className="text-xs text-warning">{t("Soggiorno minimo consigliato:")} {q.minStayWarning} {t("notti")}{q.touchesPeak ? t(" nel periodo di Picco") : ""}{t(". Puoi comunque inviare la richiesta.")}</p>}
-        <p role="timer" className={`flex items-center gap-2 text-sm ${left <= 120 ? "text-destructive" : "text-gold"}`}><Timer className="size-4" />{t("Preventivo riservato per:")} {mmss(left)}</p>
         {ROOMS.length > 1 && <select name="room_id" aria-label={t("Stanza")} className="field" defaultValue={ROOMS[0]?.id}>{ROOMS.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}</select>}
         <input name="Nome" aria-label={t("Nome completo")} placeholder={t("Nome e Cognome")} required autoComplete="name" className="field" />
-        <input name="Telefono" aria-label={t("Telefono")} type="tel" defaultValue="+39 " required autoComplete="tel" className="field" />
+        <input name="Telefono" aria-label={t("Telefono")} type="tel" defaultValue={PHONE_PREFIX[language] ?? "+"} required autoComplete="tel" className="field" />
         <input name="Email" aria-label={t("Email")} type="email" placeholder={t("Email")} required autoComplete="email" className="field" />
         <fieldset className="space-y-2"><legend className="mb-2 text-xs text-muted-foreground">{t("Extra (non inclusi nel totale)")}</legend>
           {QUICK_EXTRAS.map(x => { const on = x.id === "cena" ? dinner : extras.includes(x.id); return <label key={x.id} className="flex cursor-pointer items-center gap-3 text-sm"><input type="checkbox" className="accent-primary" checked={on} onChange={() => x.id === "cena" ? setDinner(!dinner) : toggleExtra(x.id)} /><x.icon className="size-4 text-gold-light" />{t(x.name)}</label>; })}
         </fieldset>
-        <input name="special_dates" aria-label={t("Date speciali da festeggiare a Sharm")} maxLength={500} placeholder={t("Date speciali da festeggiare a Sharm (compleanni, anniversari) — facoltativo")} className="field" />
+        <textarea name="special_dates" aria-label={t("Date speciali da festeggiare a Sharm")} rows={2} maxLength={500} placeholder={t("Compleanni o anniversari durante il soggiorno? (facoltativo)")} className="field" />
         {showNote ? <textarea name="Note" aria-label={t("Note")} rows={3} maxLength={1000} className="field" placeholder={t("Note per Fulvio")} /> : <Button type="button" variant="link" className="h-auto p-0" onClick={() => setShowNote(true)}>{t("Aggiungi una nota")}</Button>}
         <label className="flex items-start gap-3 text-xs"><input type="checkbox" name="consent_privacy" required className="mt-0.5 accent-primary" /><span>{t("Ho letto l’")} <a href={publicPath(language, "privacy")} target="_blank" rel="noreferrer" className="underline">{t("informativa privacy")}</a> {t("e acconsento al trattamento dei dati per gestire la richiesta (obbligatorio).")}</span></label>
         <label className="flex items-start gap-3 text-xs"><input type="checkbox" name="consent_marketing" className="mt-0.5 accent-primary" /><span>{t("Voglio ricevere offerte e novità (facoltativo).")}</span></label>

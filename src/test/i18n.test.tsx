@@ -3,6 +3,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { DICTIONARIES, detectLanguage, LanguageProvider, languages, publicPath, translate } from "@/lib/i18n";
 import { publicHead } from "@/lib/public-head";
 import { Booking } from "@/components/site/Booking";
+import { quote } from "@/lib/pricing";
 import { APARTMENT_PHOTOS, VILLAGE_PHOTOS, ROOMS, EXTRAS, RESTAURANTS, SPOTS, ROOM_AMENITIES } from "@/lib/site-data";
 
 const insert = vi.hoisted(() => vi.fn().mockResolvedValue({ error: null }));
@@ -49,11 +50,14 @@ describe("public languages", () => {
     const popup = { opener: null, location: { href: "" } };
     vi.spyOn(window,"open").mockReturnValue(popup as unknown as Window);
     render(<LanguageProvider language="en"><Booking extras={[]} toggleExtra={()=>{}} /></LanguageProvider>);
-    const year = new Date().getFullYear()+1;
-    fireEvent.change(screen.getByLabelText("Arrival"),{target:{value:`${year}-05-10`}});
-    fireEvent.change(screen.getByLabelText("Departure"),{target:{value:`${year}-05-13`}});
+    const now = new Date(); const m = new Date(now.getFullYear(), now.getMonth()+1, 1);
+    const dayLabel = (d: number) => new Date(m.getFullYear(), m.getMonth(), d).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+    fireEvent.click(screen.getByLabelText("Next month"));
+    fireEvent.click(screen.getByRole("button",{name:dayLabel(10)}));
+    fireEvent.click(screen.getByRole("button",{name:dayLabel(13)}));
     fireEvent.click(screen.getByRole("button",{name:"Check availability"}));
-    expect(screen.getByLabelText("Night-by-night breakdown")).toHaveTextContent("€240.00");
+    const q = quote(new Date(m.getFullYear(), m.getMonth(), 10), new Date(m.getFullYear(), m.getMonth(), 13));
+    if (q.total !== null) expect(document.body.textContent).toContain(new Intl.NumberFormat("en-GB",{style:"currency",currency:"EUR"}).format(q.total));
     fireEvent.change(screen.getByLabelText("Full name"),{target:{value:"Test Guest"}});
     fireEvent.change(screen.getByLabelText("Email"),{target:{value:"test@example.invalid"}});
     fireEvent.change(screen.getByLabelText("Phone"),{target:{value:"+393331234567"}});
