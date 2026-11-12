@@ -13,6 +13,16 @@ import { Field } from "@/components/admin/BookingFormDialog";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { eur, fmtDate, type Host } from "@/lib/admin";
 
+/** What a host brought (stays and their value) and what is still to collect (open balances). */
+export function hostTotals(rows: { total_price: number | null; balance_due: number | null }[]) {
+  const r2 = (n: number) => Math.round(n * 100) / 100;
+  return {
+    stays: rows.length,
+    brought: r2(rows.reduce((s, b) => s + Number(b.total_price ?? 0), 0)),
+    open: r2(rows.reduce((s, b) => s + Math.max(Number(b.balance_due ?? 0), 0), 0)),
+  };
+}
+
 export const Route = createFileRoute("/admin/hosts")({ component: HostsPage });
 
 function HostsPage() {
@@ -20,22 +30,29 @@ function HostsPage() {
   const [selected, setSelected] = useState<Host | null>(null);
   const { data = [], isLoading } = useQuery({
     queryKey: ["admin", "hosts"],
-    queryFn: async () => { const { data, error } = await supabase.from("hosts").select("*").order("name"); if (error) throw error; return data; },
+    queryFn: async () => {
+      const [h, b] = await Promise.all([
+        supabase.from("hosts").select("*").order("name"),
+        supabase.from("bookings").select("host_id, total_price, balance_due, status").not("host_id", "is", null).neq("status", "cancelled"),
+      ]);
+      if (h.error || b.error) throw h.error ?? b.error;
+      return h.data.map(x => ({ ...x, ...hostTotals(b.data.filter(k => k.host_id === x.id)) }));
+    },
   });
   return (
     <div className="space-y-4">
       <div className="flex"><Button className="ml-auto" onClick={() => setCreating(true)}><Plus />Nuovo host</Button></div>
       <div className="border border-border">
         <Table>
-          <TableHeader><TableRow><TableHead>Nome</TableHead><TableHead>Appartamento</TableHead><TableHead>Telefono</TableHead><TableHead>Email</TableHead><TableHead>Totale dovuto</TableHead></TableRow></TableHeader>
+          <TableHeader><TableRow><TableHead>Nome</TableHead><TableHead>Appartamento</TableHead><TableHead>Telefono</TableHead><TableHead>Email</TableHead><TableHead>Soggiorni</TableHead><TableHead>Valore portato</TableHead><TableHead>Da incassare</TableHead></TableRow></TableHeader>
           <TableBody>
-            {isLoading && <TableRow><TableCell colSpan={5} className="text-muted-foreground">Caricamento…</TableCell></TableRow>}
-            {!isLoading && data.length === 0 && <TableRow><TableCell colSpan={5} className="text-muted-foreground">Nessun host.</TableCell></TableRow>}
+            {isLoading && <TableRow><TableCell colSpan={7} className="text-muted-foreground">Caricamento…</TableCell></TableRow>}
+            {!isLoading && data.length === 0 && <TableRow><TableCell colSpan={7} className="text-muted-foreground">Nessun host.</TableCell></TableRow>}
             {data.map(h => (
               <TableRow key={h.id} className="cursor-pointer" onClick={() => setSelected(h)}>
                 <TableCell>{h.name}</TableCell><TableCell>{h.apartment_number ?? "—"}</TableCell>
                 <TableCell>{h.phone ?? "—"}</TableCell><TableCell>{h.email ?? "—"}</TableCell>
-                <TableCell className="text-gold-light">{eur(h.total_owed)}</TableCell>
+                <TableCell>{h.stays}</TableCell><TableCell>{eur(h.brought)}</TableCell><TableCell className={h.open > 0 ? "text-warning" : "text-gold-light"}>{eur(h.open)}</TableCell>
               </TableRow>))}
           </TableBody>
         </Table>
@@ -86,13 +103,13 @@ function HostDetail({ host, onClose }: { host: Host | null; onClose: () => void 
     <Dialog open onOpenChange={o => { if (!o) onClose(); }}>
       <DialogContent className="sm:max-w-xl">
         <DialogHeader><DialogTitle>{host.name}{host.apartment_number ? ` · App. ${host.apartment_number}` : ""}</DialogTitle></DialogHeader>
-        <p className="text-sm">Totale dovuto: <span className="text-gold-light">{eur(host.total_owed)}</span></p>
+        <p className="text-sm">Valore portato: <span className="text-gold-light">{eur(hostTotals(data.filter(b => b.status !== "cancelled")).brought)}</span> · Da incassare: <span className="text-gold-light">{eur(hostTotals(data.filter(b => b.status !== "cancelled")).open)}</span></p>
         {host.notes && <p className="text-sm text-muted-foreground">{host.notes}</p>}
         {data.length === 0 ? <p className="text-sm text-muted-foreground">Nessuna prenotazione collegata.</p> :
           <ul className="divide-y divide-border text-sm">{data.map(b => (
             <li key={b.id} className="flex flex-wrap items-center gap-2 py-2">
               <span className="flex-1">{b.guest_name} · {fmtDate(b.check_in)} → {fmtDate(b.check_out)}</span>
-              <span>{eur(b.host_amount)}</span><StatusBadge status={b.status} />
+              <span>{eur(b.total_price)}{Number(b.balance_due) > 0 && <span className="text-warning"> · saldo {eur(b.balance_due)}</span>}</span><StatusBadge status={b.status} />
             </li>))}</ul>}
       </DialogContent>
     </Dialog>

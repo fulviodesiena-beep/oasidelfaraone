@@ -60,7 +60,7 @@ export function dashboardStats(bookings: Booking[], inquiries: Pick<Inquiry, "st
     checkInsToday: active.filter(b => b.check_in === today),
     checkOutsToday: active.filter(b => b.check_out === today),
     monthCount: thisMonth.length,
-    monthTotal: thisMonth.reduce((s, b) => s + Number(b.total_price), 0),
+    monthTotal: thisMonth.filter(b => b.status === "confirmed" || b.status === "host_collab").reduce((s, b) => s + Number(b.total_price), 0),
     toCollect: bookings.filter(b => b.status === "confirmed").reduce((s, b) => s + Number(b.balance_due ?? 0), 0),
     newInquiries: inquiries.filter(i => i.status === "new").length,
     upcoming: bookings
@@ -91,31 +91,52 @@ export function bookedDaysBetween(bookings: Pick<Booking, "status" | "check_in" 
   return days.size;
 }
 
+/** Dashboard occupancy. "Commercial" counts only nights that earn money (confirmed + host stays);
+ *  "total" also counts owner use. Revenue of the year follows the nights, like the finance panel. */
 export function occupancyStats(bookings: Booking[], today: string) {
   const y = Number(today.slice(0, 4)), m = Number(today.slice(5, 7));
   const monthStart = `${today.slice(0, 7)}-01`;
   const monthDays = new Date(Date.UTC(y, m, 0)).getUTCDate();
   const nextMonth = keyOf(Date.UTC(y, m, 1));
   const yearStart = `${y}-01-01`;
+  const nextYear = `${y + 1}-01-01`;
   const tomorrow = keyOf(toUtc(today) + dayMs);
   const yearElapsed = Math.round((toUtc(tomorrow) - toUtc(yearStart)) / dayMs);
+  const sold = bookings.filter(b => b.status === "confirmed" || b.status === "host_collab");
   const monthBooked = bookedDaysBetween(bookings, monthStart, nextMonth);
   const yearBooked = bookedDaysBetween(bookings, yearStart, tomorrow);
-  const inYear = bookings.filter(b => b.check_in.slice(0, 4) === String(y));
-  const confirmedYear = inYear.filter(b => b.status === "confirmed");
-  const revenueYear = inYear
-    .filter(b => b.status === "confirmed" || b.pipeline_stage === "post_stay" || b.pipeline_stage === "loyal")
-    .filter(b => b.status !== "cancelled")
-    .reduce((s, b) => s + Number(b.total_price), 0);
+  const monthSold = bookedDaysBetween(sold, monthStart, nextMonth);
+  const yearSold = bookedDaysBetween(sold, yearStart, tomorrow);
+  const nightsIn = (b: Booking, from: string, to: string) => Math.max(0, Math.round((Math.min(toUtc(b.check_out), toUtc(to)) - Math.max(toUtc(b.check_in), toUtc(from))) / dayMs));
+  const soldYear = sold.filter(b => nightsIn(b, yearStart, nextYear) > 0);
+  const revenueYear = Math.round(soldYear.reduce((s, b) => s + Number(b.total_price) * (b.total_nights > 0 ? nightsIn(b, yearStart, nextYear) / b.total_nights : 0), 0) * 100) / 100;
   const pct = (n: number, d: number) => (d ? Math.round((n / d) * 1000) / 10 : 0);
   return {
     monthBooked, monthDays, monthPct: pct(monthBooked, monthDays),
     yearBooked, yearElapsed, yearPct: pct(yearBooked, yearElapsed),
-    confirmedYearCount: confirmedYear.length,
-    avgNights: confirmedYear.length ? Math.round((confirmedYear.reduce((s, b) => s + b.total_nights, 0) / confirmedYear.length) * 10) / 10 : 0,
+    monthSold, monthSoldPct: pct(monthSold, monthDays), yearSold, yearSoldPct: pct(yearSold, yearElapsed),
+    confirmedYearCount: soldYear.length,
+    avgNights: soldYear.length ? Math.round((soldYear.reduce((s, b) => s + b.total_nights, 0) / soldYear.length) * 10) / 10 : 0,
     revenueYear,
   };
 }
 
 /** Bar colour band: green >70, yellow 40–70, red <40. */
 export const occupancyBand = (pct: number) => (pct > 70 ? "high" : pct >= 40 ? "mid" : "low");
+
+export type ConfirmIssue = { level: "block" | "warn"; text: string };
+/** Checks before a stay becomes confirmed (or host): blocks missing contacts and impossible amounts,
+ *  warns on a zero total (allowed only as an explicit complimentary stay). Owner use is exempt. */
+export function confirmationIssues(b: {
+  status: string; is_personal_use: boolean; total_price: number; deposit_paid: number;
+  guest_email?: string | null; guest_phone?: string | null;
+}): ConfirmIssue[] {
+  if (b.is_personal_use || (b.status !== "confirmed" && b.status !== "host_collab")) return [];
+  const out: ConfirmIssue[] = [];
+  const email = (b.guest_email ?? "").trim(), phone = (b.guest_phone ?? "").replace(/\D/g, "");
+  if (!email && phone.length < 6) out.push({ level: "block", text: "Serve almeno un contatto dell'ospite (email o telefono): senza, le comunicazioni del soggiorno non partono." });
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) out.push({ level: "block", text: "L'email dell'ospite non è valida." });
+  if (Number(b.deposit_paid) > Number(b.total_price) && Number(b.total_price) > 0) out.push({ level: "block", text: "La caparra supera il totale." });
+  if (!(Number(b.total_price) > 0)) out.push({ level: "warn", text: "Totale 0 €: confermi solo se è un soggiorno omaggio." });
+  return out;
+}

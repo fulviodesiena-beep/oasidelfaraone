@@ -51,7 +51,7 @@ function Dashboard() {
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <Stat title="Check-in oggi" value={data.checkInsToday.length} list={data.checkInsToday} />
         <Stat title="Check-out oggi" value={data.checkOutsToday.length} list={data.checkOutsToday} />
-        <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Prenotazioni questo mese</CardTitle></CardHeader>
+        <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Arrivi questo mese</CardTitle></CardHeader>
           <CardContent><p className="font-display text-4xl">{data.monthCount}</p><p className="text-sm text-gold-light">{eur(data.monthTotal)}</p></CardContent></Card>
         <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Da incassare</CardTitle></CardHeader>
           <CardContent><p className="font-display text-3xl text-gold-light">{eur(data.toCollect)}</p><p className="text-xs text-muted-foreground">Saldo prenotazioni confermate</p></CardContent></Card>
@@ -60,18 +60,18 @@ function Dashboard() {
             <Link to="/admin/inquiries" className="text-sm text-gold-light underline-offset-4 hover:underline">Apri richieste</Link></CardContent></Card>
         <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Andamento anno</CardTitle></CardHeader>
           <CardContent className="space-y-1 text-sm">
-            <p className="flex justify-between"><span className="text-muted-foreground">Prenotazioni confermate</span><span className="font-display text-xl">{data.occ.confirmedYearCount}</span></p>
+            <p className="flex justify-between"><span className="text-muted-foreground">Soggiorni venduti (confermati + host)</span><span className="font-display text-xl">{data.occ.confirmedYearCount}</span></p>
             <p className="flex justify-between"><span className="text-muted-foreground">Durata media</span><span className="font-display text-xl">{data.occ.avgNights} notti</span></p>
-            <p className="flex justify-between"><span className="text-muted-foreground">Incasso anno</span><span className="font-display text-xl text-gold-light">{eur(data.occ.revenueYear)}</span></p>
+            <p className="flex justify-between"><span className="text-muted-foreground">Fatturato anno (per notte)</span><span className="font-display text-xl text-gold-light">{eur(data.occ.revenueYear)}</span></p>
           </CardContent></Card>
       </div>
 
       {/* Riga 2 — card di occupazione, calcolate dai bookings già caricati */}
       <div className="grid gap-4 sm:grid-cols-3">
-        <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Giorni occupati — {monthTitle}</CardTitle></CardHeader>
-          <CardContent><p className="font-display text-4xl">{data.occ.monthBooked} <span className="text-2xl text-muted-foreground">/ {data.occ.monthDays} giorni</span></p></CardContent></Card>
-        <Occupancy title="Occupazione mese" pct={data.occ.monthPct} note={`${data.occ.monthBooked} di ${data.occ.monthDays} giorni`} />
-        <Occupancy title="Occupazione anno" pct={data.occ.yearPct} note={`${data.occ.yearBooked} di ${data.occ.yearElapsed} giorni dal 1° gennaio`} />
+        <Card><CardHeader><CardTitle className="text-sm font-normal text-muted-foreground">Notti vendute — {monthTitle}</CardTitle></CardHeader>
+          <CardContent><p className="font-display text-4xl">{data.occ.monthSold} <span className="text-2xl text-muted-foreground">/ {data.occ.monthDays}</span></p><p className="text-xs text-muted-foreground">{data.occ.monthBooked} notti occupate in totale, con uso proprietario</p></CardContent></Card>
+        <Occupancy title="Occupazione commerciale mese" pct={data.occ.monthSoldPct} note={`${data.occ.monthSold} notti vendute di ${data.occ.monthDays} · totale ${data.occ.monthPct.toLocaleString("it-IT")}% con uso proprietario`} />
+        <Occupancy title="Occupazione commerciale anno" pct={data.occ.yearSoldPct} note={`${data.occ.yearSold} notti vendute di ${data.occ.yearElapsed} dal 1° gennaio · totale ${data.occ.yearPct.toLocaleString("it-IT")}% con uso proprietario`} />
       </div>
 
       <FinancePanel />

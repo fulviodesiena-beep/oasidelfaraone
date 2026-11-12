@@ -18,7 +18,7 @@ const STATUS: Record<string, string> = { draft: "Bozza", approved: "Approvata", 
 function NewsletterPage() {
   const qc = useQueryClient();
   const { data: issues = [] } = useQuery({ queryKey: ["admin", "newsletter"], queryFn: async () => { const { data, error } = await supabase.from("newsletter_issues").select("*").order("number", { ascending: false }); if (error) throw error; return data; } });
-  const { data: subs = 0 } = useQuery({ queryKey: ["admin", "nl-subs"], queryFn: async () => (await supabase.from("contacts").select("id", { count: "exact", head: true }).eq("newsletter_status", "confirmed").is("unsubscribed_at", null)).count ?? 0 });
+  const subsQ = useQuery({ queryKey: ["admin", "nl-subs"], queryFn: async () => { const { count, error } = await supabase.from("contacts").select("id", { count: "exact" }).eq("newsletter_status", "confirmed").is("unsubscribed_at", null).range(0, 0); if (error) throw error; return count ?? 0; } });
   const [sel, setSel] = useState<string | null>(null);
   const issue = issues.find(i => i.id === sel) ?? issues[0];
   const add = useMutation({ mutationFn: async () => { const n = (issues[0]?.number ?? 0) + 1; const { error } = await supabase.from("newsletter_issues").insert({ number: n, blocks: { firma: "Fulvio — Oasi del Faraone" } }); if (error) throw error; }, onSuccess: () => qc.invalidateQueries({ queryKey: ["admin", "newsletter"] }) });
@@ -27,7 +27,7 @@ function NewsletterPage() {
       <div className="flex flex-wrap items-center gap-2">
         {issues.map(i => <Button key={i.id} size="sm" variant={issue?.id === i.id ? "default" : "outline"} onClick={() => setSel(i.id)}>N.{i.number} · {STATUS[i.status]}</Button>)}
         <Button size="sm" variant="ghost" onClick={() => add.mutate()}>+ Nuova uscita</Button>
-        <span className="ml-auto text-sm text-muted-foreground">Iscritti confermati: {subs}</span>
+        <span className="ml-auto text-sm text-muted-foreground">Iscritti confermati: {subsQ.isError ? <span className="text-destructive">non disponibile</span> : subsQ.isLoading ? "…" : subsQ.data}</span>
       </div>
       {issue && <Editor key={issue.id} issue={issue} />}
     </div>

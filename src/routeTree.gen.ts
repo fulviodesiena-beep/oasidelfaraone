@@ -44,6 +44,7 @@ import { Route as EnSharmGuideRouteImport } from './routes/en_.sharm-guide'
 import { Route as EnUnsubscribeRouteImport } from './routes/en_.unsubscribe'
 import { Route as NewsletterConfermaRouteImport } from './routes/newsletter.conferma'
 import { Route as ApiPublicBrevoWebhookRouteImport } from './routes/api/public/brevo-webhook'
+import { Route as ApiPublicDTokenRouteImport } from './routes/api/public/d.$token'
 import { Route as ApiPublicIcalTokenRouteImport } from './routes/api/public/ical.$token'
 import { Route as ApiPublicJobsAutomationsRouteImport } from './routes/api/public/jobs/automations'
 import { Route as ApiPublicJobsIcalSyncRouteImport } from './routes/api/public/jobs/ical-sync'
@@ -227,6 +228,11 @@ const ApiPublicBrevoWebhookRoute = ApiPublicBrevoWebhookRouteImport.update({
   path: '/api/public/brevo-webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicDTokenRoute = ApiPublicDTokenRouteImport.update({
+  id: '/api/public/d/$token',
+  path: '/api/public/d/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicIcalTokenRoute = ApiPublicIcalTokenRouteImport.update({
   id: '/api/public/ical/$token',
   path: '/api/public/ical/$token',
@@ -301,6 +307,7 @@ export interface FileRoutesByFullPath {
   '/newsletter/conferma': typeof NewsletterConfermaRoute
   '/admin/': typeof AdminIndexRoute
   '/api/public/brevo-webhook': typeof ApiPublicBrevoWebhookRoute
+  '/api/public/d/$token': typeof ApiPublicDTokenRoute
   '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
   '/api/public/jobs/automations': typeof ApiPublicJobsAutomationsRoute
   '/api/public/jobs/ical-sync': typeof ApiPublicJobsIcalSyncRoute
@@ -344,6 +351,7 @@ export interface FileRoutesByTo {
   '/newsletter/conferma': typeof NewsletterConfermaRoute
   '/admin': typeof AdminIndexRoute
   '/api/public/brevo-webhook': typeof ApiPublicBrevoWebhookRoute
+  '/api/public/d/$token': typeof ApiPublicDTokenRoute
   '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
   '/api/public/jobs/automations': typeof ApiPublicJobsAutomationsRoute
   '/api/public/jobs/ical-sync': typeof ApiPublicJobsIcalSyncRoute
@@ -389,6 +397,7 @@ export interface FileRoutesById {
   '/newsletter/conferma': typeof NewsletterConfermaRoute
   '/admin/': typeof AdminIndexRoute
   '/api/public/brevo-webhook': typeof ApiPublicBrevoWebhookRoute
+  '/api/public/d/$token': typeof ApiPublicDTokenRoute
   '/api/public/ical/$token': typeof ApiPublicIcalTokenRoute
   '/api/public/jobs/automations': typeof ApiPublicJobsAutomationsRoute
   '/api/public/jobs/ical-sync': typeof ApiPublicJobsIcalSyncRoute
@@ -435,6 +444,7 @@ export interface FileRouteTypes {
     | '/newsletter/conferma'
     | '/admin/'
     | '/api/public/brevo-webhook'
+    | '/api/public/d/$token'
     | '/api/public/ical/$token'
     | '/api/public/jobs/automations'
     | '/api/public/jobs/ical-sync'
@@ -478,6 +488,7 @@ export interface FileRouteTypes {
     | '/newsletter/conferma'
     | '/admin'
     | '/api/public/brevo-webhook'
+    | '/api/public/d/$token'
     | '/api/public/ical/$token'
     | '/api/public/jobs/automations'
     | '/api/public/jobs/ical-sync'
@@ -522,6 +533,7 @@ export interface FileRouteTypes {
     | '/newsletter/conferma'
     | '/admin/'
     | '/api/public/brevo-webhook'
+    | '/api/public/d/$token'
     | '/api/public/ical/$token'
     | '/api/public/jobs/automations'
     | '/api/public/jobs/ical-sync'
@@ -555,6 +567,7 @@ export interface RootRouteChildren {
   EnUnsubscribeRoute: typeof EnUnsubscribeRoute
   NewsletterConfermaRoute: typeof NewsletterConfermaRoute
   ApiPublicBrevoWebhookRoute: typeof ApiPublicBrevoWebhookRoute
+  ApiPublicDTokenRoute: typeof ApiPublicDTokenRoute
   ApiPublicIcalTokenRoute: typeof ApiPublicIcalTokenRoute
   ApiPublicJobsAutomationsRoute: typeof ApiPublicJobsAutomationsRoute
   ApiPublicJobsIcalSyncRoute: typeof ApiPublicJobsIcalSyncRoute
@@ -811,6 +824,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicBrevoWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/d/$token': {
+      id: '/api/public/d/$token'
+      path: '/api/public/d/$token'
+      fullPath: '/api/public/d/$token'
+      preLoaderRoute: typeof ApiPublicDTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/ical/$token': {
       id: '/api/public/ical/$token'
       path: '/api/public/ical/$token'
@@ -919,6 +939,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnUnsubscribeRoute: EnUnsubscribeRoute,
   NewsletterConfermaRoute: NewsletterConfermaRoute,
   ApiPublicBrevoWebhookRoute: ApiPublicBrevoWebhookRoute,
+  ApiPublicDTokenRoute: ApiPublicDTokenRoute,
   ApiPublicIcalTokenRoute: ApiPublicIcalTokenRoute,
   ApiPublicJobsAutomationsRoute: ApiPublicJobsAutomationsRoute,
   ApiPublicJobsIcalSyncRoute: ApiPublicJobsIcalSyncRoute,

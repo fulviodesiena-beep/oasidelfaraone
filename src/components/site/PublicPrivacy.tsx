@@ -22,6 +22,8 @@ function Privacy() {
     <p>{t("I consensi sono facoltativi e separati: puoi revocarli in qualsiasi momento scrivendo all’email sopra, senza conseguenze sulla prenotazione.")}</p>
     <h2 className="font-display text-2xl">{t("Newsletter ed email")}</h2>
     <p>{t("Lettere dall’Oasi si riceve solo dopo aver confermato l’iscrizione dal link che ti inviamo (doppio consenso); registriamo data, fonte e indirizzo IP della conferma. Agli ospiti che hanno già soggiornato possiamo inviare, per servizi analoghi, un messaggio un anno dopo il soggiorno, con possibilità di opporsi subito. Le email promozionali sono inviate tramite Brevo (Sendinblue SAS, Francia), che tratta i dati per nostro conto; le email sul soggiorno tramite il servizio email del sito. Ogni email promozionale contiene un link per disiscriversi con un clic.")}</p>
+    <h2 className="font-display text-2xl">{t("Conservazione e sicurezza")}</h2>
+    <p>{t("Documenti di identità, numeri di documento, date di nascita e delega sono conservati in un archivio privato accessibile solo al titolare. Agli ospiti li inviamo solo tramite link personali che scadono dopo poche ore o pochi giorni dal soggiorno, mai come allegati aperti. Conserviamo questi dati per il tempo necessario a gestire il soggiorno e gli adempimenti collegati; puoi chiederne la cancellazione in qualsiasi momento scrivendo all’email sopra.")}</p>
     <h2 className="font-display text-2xl">{t("Cookie")}</h2>
     <p>{t("Il sito usa solo memorizzazione tecnica necessaria. Il Meta Pixel (Meta Platforms) viene caricato soltanto se accetti dal banner; se rifiuti non viene caricato nessuno script di misurazione. Per cambiare scelta cancella i dati del sito dal browser.")}</p>
     <h2 className="font-display text-2xl">{t("Diritti")}</h2>

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { syncBookingIfStale } from "@/lib/ical.functions";
 import { BookingClosureGate } from "@/components/admin/BookingClosureGate";
-import { createFileRoute, Link, Outlet, redirect, useNavigate, useRouterState } from "@tanstack/react-router";
+import { createFileRoute, type ErrorComponentProps, Link, Outlet, redirect, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CalendarDays, Contact, FileText, Handshake, Inbox, KeyRound, LayoutDashboard, LogOut, Receipt, Settings, Users, MessageCircle, Mail, Newspaper } from "lucide-react";
 import { toast } from "sonner";
@@ -17,14 +17,30 @@ import {
   SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger,
 } from "@/components/ui/sidebar";
 
+/** Admin role verified once per signed-in user; later navigations reuse it instead of hitting the network again.
+ *  This is only a UX guard: every query is still enforced by RLS (has_role admin) on the database. */
+let verifiedAdmin: { id: string; email: string } | null = null;
+let authListener = false;
+
 export const Route = createFileRoute("/admin")({
   ssr: false,
+  // Shown while the session is checked (and as the server fallback of this client-only route): no blank screen.
+  pendingComponent: AdminPending,
+  pendingMs: 150,
+  errorComponent: AdminError,
   beforeLoad: async () => {
-    const { data } = await supabase.auth.getUser();
-    if (!data.user) throw redirect({ to: "/admin/login" });
-    const { data: role } = await supabase.from("user_roles").select("role").eq("user_id", data.user.id).eq("role", "admin").maybeSingle();
+    if (!authListener) {
+      authListener = true;
+      supabase.auth.onAuthStateChange((_e, session) => { if (session?.user.id !== verifiedAdmin?.id) verifiedAdmin = null; });
+    }
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) throw redirect({ to: "/admin/login" });
+    if (verifiedAdmin?.id === session.user.id) return { adminEmail: verifiedAdmin.email };
+    const { data: role, error } = await supabase.from("user_roles").select("role").eq("user_id", session.user.id).eq("role", "admin").maybeSingle();
+    if (error) throw new Error(`Verifica accesso non riuscita: ${error.message}`);
     if (!role) { await supabase.auth.signOut(); throw redirect({ to: "/admin/login" }); }
-    return { adminEmail: data.user.email ?? "" };
+    verifiedAdmin = { id: session.user.id, email: session.user.email ?? "" };
+    return { adminEmail: verifiedAdmin.email };
   },
   head: () => ({
     meta: [
@@ -56,14 +72,17 @@ const NAV = [
 ] as const;
 
 function AdminLayout() {
-  const path = useRouterState({ select: s => s.location.pathname.replace(/\/$/, "") || "/" });
+  // Resolved location: the title changes together with the page content, not before it.
+  const path = useRouterState({ select: s => (s.resolvedLocation ?? s.location).pathname.replace(/\/$/, "") || "/" });
+  const failed = useFailedQueries();
   const navigate = useNavigate();
   const qc = useQueryClient();
   const { adminEmail } = Route.useRouteContext();
   const { data: newCount = 0 } = useQuery({
     queryKey: ["admin", "inquiries", "new-count"],
     queryFn: async () => {
-      const { count } = await supabase.from("inquiries").select("id", { count: "exact", head: true }).eq("status", "new");
+      const { count, error } = await supabase.from("inquiries").select("id", { count: "exact" }).eq("status", "new").range(0, 0);
+      if (error) throw error;
       return count ?? 0;
     },
   });
@@ -110,6 +129,12 @@ function AdminLayout() {
             <PasswordDialog />
             <Button variant="outline" size="sm" onClick={logout}><LogOut />Esci</Button>
           </header>
+          {failed > 0 && (
+            <div role="alert" className="mx-4 mt-4 flex flex-wrap items-center gap-3 rounded-md border border-destructive/60 bg-destructive/15 px-4 py-3 text-sm text-destructive sm:mx-6">
+              <span>Alcuni dati non sono stati caricati: i numeri a zero in questa pagina potrebbero non essere reali.</span>
+              <Button size="sm" variant="outline" className="ml-auto" onClick={() => qc.refetchQueries({ predicate: q => q.state.status === "error" })}>Riprova</Button>
+            </div>
+          )}
           <main className="flex-1 p-4 sm:p-6"><Outlet /></main>
           <BookingClosureGate />
         </div>
@@ -161,5 +186,51 @@ function PasswordDialog() {
         </form>
       </DialogContent>
     </Dialog>
+  );
+}
+
+/** Counts failed admin queries and toasts each failure once, so an error never looks like an empty result. */
+function useFailedQueries() {
+  const qc = useQueryClient();
+  const [failed, setFailed] = useState(0);
+  useEffect(() => {
+    const cache = qc.getQueryCache();
+    const count = () => setFailed(cache.findAll({ predicate: q => q.state.status === "error" }).length);
+    count();
+    return cache.subscribe(ev => {
+      if (ev.type === "updated" && ev.action.type === "error") {
+        const msg = ev.action.error instanceof Error ? ev.action.error.message : String(ev.action.error ?? "errore");
+        toast.error("Dati non caricati", { id: ev.query.queryHash, description: msg });
+      }
+      if (ev.type === "updated" || ev.type === "removed") count();
+    });
+  }, [qc]);
+  return failed;
+}
+
+function AdminPending() {
+  return (
+    <div className="admin-shell flex min-h-screen w-full items-center justify-center bg-background font-sans" role="status" aria-live="polite">
+      <div className="flex flex-col items-center gap-4 text-muted-foreground">
+        <span className="h-10 w-10 animate-spin rounded-full border-2 border-gold/30 border-t-gold-light" aria-hidden="true" />
+        <p className="font-display text-xl text-gold-light">Oasi del Faraone</p>
+        <p className="text-sm">Caricamento del gestionale…</p>
+      </div>
+    </div>
+  );
+}
+
+function AdminError({ error, reset }: ErrorComponentProps) {
+  return (
+    <div className="admin-shell flex min-h-screen w-full items-center justify-center bg-background p-6 font-sans">
+      <div role="alert" className="max-w-md space-y-4 rounded-md border border-destructive/60 bg-destructive/10 p-6 text-sm">
+        <p className="font-display text-2xl">Il gestionale non si è caricato</p>
+        <p className="text-muted-foreground">{error instanceof Error ? error.message : String(error)}</p>
+        <div className="flex gap-2">
+          <Button onClick={() => { verifiedAdmin = null; reset(); }}>Riprova</Button>
+          <Button variant="outline" onClick={() => window.location.assign("/admin/login")}>Vai al login</Button>
+        </div>
+      </div>
+    </div>
   );
 }

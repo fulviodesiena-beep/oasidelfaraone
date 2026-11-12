@@ -18,7 +18,8 @@ function TodayPage() {
       const { data, error } = await supabase.from("email_log").select("id, created_at, automation, step, recipient, body, language, booking_id, contact_id").eq("channel", "whatsapp").eq("status", "queued").order("created_at");
       if (error) throw error;
       const ids = [...new Set(data.map(d => d.booking_id).filter(Boolean))] as string[];
-      const { data: b } = ids.length ? await supabase.from("bookings").select("id, guest_name, check_in").in("id", ids) : { data: [] };
+      const { data: b, error: be } = ids.length ? await supabase.from("bookings").select("id, guest_name, check_in").in("id", ids) : { data: [], error: null };
+      if (be) throw be;
       return data.map(d => ({ ...d, booking: b?.find(x => x.id === d.booking_id) }));
     },
   });

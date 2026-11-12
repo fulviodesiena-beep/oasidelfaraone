@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { StatusBadge } from "@/components/admin/StatusBadge";
-import { BookingFormDialog, CHANNELS, emptyDraft, Field, SplitPreview } from "@/components/admin/BookingFormDialog";
+import { BookingFormDialog, CHANNELS, emptyDraft, Field, SplitPreview, ConfirmIssues } from "@/components/admin/BookingFormDialog";
 import { BookingDocuments } from "@/components/admin/BookingDocuments";
 import { BookingCommunications } from "@/components/admin/BookingCommunications";
 import { BookingTravelers } from "@/components/admin/BookingTravelers";
@@ -21,7 +21,7 @@ import { checkAvailabilityLive } from "@/lib/ical.functions";
 import { defaultOptionExpiry, NEEDS_LIVE_CHECK } from "@/components/admin/BookingFormDialog";
 import { previewSplit, suggestedCommission } from "@/lib/finance";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { balanceDue, BOOKING_STATUS_LABEL, PIPELINE_LABEL, eur, extrasList, fmtDate, monthOf, SOURCE_LABEL, type Booking } from "@/lib/admin";
+import { balanceDue, BOOKING_STATUS_LABEL, confirmationIssues, PIPELINE_LABEL, eur, extrasList, fmtDate, monthOf, SOURCE_LABEL, type Booking } from "@/lib/admin";
 
 export const Route = createFileRoute("/admin/bookings")({ component: BookingsPage });
 
@@ -79,6 +79,7 @@ function BookingsPage() {
 function BookingDetail({ booking, onClose }: { booking: Booking | null; onClose: () => void }) {
   const qc = useQueryClient();
   const [status, setStatus] = useState<Booking["status"]>("pending");
+  const [ackZero, setAckZero] = useState(false);
   const [notes, setNotes] = useState("");
   const [deposit, setDeposit] = useState(0);
   const [stage, setStage] = useState<Booking["pipeline_stage"]>("lead");
@@ -117,6 +118,9 @@ function BookingDetail({ booking, onClose }: { booking: Booking | null; onClose:
     onSuccess: () => { toast.success("Pagamento verificato"); qc.invalidateQueries({ queryKey: ["admin"] }); onClose(); },
     onError: (e: Error) => toast.error(e.message),
   });
+  // Checks apply when a stay becomes confirmed/host here (stays already confirmed are not re-blocked).
+  const confirmIssues = booking && status !== booking.status ? confirmationIssues({ ...booking, status, deposit_paid: deposit }) : [];
+  const confirmBlocked = confirmIssues.some(i => i.level === "block") || (confirmIssues.some(i => i.level === "warn") && !ackZero);
   if (!booking) return null;
   const total = Number(booking.total_price);
   const split = previewSplit(total, commission, booking.total_nights, Number(booking.owner_cap_per_night ?? settings?.owner_cap_per_night ?? 80), Number(booking.fds_min_per_night ?? settings?.fds_min_per_night ?? 20), booking.is_personal_use);
@@ -133,7 +137,7 @@ function BookingDetail({ booking, onClose }: { booking: Booking | null; onClose:
           <Dt k="Telefono" v={booking.guest_phone ?? "—"} />
           <Dt k="Prezzo a notte" v={eur(booking.price_per_night)} />
           <Dt k="Totale" v={eur(total)} />
-          {booking.source === "host" && <Dt k="Dovuto dall'host" v={eur(booking.host_amount)} />}
+          {booking.source === "host" && <Dt k="Da incassare dall'host" v={eur(booking.balance_due)} />}
           <Dt k="Extra" v={extrasList(booking.extras).join(", ") || "—"} />
           <Dt k="Canale" v={booking.channel === "diretto" ? "Diretto" : booking.channel} />
           {Number(booking.channel_commission) > 0 && <Dt k="Commissione OTA" v={eur(booking.channel_commission)} />}
@@ -148,6 +152,7 @@ function BookingDetail({ booking, onClose }: { booking: Booking | null; onClose:
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Stato"><Select value={status} onValueChange={v => setStatus(v as Booking["status"])}><SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>{Object.entries(BOOKING_STATUS_LABEL).map(([k, l]) => <SelectItem key={k} value={k}>{l}</SelectItem>)}</SelectContent></Select></Field>
+          <ConfirmIssues issues={confirmIssues} ack={ackZero} onAck={setAckZero} />
           {status === "option" && <Field label="Opzione valida fino a"><Input type="datetime-local" value={extra.option_expires_at || defaultOptionExpiry()} onChange={e => setExtra({ ...extra, option_expires_at: e.target.value })} /></Field>}
           <Field label="Fase pipeline"><Select value={stage} onValueChange={v => setStage(v as Booking["pipeline_stage"])}><SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>{Object.entries(PIPELINE_LABEL).map(([k, l]) => <SelectItem key={k} value={k}>{l}</SelectItem>)}</SelectContent></Select></Field>
@@ -175,7 +180,7 @@ function BookingDetail({ booking, onClose }: { booking: Booking | null; onClose:
           <TabsContent value="docs"><BookingDocuments booking={booking} /></TabsContent>
           <TabsContent value="comms"><BookingCommunications booking={booking} /></TabsContent>
         </Tabs>
-        <DialogFooter><Button variant="outline" onClick={onClose}>Chiudi</Button><Button onClick={() => save.mutate()} disabled={save.isPending}>Salva modifiche</Button></DialogFooter>
+        <DialogFooter><Button variant="outline" onClick={onClose}>Chiudi</Button><Button onClick={() => save.mutate()} disabled={save.isPending || confirmBlocked}>Salva modifiche</Button></DialogFooter>
       </DialogContent>
     </Dialog>
   );
