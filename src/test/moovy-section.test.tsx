@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 
 import moovyLogo from "@/assets/moovy-logo.png.asset.json";
 import moovyBoy from "@/assets/moovy-boy.jpg.asset.json";
-import { Route } from "@/routes/index";
+import { PublicInvest } from "@/components/site/PublicInvest";
 
 // jsdom has no IntersectionObserver; the page's reveal effect needs one.
 class FakeIntersectionObserver {
@@ -16,11 +16,9 @@ globalThis.IntersectionObserver = FakeIntersectionObserver as unknown as typeof 
 
 describe("MOOVY section", () => {
   it("shows the real MOOVY logo and the real resort photo", () => {
-    const Index = Route.options.component as () => React.ReactElement;
-
     render(
       <QueryClientProvider client={new QueryClient()}>
-        <Index />
+        <PublicInvest language="it" />
       </QueryClientProvider>,
     );
 

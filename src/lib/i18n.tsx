@@ -18,10 +18,16 @@ export function detectLanguage(values: readonly string[]): Language {
   for (const value of values) { const code = value.toLowerCase().split("-")[0]; if (isLanguage(code)) return code; }
   return "it";
 }
-export type PublicPage = "home" | "privacy" | "ritual";
+export type PublicPage = "home" | "privacy" | "ritual" | "guide" | "invest";
+/** Localized slugs of the secondary pages (Italian has no language prefix). */
+const PAGE_SLUGS: Record<"guide" | "invest", Record<Language, string>> = {
+  guide: { it: "guida-sharm", en: "sharm-guide", de: "sharm-reisefuehrer" },
+  invest: { it: "investire", en: "invest", de: "investieren" },
+};
 export function publicPath(language: Language, page: PublicPage = "home") {
   const prefix = language === "it" ? "" : `/${language}`;
   if (page === "ritual") return language === "it" ? "/rito" : `${prefix}/ritual`;
+  if (page === "guide" || page === "invest") return `${prefix}/${PAGE_SLUGS[page][language]}`;
   return page === "home" ? prefix || "/" : `${prefix}/privacy`;
 }
 /** Italian entry URLs where a first visit may follow the browser language (home and the in-room QR page). */

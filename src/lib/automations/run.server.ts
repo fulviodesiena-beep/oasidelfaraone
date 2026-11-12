@@ -12,6 +12,8 @@ import { MINA_WHATSAPP, ELISIR_ROOM_ID } from "@/lib/site-data";
 type DB = SupabaseClient<Database>;
 export const SITE = "https://oasidelfaraone.it";
 export const OWNER_INBOX = "prenotazionisharm@gmail.com";
+/** Address guests see and reply to: the domain alias, forwarded to OWNER_INBOX by Register.it. */
+export const GUEST_REPLY_TO = "prenotazioni@oasidelfaraone.it";
 const ATTACHMENTS = ["scheda-gialla-it.pdf", "scheda-gialla-ar.pdf", "modulo-rosa-it.pdf", "modulo-rosa-ar.pdf"];
 const THIRTY_DAYS = 30 * 86400;
 const langPath = (l: Lang) => (l === "it" ? "" : `/${l}`);
@@ -115,7 +117,7 @@ export async function runAutomations(db: DB, now = new Date()): Promise<RunSumma
     if (item.channel === "whatsapp") { await patch({ status: "queued" }); sum.tasks++; continue; }
     try {
       if (item.channel === "email") {
-        const res = await sendTemplateEmail("oasi-message", item.to, { templateData: { ...r.props }, idempotencyKey: item.dedupKey, replyTo: OWNER_INBOX });
+        const res = await sendTemplateEmail("oasi-message", item.to, { templateData: { ...r.props }, idempotencyKey: item.dedupKey, replyTo: GUEST_REPLY_TO });
         if (res.sent) { await patch({ status: "sent", sent_at: new Date().toISOString() }); sum.sent++; }
         else { await patch({ status: "skipped", reason: "destinatario disiscritto o bloccato" }); sum.skipped++; }
       } else {

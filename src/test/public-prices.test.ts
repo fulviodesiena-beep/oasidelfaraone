@@ -19,3 +19,13 @@ describe("prezzi solo nel preventivo", () => {
     expect(q.cleaningFee).toBe(40);
   });
 });
+
+describe("prezzo 'da' in evidenza", () => {
+  it("mostra la tariffa minima stagionale con le avvertenze su stagione e all inclusive", async () => {
+    const { FROM_PRICE, SEASON_RATES } = await import("@/lib/pricing");
+    expect(FROM_PRICE).toBe(Math.min(...Object.values(SEASON_RATES)));
+    const home = read("src/components/site/PublicHome.tsx");
+    expect(home).toContain("Da {price} a notte · appartamento intero fino a 4 ospiti");
+    expect(home).toContain("Tariffa in base alla stagione. Solo alloggio: pasti e formula all inclusive del resort non compresi.");
+  });
+});

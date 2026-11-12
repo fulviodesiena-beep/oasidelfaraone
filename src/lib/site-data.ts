@@ -50,7 +50,7 @@ import heroCoastAerial from "@/assets/hero-1.jpg.asset.json";
 import heroOrientalSuite from "@/assets/hero-3.jpg.asset.json";
 export const OWNER_WHATSAPP = "393347328158";
 export const MINA_WHATSAPP = "393481804764";
-export const OWNER_EMAIL = "prenotazionisharm@gmail.com";
+export const OWNER_EMAIL = "prenotazioni@oasidelfaraone.it";
 export const INSTAGRAM_URL = "https://www.instagram.com/oasidelfaraone";
 export const wa = (num: string, text: string) => `https://wa.me/${num}?text=${encodeURIComponent(text)}`;
 export type Extra = { id: string; name: string; desc: string; image: string; photo: string; focus?: string };
