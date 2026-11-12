@@ -1,5 +1,5 @@
 {
-  "Oasi del Faraone · Appartamenti al Domina Coral Bay, Sharm el-Sheikh": "Oasi del Faraone · Apartments im Domina Coral Bay, Sharm el-Sheikh",
+  "Oasi del Faraone · Appartamento al Domina Coral Bay, Sharm el-Sheikh": "Oasi del Faraone · Apartment im Domina Coral Bay, Sharm el-Sheikh",
   "Appartamento privato fino a 4 ospiti al Domina Coral Bay, Sharm el-Sheikh. Balcone vista piscina, spiagge e piscine del resort incluse. Preventivo in 2 minuti.": "Privates Apartment für bis zu 4 Gäste im Domina Coral Bay, Sharm el-Sheikh. Balkon mit Poolblick, Resortstrände und Pools inklusive. Jetzt anfragen.",
   "Cosa è incluso nel soggiorno?": "Was ist im Aufenthalt enthalten?",
   "Spiagge, piscine, padel, beach volley e animazione del resort Domina Coral Bay sono inclusi, senza costi aggiuntivi. Ristoranti e bar sono à la carte; spa e casinò sono a pagamento.": "Strände, Pools, Padel, Beachvolleyball und das Unterhaltungsprogramm im Domina Coral Bay sind ohne Aufpreis enthalten. Restaurants und Bars sind à la carte; Spa und Casino sind kostenpflichtig.",
@@ -128,7 +128,7 @@
   "Una buona tavola fa parte del viaggio. Questi sono gli indirizzi che condividiamo con chi viene a trovarci.": "Gutes Essen gehört zur Reise. Diese Adressen empfehlen wir allen, die uns besuchen.",
   "Tipo di cucina": "Küche",
   "Per orari, menu e prenotazioni aggiornati, chiedi a Mina.": "Aktuelle Öffnungszeiten, Speisekarten und Reservierungen erfahren Sie bei Mina.",
-  "08 / Ci vediamo sul Mar Rosso": "08 / Wir sehen uns am Roten Meer",
+  "07 / Ci vediamo sul Mar Rosso": "07 / Wir sehen uns am Roten Meer",
   "Prenota il tuo soggiorno.": "Buchen Sie Ihren Aufenthalt.",
   "Il tuo prossimo ricordo.": "Ihre nächste schöne Erinnerung.",
   "Prima di partire": "Vor der Reise",
@@ -199,7 +199,6 @@
   "Le date scelte includono giorni già occupati. Scegli un altro periodo.": "Ihre Reisedaten enthalten bereits belegte Tage. Bitte wählen Sie einen anderen Zeitraum.",
   "Disponibilità da confermare con Fulvio. Il prezzo è riferito all’intero appartamento.": "Fulvio bestätigt die Verfügbarkeit persönlich. Der Preis gilt für das gesamte Apartment.",
   "1 · Date e ospiti · fino a 4 persone": "1 · Reisedaten und Gäste · bis zu 4 Personen",
-  "Il preventivo è scaduto. Seleziona di nuovo le date.": "Ihr Angebot ist abgelaufen. Bitte wählen Sie Ihre Reisedaten erneut.",
   "Arrivo": "Anreise",
   "Partenza": "Abreise",
   "Adulti": "Erwachsene",
@@ -223,12 +222,11 @@
   "Soggiorno minimo consigliato:": "Empfohlener Mindestaufenthalt:",
   " nel periodo di Picco": " in der Spitzenzeit",
   ". Puoi comunque inviare la richiesta.": ". Sie können trotzdem eine Anfrage senden.",
-  "Preventivo riservato per:": "Angebot reserviert für:",
   "Nome completo": "Vollständiger Name",
   "Nome e Cognome": "Vor- und Nachname",
   "Extra (non inclusi nel totale)": "Extras (nicht im Gesamtbetrag enthalten)",
   "Date speciali da festeggiare a Sharm": "Besondere Anlässe zum Feiern in Sharm",
-  "Date speciali da festeggiare a Sharm (compleanni, anniversari) — facoltativo": "Besondere Anlässe in Sharm (Geburtstage, Jahrestage) – optional",
+  "Compleanni o anniversari durante il soggiorno? (facoltativo)": "Geburtstage oder Jahrestage während des Aufenthalts? (optional)",
   "Note per Fulvio": "Anmerkungen für Fulvio",
   "Aggiungi una nota": "Anmerkung hinzufügen",
   "Ho letto l’": "Ich habe die",
@@ -418,5 +416,8 @@
   "Apri Instagram": "Instagram öffnen",
   "Ogni mese ricondividiamo, con il tuo permesso, le foto più belle.": "Jeden Monat teilen wir – mit deiner Erlaubnis – die schönsten Fotos.",
   "Una nota gentile": "Ein freundlicher Hinweis",
-  "Torna alla home dell’Oasi del Faraone": "Zur Startseite von Oasi del Faraone"
+  "Torna alla home dell’Oasi del Faraone": "Zur Startseite von Oasi del Faraone",
+  "Scegli il giorno di arrivo sul calendario.": "Wählen Sie Ihren Anreisetag im Kalender.",
+  "Ora scegli il giorno di partenza.": "Wählen Sie jetzt Ihren Abreisetag.",
+  "Tocca un altro giorno per cambiare le date.": "Tippen Sie auf einen anderen Tag, um die Daten zu ändern."
 }

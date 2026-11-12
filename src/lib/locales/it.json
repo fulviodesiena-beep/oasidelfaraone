@@ -1,5 +1,5 @@
 {
-  "Oasi del Faraone · Appartamenti al Domina Coral Bay, Sharm el-Sheikh": "Oasi del Faraone · Appartamenti al Domina Coral Bay, Sharm el-Sheikh",
+  "Oasi del Faraone · Appartamento al Domina Coral Bay, Sharm el-Sheikh": "Oasi del Faraone · Appartamento al Domina Coral Bay, Sharm el-Sheikh",
   "Appartamento privato fino a 4 ospiti al Domina Coral Bay, Sharm el-Sheikh. Balcone vista piscina, spiagge e piscine del resort incluse. Preventivo in 2 minuti.": "Appartamento privato fino a 4 ospiti al Domina Coral Bay, Sharm el-Sheikh. Balcone vista piscina, spiagge e piscine del resort incluse. Preventivo in 2 minuti.",
   "Cosa è incluso nel soggiorno?": "Cosa è incluso nel soggiorno?",
   "Spiagge, piscine, padel, beach volley e animazione del resort Domina Coral Bay sono inclusi, senza costi aggiuntivi. Ristoranti e bar sono à la carte; spa e casinò sono a pagamento.": "Spiagge, piscine, padel, beach volley e animazione del resort Domina Coral Bay sono inclusi, senza costi aggiuntivi. Ristoranti e bar sono à la carte; spa e casinò sono a pagamento.",
@@ -128,7 +128,7 @@
   "Una buona tavola fa parte del viaggio. Questi sono gli indirizzi che condividiamo con chi viene a trovarci.": "Una buona tavola fa parte del viaggio. Questi sono gli indirizzi che condividiamo con chi viene a trovarci.",
   "Tipo di cucina": "Tipo di cucina",
   "Per orari, menu e prenotazioni aggiornati, chiedi a Mina.": "Per orari, menu e prenotazioni aggiornati, chiedi a Mina.",
-  "08 / Ci vediamo sul Mar Rosso": "08 / Ci vediamo sul Mar Rosso",
+  "07 / Ci vediamo sul Mar Rosso": "07 / Ci vediamo sul Mar Rosso",
   "Prenota il tuo soggiorno.": "Prenota il tuo soggiorno.",
   "Il tuo prossimo ricordo.": "Il tuo prossimo ricordo.",
   "Prima di partire": "Prima di partire",
@@ -199,7 +199,6 @@
   "Le date scelte includono giorni già occupati. Scegli un altro periodo.": "Le date scelte includono giorni già occupati. Scegli un altro periodo.",
   "Disponibilità da confermare con Fulvio. Il prezzo è riferito all’intero appartamento.": "Disponibilità da confermare con Fulvio. Il prezzo è riferito all’intero appartamento.",
   "1 · Date e ospiti · fino a 4 persone": "1 · Date e ospiti · fino a 4 persone",
-  "Il preventivo è scaduto. Seleziona di nuovo le date.": "Il preventivo è scaduto. Seleziona di nuovo le date.",
   "Arrivo": "Arrivo",
   "Partenza": "Partenza",
   "Adulti": "Adulti",
@@ -223,12 +222,11 @@
   "Soggiorno minimo consigliato:": "Soggiorno minimo consigliato:",
   " nel periodo di Picco": " nel periodo di Picco",
   ". Puoi comunque inviare la richiesta.": ". Puoi comunque inviare la richiesta.",
-  "Preventivo riservato per:": "Preventivo riservato per:",
   "Nome completo": "Nome completo",
   "Nome e Cognome": "Nome e Cognome",
   "Extra (non inclusi nel totale)": "Extra (non inclusi nel totale)",
   "Date speciali da festeggiare a Sharm": "Date speciali da festeggiare a Sharm",
-  "Date speciali da festeggiare a Sharm (compleanni, anniversari) — facoltativo": "Date speciali da festeggiare a Sharm (compleanni, anniversari) — facoltativo",
+  "Compleanni o anniversari durante il soggiorno? (facoltativo)": "Compleanni o anniversari durante il soggiorno? (facoltativo)",
   "Note per Fulvio": "Note per Fulvio",
   "Aggiungi una nota": "Aggiungi una nota",
   "Ho letto l’": "Ho letto l’",
@@ -418,5 +416,8 @@
   "Apri Instagram": "Apri Instagram",
   "Ogni mese ricondividiamo, con il tuo permesso, le foto più belle.": "Ogni mese ricondividiamo, con il tuo permesso, le foto più belle.",
   "Una nota gentile": "Una nota gentile",
-  "Torna alla home dell’Oasi del Faraone": "Torna alla home dell’Oasi del Faraone"
+  "Torna alla home dell’Oasi del Faraone": "Torna alla home dell’Oasi del Faraone",
+  "Scegli il giorno di arrivo sul calendario.": "Scegli il giorno di arrivo sul calendario.",
+  "Ora scegli il giorno di partenza.": "Ora scegli il giorno di partenza.",
+  "Tocca un altro giorno per cambiare le date.": "Tocca un altro giorno per cambiare le date."
 }
