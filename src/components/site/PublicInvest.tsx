@@ -20,7 +20,7 @@ function Invest() {
   const { t } = useLanguage();
   return (
     <SubPage page="invest">
-      <section id="investire" className="site-section invest-section">
+      <section id="investire" className="site-section invest-section theme-sea">
         <div className="site-container invest-layout">
           <div className="reveal">
             <p className="eyebrow">{t("OPPORTUNITÀ")}</p>
@@ -59,7 +59,7 @@ function Invest() {
           </div>
         </div>
       </section>
-      <section id="moovy" className="moovy-section site-section">
+      <section id="moovy" className="moovy-section site-section theme-sunset wave-top">
         <div className="site-container moovy-layout">
           <div className="reveal">
             <p className="eyebrow text-moovy">{t("MOBILITÀ, CON UN’ENERGIA NUOVA")}</p>
