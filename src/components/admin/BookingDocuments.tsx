@@ -7,10 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Field } from "@/components/admin/BookingFormDialog";
+import { documentShareLink } from "@/lib/documents.functions";
 import { DOCUMENT_TYPES, fmtDate, type Booking, type DocumentRow } from "@/lib/admin";
 
 const BUCKET = "documents";
-const SHARE_SECONDS = 60 * 60 * 24 * 7; // link valid 7 days
 
 export async function uploadDocument(bookingId: string, name: string, file: Blob, fileName: string, type: string) {
   const path = `${bookingId}/${Date.now()}-${fileName.replace(/[^\w.-]+/g, "_")}`;
@@ -21,17 +21,25 @@ export async function uploadDocument(bookingId: string, name: string, file: Blob
 }
 
 export async function openDocument(doc: DocumentRow) {
-  const { data, error } = await supabase.storage.from(BUCKET).createSignedUrl(doc.file_url, 300);
+  // The admin preview link lives one minute: enough to open it, useless if copied.
+  const { data, error } = await supabase.storage.from(BUCKET).createSignedUrl(doc.file_url, 60);
   if (error) { toast.error(error.message); return; }
   window.open(data.signedUrl, "_blank", "noopener");
 }
 
+/** WhatsApp share: sends a 72-hour /api/public/d link (never the storage URL); each click mints a 60-second URL. */
 export async function shareDocument(doc: DocumentRow, phone?: string | null) {
-  const { data, error } = await supabase.storage.from(BUCKET).createSignedUrl(doc.file_url, SHARE_SECONDS);
-  if (error) { toast.error(error.message); return; }
-  const text = encodeURIComponent(`${doc.name} — Oasi del Faraone (link valido 7 giorni): ${data.signedUrl}`);
   const digits = (phone ?? "").replace(/\D/g, "");
-  window.open(`https://wa.me/${digits}?text=${text}`, "_blank", "noopener");
+  const win = window.open("about:blank", "_blank");
+  try {
+    const { url, hours } = await documentShareLink({ data: { documentId: doc.id } });
+    const text = encodeURIComponent(`${doc.name} — Oasi del Faraone (link valido ${hours} ore): ${url}`);
+    const wa = `https://wa.me/${digits}?text=${text}`;
+    if (win) win.location.href = wa; else window.open(wa, "_blank", "noopener");
+  } catch (e) {
+    win?.close();
+    toast.error(e instanceof Error ? e.message : "Link non creato");
+  }
 }
 
 export function DocumentUploader({ bookingId }: { bookingId: string }) {

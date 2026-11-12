@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { balanceDue, BOOKING_STATUS_LABEL, eur, nightsFor, SOURCE_LABEL, type Booking } from "@/lib/admin";
+import { balanceDue, BOOKING_STATUS_LABEL, eur, nightsFor, SOURCE_LABEL, type Booking, confirmationIssues, type ConfirmIssue } from "@/lib/admin";
 import { quote } from "@/lib/pricing";
 import { previewSplit, suggestedCommission } from "@/lib/finance";
 import { useServerFn } from "@tanstack/react-start";
@@ -85,8 +85,8 @@ export function BookingFormDialog({ open, onOpenChange, initial, inquiryId }: {
   const { data: conflicts = 0 } = useQuery({
     queryKey: ["admin", "overlap", d.check_in, d.check_out], enabled: open && nights > 0,
     queryFn: async () => {
-      const { count, error } = await supabase.from("bookings").select("id", { count: "exact", head: true })
-        .eq("status", "confirmed").lt("check_in", d.check_out).gt("check_out", d.check_in);
+      const { count, error } = await supabase.from("bookings").select("id", { count: "exact" })
+        .eq("status", "confirmed").lt("check_in", d.check_out).gt("check_out", d.check_in).range(0, 0);
       if (error) throw error; return count ?? 0;
     },
   });
@@ -120,7 +120,10 @@ export function BookingFormDialog({ open, onOpenChange, initial, inquiryId }: {
   });
 
   const guests = d.adults + d.children;
-  const valid = d.guest_name.trim() && nights > 0 && d.adults >= 1 && guests <= 4 && (d.source !== "host" || d.host_id);
+  const issues = confirmationIssues(d);
+  const [ackZero, setAckZero] = useState(false);
+  const blocked = issues.some(i => i.level === "block") || (issues.some(i => i.level === "warn") && !ackZero);
+  const valid = d.guest_name.trim() && nights > 0 && d.adults >= 1 && guests <= 4 && (d.source !== "host" || d.host_id) && !blocked;
   const lock = d.is_personal_use;
 
   return (
@@ -168,12 +171,13 @@ export function BookingFormDialog({ open, onOpenChange, initial, inquiryId }: {
                 <SelectContent>{hosts.map(h => <SelectItem key={h.id} value={h.id}>{h.name}{h.apartment_number ? ` · App. ${h.apartment_number}` : ""}</SelectItem>)}</SelectContent>
               </Select>
             </Field>
-            <Field label="Importo dovuto dall'host (€)"><Input type="number" min={0} step="0.01" value={d.host_amount} onChange={e => set("host_amount", Number(e.target.value))} /></Field>
+            <p className="self-end text-xs text-muted-foreground">L'host paga il soggiorno: quanto resta da incassare è Totale meno Acconto, e compare nella pagina Host.</p>
           </>}
           <Field label="Extra (separati da virgola)" className="sm:col-span-2"><Input value={d.extras.join(", ")} onChange={e => set("extras", e.target.value.split(",").map(s => s.trim()).filter(Boolean))} /></Field>
           <Field label="Note" className="sm:col-span-2"><Textarea value={d.notes} onChange={e => set("notes", e.target.value)} /></Field>
           {guests > 4 && <p className="text-sm text-destructive sm:col-span-2">Massimo 4 ospiti.</p>}
           {conflicts > 0 && <p role="alert" className="rounded-md border border-destructive bg-destructive/10 p-3 text-sm text-destructive sm:col-span-2">⚠️ Attenzione: esiste già una prenotazione confermata per queste date. Verifica prima di procedere.</p>}
+          <ConfirmIssues issues={issues} ack={ackZero} onAck={setAckZero} />
         </form>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Annulla</Button>
@@ -197,6 +201,19 @@ export function SplitPreview({ net, owner, fds, ownerName }: { net: number; owne
       <div><p className="text-xs text-muted-foreground">Quota {ownerName}</p><p className="text-gold-light">{eur(owner)}</p></div>
       <div><p className="text-xs text-muted-foreground">Borsellino FDS</p><p className="text-gold-light">{eur(fds)}</p></div>
       <p className="col-span-3 text-xs text-muted-foreground">Anteprima: i valori definitivi li calcola il gestionale al salvataggio.</p>
+    </div>
+  );
+}
+
+/** Confirmation checks shown above the save button; a zero total needs an explicit "complimentary" tick. */
+export function ConfirmIssues({ issues, ack, onAck }: { issues: ConfirmIssue[]; ack: boolean; onAck: (v: boolean) => void }) {
+  if (!issues.length) return null;
+  return (
+    <div role="alert" className="space-y-2 rounded-md border border-warning/50 bg-warning/10 p-3 text-sm sm:col-span-2">
+      {issues.map(i => <p key={i.text} className={i.level === "block" ? "text-destructive" : "text-warning"}>{i.level === "block" ? "⛔ " : "⚠️ "}{i.text}</p>)}
+      {issues.some(i => i.level === "warn") && (
+        <label className="flex items-center gap-2"><input type="checkbox" checked={ack} onChange={e => onAck(e.target.checked)} />Sì, è un soggiorno omaggio</label>
+      )}
     </div>
   );
 }

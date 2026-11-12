@@ -28,22 +28,56 @@ export const expenseEur = (e: Pick<Expense, "amount" | "amount_eur" | "currency"
 const r2 = (n: number) => Math.round(n * 100) / 100;
 const pct = (n: number, d: number) => (d ? Math.round((n / d) * 1000) / 10 : 0);
 
-export function financeStats(bookings: Booking[], expenses: Expense[], inquiries: Pick<Tables<"inquiries">, "created_at" | "status">[], p: Period) {
+const dayMs = 86400000;
+const utc = (d: string) => Date.parse(`${d.slice(0, 10)}T00:00:00Z`);
+/** Nights of a stay that fall inside [from, to). */
+export function nightsInPeriod(b: Pick<Booking, "check_in" | "check_out">, from: string, to: string) {
+  return Math.max(0, Math.round((Math.min(utc(b.check_out), utc(to)) - Math.max(utc(b.check_in), utc(from))) / dayMs));
+}
+/** Share of a stay's money that belongs to the period: amounts are spread evenly over its nights. */
+export function periodShare(b: Pick<Booking, "check_in" | "check_out" | "total_nights">, from: string, to: string) {
+  const total = b.total_nights > 0 ? b.total_nights : nightsInPeriod(b, "0000-01-01", "9999-12-31");
+  return total > 0 ? nightsInPeriod(b, from, to) / total : 0;
+}
+/** Euro amount of an expense that falls inside [from, to): spread evenly over `amortize_months` months from its month. */
+export function expenseInPeriod(e: Pick<Expense, "date" | "period_month" | "amount" | "amount_eur" | "currency"> & { amortize_months?: number | null }, from: string, to: string) {
+  const months = Math.max(1, Math.min(36, Math.round(Number(e.amortize_months ?? 1))));
+  const start = (e.period_month || e.date).slice(0, 7);
+  const y = Number(start.slice(0, 4)), m = Number(start.slice(5, 7)) - 1;
+  const each = expenseEur(e) / months;
+  let sum = 0;
+  for (let i = 0; i < months; i++) {
+    const key = new Date(Date.UTC(y, m + i, 1)).toISOString().slice(0, 10);
+    if (key >= from && key < to) sum += each;
+  }
+  return sum;
+}
+
+/** Occupied nights of any kind: bookings that are not cancelled (incl. owner and host stays) and calendar blocks. */
+export function occupiedNights(bookings: Pick<Booking, "status" | "check_in" | "check_out">[], blocks: Pick<Block, "start_date" | "end_date">[], from: string, to: string) {
+  const asStay = blocks.map(k => ({ status: "confirmed" as Booking["status"], check_in: k.start_date, check_out: k.end_date }));
+  return bookedDaysBetween([...bookings, ...asStay], from, to);
+}
+
+export function financeStats(bookings: Booking[], expenses: Expense[], inquiries: Pick<Tables<"inquiries">, "created_at" | "status">[], p: Period, blocks: Pick<Block, "start_date" | "end_date">[] = []) {
   const { from, to, days } = periodRange(p);
   const inP = (d: string) => d.slice(0, 10) >= from && d.slice(0, 10) < to;
-  const sold = bookings.filter(b => isSold(b) && inP(b.check_in));
-  const sum = (f: (b: Booking) => number | null) => r2(sold.reduce((s, b) => s + Number(f(b) ?? 0), 0));
+  // Revenue follows the nights: a stay across two months is split between them.
+  const sold = bookings.filter(b => isSold(b) && nightsInPeriod(b, from, to) > 0);
+  const sum = (f: (b: Booking) => number | null) => r2(sold.reduce((s, b) => s + Number(f(b) ?? 0) * periodShare(b, from, to), 0));
   const revenue = sum(b => b.total_price);
   const ownerShare = sum(b => b.room_amount);
-  const ownerExpenses = r2(expenses.filter(e => inP(e.date) && chargedToOwner(e)).reduce((s, e) => s + expenseEur(e), 0));
-  const unconvertedExpenses = expenses.filter(e => inP(e.date) && e.amount_eur == null && e.currency !== "EUR").length;
-  const nightsSold = bookedDaysBetween(bookings.filter(isSold), from, to);
+  const ownerExpenses = r2(expenses.filter(chargedToOwner).reduce((s, e) => s + expenseInPeriod(e, from, to), 0));
+  const unconvertedExpenses = expenses.filter(e => expenseInPeriod({ ...e, amount_eur: 1, currency: "EUR" }, from, to) > 0 && e.amount_eur == null && e.currency !== "EUR").length;
+  const nightsSold = bookedDaysBetween(sold, from, to);
+  const nightsOccupied = occupiedNights(bookings, blocks, from, to);
   const inq = inquiries.filter(i => inP(i.created_at));
   const ota = sold.filter(isOta).length;
   return {
     revenue, commissions: sum(b => b.channel_commission), ownerShare, fds: sum(b => b.fds_amount),
     ownerExpenses, unconvertedExpenses, ownerNet: r2(ownerShare - ownerExpenses),
     nightsSold, nightsAvailable: days, occupancyPct: pct(nightsSold, days),
+    nightsOccupied, occupancyTotalPct: pct(nightsOccupied, days),
     adr: nightsSold ? r2(revenue / nightsSold) : 0, revpar: days ? r2(revenue / days) : 0,
     inquiries: inq.length, conversionPct: pct(inq.filter(i => i.status === "converted").length, inq.length),
     directPct: pct(sold.length - ota, sold.length), otaPct: pct(ota, sold.length), bookingsCount: sold.length,

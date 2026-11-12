@@ -30,7 +30,7 @@ function EmailsPage() {
   const [key, setKey] = useState<MessageKey>("A1");
   const [lang, setLang] = useState<Lang>("it");
   const [bookingId, setBookingId] = useState<string>("");
-  const { data: bookings = [] } = useQuery({ queryKey: ["admin", "bookings-pick"], queryFn: async () => (await supabase.from("bookings").select("id, guest_name, check_in, status").in("status", ["confirmed", "host_collab"]).order("check_in", { ascending: false })).data ?? [] });
+  const { data: bookings = [] } = useQuery({ queryKey: ["admin", "bookings-pick"], queryFn: async () => { const { data, error } = await supabase.from("bookings").select("id, guest_name, check_in, status").in("status", ["confirmed", "host_collab"]).order("check_in", { ascending: false }); if (error) throw error; return data; } });
   const { data: log = [] } = useQuery({ queryKey: ["admin", "email-log"], queryFn: async () => { const { data, error } = await supabase.from("email_log").select("*").order("created_at", { ascending: false }).limit(200); if (error) throw error; return data; } });
   const p = useQuery({ queryKey: ["admin", "preview", key, lang, bookingId], queryFn: () => preview({ data: { key, lang, bookingId: bookingId || null } }) });
   const sendTest = useMutation({ mutationFn: () => test({ data: { key, lang, bookingId: bookingId || null } }), onSuccess: r => { r.sent ? toast.success("Prova inviata a prenotazionisharm@gmail.com") : toast.error("Indirizzo bloccato"); qc.invalidateQueries({ queryKey: ["admin", "email-log"] }); }, onError: (e: Error) => toast.error(e.message) });

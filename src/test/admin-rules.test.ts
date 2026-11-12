@@ -31,7 +31,8 @@ describe("admin rules", () => {
     expect(s.checkInsToday).toHaveLength(1);
     expect(s.checkOutsToday).toHaveLength(1);
     expect(s.monthCount).toBe(8);
-    expect(s.monthTotal).toBe(200 + 300 + 500 + 50);
+    // Value counts only sold stays (confirmed/host): the pending option (50) is excluded.
+    expect(s.monthTotal).toBe(200 + 300 + 500);
     expect(s.newInquiries).toBe(2);
     expect(s.upcoming.map(x => x.check_in)).toEqual([today, "2026-11-11", "2026-11-12", "2026-11-13", "2026-11-14"]);
   });

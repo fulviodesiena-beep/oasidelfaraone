@@ -431,6 +431,7 @@ export type Database = {
       }
       expenses: {
         Row: {
+          amortize_months: number
           amount: number
           amount_eur: number | null
           category: string
@@ -445,6 +446,7 @@ export type Database = {
           period_month: string | null
         }
         Insert: {
+          amortize_months?: number
           amount: number
           amount_eur?: number | null
           category: string
@@ -459,6 +461,7 @@ export type Database = {
           period_month?: string | null
         }
         Update: {
+          amortize_months?: number
           amount?: number
           amount_eur?: number | null
           category?: string

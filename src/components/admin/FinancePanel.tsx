@@ -29,7 +29,7 @@ export function FinancePanel() {
     },
   });
   const period: Period = kind === "month" ? { kind, key: month } : { kind, key: year };
-  const s = useMemo(() => (data ? financeStats(data.bookings, data.expenses, data.inquiries, period) : null), [data, kind, month, year]);
+  const s = useMemo(() => (data ? financeStats(data.bookings, data.expenses, data.inquiries, period, data.blocks) : null), [data, kind, month, year]);
   if (!data || !s) return <p className="text-muted-foreground">Caricamento conti…</p>;
   const conflicts = doubleBookingConflicts(data.bookings, data.blocks);
   const label = kind === "month" ? new Date(`${month}-15`).toLocaleDateString("it-IT", { month: "long", year: "numeric" }) : year;
@@ -50,13 +50,13 @@ export function FinancePanel() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <K t="Fatturato stanza" v={eur(s.revenue)} n={`${s.bookingsCount} soggiorni (confermati + host)`} />
+        <K t="Fatturato stanza" v={eur(s.revenue)} n={`${s.bookingsCount} soggiorni con notti nel periodo · ricavo ripartito per notte`} />
         <K t="Commissioni OTA" v={eur(s.commissions)} />
         <K t="Quota Carmine (proprietario)" v={eur(s.ownerShare)} />
         <K t="Borsellino FDS" v={eur(s.fds)} />
-        <K t="Spese (a carico Carmine)" v={eur(s.ownerExpenses)} n={s.unconvertedExpenses ? `${s.unconvertedExpenses} spese senza controvalore in euro, escluse` : undefined} />
+        <K t="Spese (a carico Carmine)" v={eur(s.ownerExpenses)} n={s.unconvertedExpenses ? `${s.unconvertedExpenses} spese senza controvalore in euro, escluse` : "Spese pluriennali o annuali ripartite per mese"} />
         <K t="Netto Carmine" v={eur(s.ownerNet)} n="Quota meno spese" gold />
-        <K t="Notti vendute" v={`${s.nightsSold} / ${s.nightsAvailable}`} n={`Occupazione ${s.occupancyPct.toLocaleString("it-IT")}%`} />
+        <K t="Notti vendute" v={`${s.nightsSold} / ${s.nightsAvailable}`} n={`Occupazione commerciale ${s.occupancyPct.toLocaleString("it-IT")}% · totale ${s.occupancyTotalPct.toLocaleString("it-IT")}% (con uso proprietario e blocchi)`} />
         <K t="ADR · RevPAR" v={`${eur(s.adr)} · ${eur(s.revpar)}`} n="Prezzo medio per notte venduta · per notte disponibile" />
         <K t="Richieste" v={String(s.inquiries)} n={`Conversione ${s.conversionPct.toLocaleString("it-IT")}%`} />
         <K t="Dirette vs OTA" v={`${s.directPct.toLocaleString("it-IT")}% · ${s.otaPct.toLocaleString("it-IT")}%`} />

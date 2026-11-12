@@ -5,7 +5,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 import { computeDue, bookingVars, messageText, whatsappUrl, type DueItem, type Toggles, type ABooking } from "./engine";
 import { LINK_LABELS, MARKETING_FOOTER, UNSUBSCRIBE_LABEL, type Lang, type MessageKey } from "./messages";
-import { signToken } from "./tokens";
+import { signDocumentToken, signToken } from "./tokens";
 import { OasiMessage, type OasiMessageProps } from "@/lib/email-templates/oasi-message";
 import { MINA_WHATSAPP, ELISIR_ROOM_ID } from "@/lib/site-data";
 
@@ -54,8 +54,14 @@ export async function renderItem(db: DB, item: Pick<DueItem, "msgKey" | "lang" |
         if (r.data) links.push({ label: L(f), url: r.data.signedUrl });
       }
       if (item.bookingId) {
-        const { data: d } = await db.from("documents").select("file_url").eq("booking_id", item.bookingId).eq("kind", "delega").order("created_at", { ascending: false }).limit(1).maybeSingle();
-        if (d?.file_url) { const r = await db.storage.from("documents").createSignedUrl(d.file_url, THIRTY_DAYS); if (r.data) links.push({ label: L("delega"), url: r.data.signedUrl }); }
+        const { data: d } = await db.from("documents").select("id").eq("booking_id", item.bookingId).eq("kind", "delega").order("created_at", { ascending: false }).limit(1).maybeSingle();
+        if (d?.id) {
+          // Delega link: valid until two days after check-out (at least 72 hours), never a raw storage URL.
+          const { data: stay } = await db.from("bookings").select("check_out").eq("id", item.bookingId).maybeSingle();
+          const end = stay?.check_out ? Date.parse(`${stay.check_out}T00:00:00Z`) + 2 * 86400_000 : 0;
+          const token = await signDocumentToken(d.id, Math.max(end, Date.now() + 72 * 3600_000));
+          links.push({ label: L("delega"), url: `${SITE}/api/public/d/${token}` });
+        }
       }
       break;
     }

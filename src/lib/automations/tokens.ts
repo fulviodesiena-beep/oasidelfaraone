@@ -7,7 +7,7 @@ async function hmac(secret: string, msg: string) {
   const key = await crypto.subtle.importKey("raw", enc.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
   return b64u(await crypto.subtle.sign("HMAC", key, enc.encode(msg)));
 }
-export type TokenPurpose = "unsub" | "nl-confirm" | "brevo-webhook";
+export type TokenPurpose = "unsub" | "nl-confirm" | "brevo-webhook" | "doc";
 
 export async function signToken(purpose: TokenPurpose, subject: string, secret = process.env["EMAIL_TOKEN_SECRET"] ?? "") {
   if (!secret) throw new Error("EMAIL_TOKEN_SECRET mancante");
@@ -24,4 +24,16 @@ export async function verifyToken(purpose: TokenPurpose, token: string, secret =
   let diff = 0; for (let i = 0; i < sig.length; i++) diff |= sig.charCodeAt(i) ^ expected.charCodeAt(i);
   if (diff) return null;
   try { const [p, ...rest] = fromB64u(payload).split(":"); return p === purpose ? rest.join(":") : null; } catch { return null; }
+}
+
+/** Document link: `doc` token carrying the document id and an expiry (ms). Each click mints a 60-second storage URL. */
+export async function signDocumentToken(documentId: string, expiresAt: number, secret?: string) {
+  return signToken("doc", `${documentId}:${Math.floor(expiresAt)}`, secret);
+}
+export async function verifyDocumentToken(token: string, now = Date.now(), secret?: string) {
+  const subject = await verifyToken("doc", token, secret);
+  if (!subject) return null;
+  const [id, exp] = subject.split(":");
+  if (!id || !/^[0-9a-f-]{36}$/i.test(id) || !(Number(exp) > now)) return null;
+  return id;
 }
