@@ -6,6 +6,7 @@ import { captureAttribution } from "@/lib/tracking";
 import { LanguageProvider, publicPath, useLanguage, type Language } from "@/lib/i18n";
 import { RITUAL_IMAGE } from "@/lib/public-head";
 import { CookieConsent } from "./CookieConsent";
+import { FloatingActions } from "./FloatingActions";
 import { LanguageSelector } from "./LanguageSelector";
 import { NewsletterSignup } from "./NewsletterSignup";
 import { Cartouche } from "./Cartouche";
@@ -109,6 +110,7 @@ function Ritual() {
         </div>
       </footer>
     </main>
+    <FloatingActions />
     <CookieConsent />
   </>;
 }

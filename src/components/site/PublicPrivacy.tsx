@@ -1,6 +1,7 @@
 import { OWNER_EMAIL } from "@/lib/site-data";
 import { LanguageProvider, useLanguage, publicPath, type Language } from "@/lib/i18n";
 import { LanguageSelector } from "./LanguageSelector";
+import { FloatingActions } from "./FloatingActions";
 export function PublicPrivacy({ language = "it" }: { language?: Language }) { return <LanguageProvider language={language}><Privacy /></LanguageProvider>; }
 function Privacy() {
  const { t, language } = useLanguage();
@@ -25,5 +26,5 @@ function Privacy() {
     <p>{t("Il sito usa solo memorizzazione tecnica necessaria. Il Meta Pixel (Meta Platforms) viene caricato soltanto se accetti dal banner; se rifiuti non viene caricato nessuno script di misurazione. Per cambiare scelta cancella i dati del sito dal browser.")}</p>
     <h2 className="font-display text-2xl">{t("Diritti")}</h2>
     <p>{t("Puoi chiedere accesso, rettifica, cancellazione, limitazione o opposizione scrivendo all’email sopra, e proporre reclamo al Garante per la protezione dei dati personali.")}</p>
-  </div></main>;
+  </div><FloatingActions /></main>;
 }

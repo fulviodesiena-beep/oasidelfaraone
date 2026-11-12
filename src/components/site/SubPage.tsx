@@ -6,6 +6,7 @@ import { captureAttribution } from "@/lib/tracking";
 import { publicPath, useLanguage, type PublicPage } from "@/lib/i18n";
 import { Cartouche } from "./Cartouche";
 import { CookieConsent } from "./CookieConsent";
+import { FloatingActions } from "./FloatingActions";
 import { LanguageSelector } from "./LanguageSelector";
 import { NewsletterSignup } from "./NewsletterSignup";
 
@@ -52,6 +53,7 @@ export function SubPage({ page, children }: { page: PublicPage; children: ReactN
   );
   return (
     <>
+      <div className="scroll-progress" aria-hidden="true" />
       <header className="site-header header-solid">
         <div className="site-container flex items-center justify-between gap-3">
           <a href={home} className="brand">
@@ -81,7 +83,7 @@ export function SubPage({ page, children }: { page: PublicPage; children: ReactN
         </div>
       </header>
       <main className="subpage">{children}</main>
-      <footer className="site-footer">
+      <footer className="site-footer theme-night wave-top">
         <div className="site-container footer-layout">
           <div>
             <a href={home} className="brand">
@@ -148,6 +150,7 @@ export function SubPage({ page, children }: { page: PublicPage; children: ReactN
           </a>
         </div>
       </footer>
+      <FloatingActions />
       <CookieConsent />
     </>
   );

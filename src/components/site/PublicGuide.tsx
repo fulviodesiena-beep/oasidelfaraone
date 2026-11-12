@@ -30,6 +30,7 @@ function Guide() {
       </section>
       <Section
         id="explore"
+        className="theme-sand wave-top"
         eyebrow={t("La Sharm che ci piace")}
         title={
           <>
@@ -54,12 +55,12 @@ function Guide() {
       </Section>
       <Section
         id="restaurants"
+        className="theme-sunset wave-top"
         eyebrow={t("I nostri consigli — dove mangiare")}
         title={t("Dove mangiare a Sharm: i più amati dai nostri ospiti")}
         intro={t(
           "Una buona tavola fa parte del viaggio. Questi sono gli indirizzi che condividiamo con chi viene a trovarci.",
         )}
-        className="bg-secondary"
       >
         <div className="restaurant-grid">
           {RESTAURANTS.map((r, i) => (
