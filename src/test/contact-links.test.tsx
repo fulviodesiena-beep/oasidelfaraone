@@ -45,7 +45,7 @@ describe("contact links", () => {
     const email = screen.getByRole("link", { name: /Scrivici via email/i });
     expect(whatsapp).toHaveAttribute("href", "https://wa.me/393347328158");
     expect(email).toHaveAttribute("href", `mailto:${OWNER_EMAIL}`);
-    expect(email).toHaveAttribute("href", "mailto:prenotazionisharm@gmail.com");
+    expect(email).toHaveAttribute("href", "mailto:prenotazioni@oasidelfaraone.it");
     expect(whatsapp.closest("section")).toHaveAttribute("id", "contatti");
     expect(email.closest("section")).toHaveAttribute("id", "contatti");
     expect(whatsapp.closest(".contact-buttons")).toBe(email.closest(".contact-buttons"));

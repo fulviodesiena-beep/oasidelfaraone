@@ -14,6 +14,8 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as DeRouteImport } from './routes/de'
 import { Route as DisiscrizioneRouteImport } from './routes/disiscrizione'
 import { Route as EnRouteImport } from './routes/en'
+import { Route as GuidaSharmRouteImport } from './routes/guida-sharm'
+import { Route as InvestireRouteImport } from './routes/investire'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RitoRouteImport } from './routes/rito'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -31,10 +33,14 @@ import { Route as AdminTodayRouteImport } from './routes/admin.today'
 import { Route as AdminLoginRouteImport } from './routes/admin_.login'
 import { Route as AdminResetPasswordRouteImport } from './routes/admin_.reset-password'
 import { Route as DeAbmeldenRouteImport } from './routes/de_.abmelden'
+import { Route as DeInvestierenRouteImport } from './routes/de_.investieren'
 import { Route as DePrivacyRouteImport } from './routes/de_.privacy'
 import { Route as DeRitualRouteImport } from './routes/de_.ritual'
+import { Route as DeSharmReisefuehrerRouteImport } from './routes/de_.sharm-reisefuehrer'
+import { Route as EnInvestRouteImport } from './routes/en_.invest'
 import { Route as EnPrivacyRouteImport } from './routes/en_.privacy'
 import { Route as EnRitualRouteImport } from './routes/en_.ritual'
+import { Route as EnSharmGuideRouteImport } from './routes/en_.sharm-guide'
 import { Route as EnUnsubscribeRouteImport } from './routes/en_.unsubscribe'
 import { Route as NewsletterConfermaRouteImport } from './routes/newsletter.conferma'
 import { Route as ApiPublicBrevoWebhookRouteImport } from './routes/api/public/brevo-webhook'
@@ -69,6 +75,16 @@ const DisiscrizioneRoute = DisiscrizioneRouteImport.update({
 const EnRoute = EnRouteImport.update({
   id: '/en',
   path: '/en',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuidaSharmRoute = GuidaSharmRouteImport.update({
+  id: '/guida-sharm',
+  path: '/guida-sharm',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvestireRoute = InvestireRouteImport.update({
+  id: '/investire',
+  path: '/investire',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -156,6 +172,11 @@ const DeAbmeldenRoute = DeAbmeldenRouteImport.update({
   path: '/de/abmelden',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DeInvestierenRoute = DeInvestierenRouteImport.update({
+  id: '/de_/investieren',
+  path: '/de/investieren',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DePrivacyRoute = DePrivacyRouteImport.update({
   id: '/de_/privacy',
   path: '/de/privacy',
@@ -166,6 +187,16 @@ const DeRitualRoute = DeRitualRouteImport.update({
   path: '/de/ritual',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DeSharmReisefuehrerRoute = DeSharmReisefuehrerRouteImport.update({
+  id: '/de_/sharm-reisefuehrer',
+  path: '/de/sharm-reisefuehrer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnInvestRoute = EnInvestRouteImport.update({
+  id: '/en_/invest',
+  path: '/en/invest',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnPrivacyRoute = EnPrivacyRouteImport.update({
   id: '/en_/privacy',
   path: '/en/privacy',
@@ -174,6 +205,11 @@ const EnPrivacyRoute = EnPrivacyRouteImport.update({
 const EnRitualRoute = EnRitualRouteImport.update({
   id: '/en_/ritual',
   path: '/en/ritual',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnSharmGuideRoute = EnSharmGuideRouteImport.update({
+  id: '/en_/sharm-guide',
+  path: '/en/sharm-guide',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnUnsubscribeRoute = EnUnsubscribeRouteImport.update({
@@ -235,6 +271,8 @@ export interface FileRoutesByFullPath {
   '/de': typeof DeRoute
   '/disiscrizione': typeof DisiscrizioneRoute
   '/en': typeof EnRoute
+  '/guida-sharm': typeof GuidaSharmRoute
+  '/investire': typeof InvestireRoute
   '/privacy': typeof PrivacyRoute
   '/rito': typeof RitoRoute
   '/admin/bookings': typeof AdminBookingsRoute
@@ -251,10 +289,14 @@ export interface FileRoutesByFullPath {
   '/admin/login': typeof AdminLoginRoute
   '/admin/reset-password': typeof AdminResetPasswordRoute
   '/de/abmelden': typeof DeAbmeldenRoute
+  '/de/investieren': typeof DeInvestierenRoute
   '/de/privacy': typeof DePrivacyRoute
   '/de/ritual': typeof DeRitualRoute
+  '/de/sharm-reisefuehrer': typeof DeSharmReisefuehrerRoute
+  '/en/invest': typeof EnInvestRoute
   '/en/privacy': typeof EnPrivacyRoute
   '/en/ritual': typeof EnRitualRoute
+  '/en/sharm-guide': typeof EnSharmGuideRoute
   '/en/unsubscribe': typeof EnUnsubscribeRoute
   '/newsletter/conferma': typeof NewsletterConfermaRoute
   '/admin/': typeof AdminIndexRoute
@@ -272,6 +314,8 @@ export interface FileRoutesByTo {
   '/de': typeof DeRoute
   '/disiscrizione': typeof DisiscrizioneRoute
   '/en': typeof EnRoute
+  '/guida-sharm': typeof GuidaSharmRoute
+  '/investire': typeof InvestireRoute
   '/privacy': typeof PrivacyRoute
   '/rito': typeof RitoRoute
   '/admin/bookings': typeof AdminBookingsRoute
@@ -288,10 +332,14 @@ export interface FileRoutesByTo {
   '/admin/login': typeof AdminLoginRoute
   '/admin/reset-password': typeof AdminResetPasswordRoute
   '/de/abmelden': typeof DeAbmeldenRoute
+  '/de/investieren': typeof DeInvestierenRoute
   '/de/privacy': typeof DePrivacyRoute
   '/de/ritual': typeof DeRitualRoute
+  '/de/sharm-reisefuehrer': typeof DeSharmReisefuehrerRoute
+  '/en/invest': typeof EnInvestRoute
   '/en/privacy': typeof EnPrivacyRoute
   '/en/ritual': typeof EnRitualRoute
+  '/en/sharm-guide': typeof EnSharmGuideRoute
   '/en/unsubscribe': typeof EnUnsubscribeRoute
   '/newsletter/conferma': typeof NewsletterConfermaRoute
   '/admin': typeof AdminIndexRoute
@@ -311,6 +359,8 @@ export interface FileRoutesById {
   '/de': typeof DeRoute
   '/disiscrizione': typeof DisiscrizioneRoute
   '/en': typeof EnRoute
+  '/guida-sharm': typeof GuidaSharmRoute
+  '/investire': typeof InvestireRoute
   '/privacy': typeof PrivacyRoute
   '/rito': typeof RitoRoute
   '/admin/bookings': typeof AdminBookingsRoute
@@ -327,10 +377,14 @@ export interface FileRoutesById {
   '/admin_/login': typeof AdminLoginRoute
   '/admin_/reset-password': typeof AdminResetPasswordRoute
   '/de_/abmelden': typeof DeAbmeldenRoute
+  '/de_/investieren': typeof DeInvestierenRoute
   '/de_/privacy': typeof DePrivacyRoute
   '/de_/ritual': typeof DeRitualRoute
+  '/de_/sharm-reisefuehrer': typeof DeSharmReisefuehrerRoute
+  '/en_/invest': typeof EnInvestRoute
   '/en_/privacy': typeof EnPrivacyRoute
   '/en_/ritual': typeof EnRitualRoute
+  '/en_/sharm-guide': typeof EnSharmGuideRoute
   '/en_/unsubscribe': typeof EnUnsubscribeRoute
   '/newsletter/conferma': typeof NewsletterConfermaRoute
   '/admin/': typeof AdminIndexRoute
@@ -351,6 +405,8 @@ export interface FileRouteTypes {
     | '/de'
     | '/disiscrizione'
     | '/en'
+    | '/guida-sharm'
+    | '/investire'
     | '/privacy'
     | '/rito'
     | '/admin/bookings'
@@ -367,10 +423,14 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/reset-password'
     | '/de/abmelden'
+    | '/de/investieren'
     | '/de/privacy'
     | '/de/ritual'
+    | '/de/sharm-reisefuehrer'
+    | '/en/invest'
     | '/en/privacy'
     | '/en/ritual'
+    | '/en/sharm-guide'
     | '/en/unsubscribe'
     | '/newsletter/conferma'
     | '/admin/'
@@ -388,6 +448,8 @@ export interface FileRouteTypes {
     | '/de'
     | '/disiscrizione'
     | '/en'
+    | '/guida-sharm'
+    | '/investire'
     | '/privacy'
     | '/rito'
     | '/admin/bookings'
@@ -404,10 +466,14 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/reset-password'
     | '/de/abmelden'
+    | '/de/investieren'
     | '/de/privacy'
     | '/de/ritual'
+    | '/de/sharm-reisefuehrer'
+    | '/en/invest'
     | '/en/privacy'
     | '/en/ritual'
+    | '/en/sharm-guide'
     | '/en/unsubscribe'
     | '/newsletter/conferma'
     | '/admin'
@@ -426,6 +492,8 @@ export interface FileRouteTypes {
     | '/de'
     | '/disiscrizione'
     | '/en'
+    | '/guida-sharm'
+    | '/investire'
     | '/privacy'
     | '/rito'
     | '/admin/bookings'
@@ -442,10 +510,14 @@ export interface FileRouteTypes {
     | '/admin_/login'
     | '/admin_/reset-password'
     | '/de_/abmelden'
+    | '/de_/investieren'
     | '/de_/privacy'
     | '/de_/ritual'
+    | '/de_/sharm-reisefuehrer'
+    | '/en_/invest'
     | '/en_/privacy'
     | '/en_/ritual'
+    | '/en_/sharm-guide'
     | '/en_/unsubscribe'
     | '/newsletter/conferma'
     | '/admin/'
@@ -465,15 +537,21 @@ export interface RootRouteChildren {
   DeRoute: typeof DeRoute
   DisiscrizioneRoute: typeof DisiscrizioneRoute
   EnRoute: typeof EnRoute
+  GuidaSharmRoute: typeof GuidaSharmRoute
+  InvestireRoute: typeof InvestireRoute
   PrivacyRoute: typeof PrivacyRoute
   RitoRoute: typeof RitoRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminResetPasswordRoute: typeof AdminResetPasswordRoute
   DeAbmeldenRoute: typeof DeAbmeldenRoute
+  DeInvestierenRoute: typeof DeInvestierenRoute
   DePrivacyRoute: typeof DePrivacyRoute
   DeRitualRoute: typeof DeRitualRoute
+  DeSharmReisefuehrerRoute: typeof DeSharmReisefuehrerRoute
+  EnInvestRoute: typeof EnInvestRoute
   EnPrivacyRoute: typeof EnPrivacyRoute
   EnRitualRoute: typeof EnRitualRoute
+  EnSharmGuideRoute: typeof EnSharmGuideRoute
   EnUnsubscribeRoute: typeof EnUnsubscribeRoute
   NewsletterConfermaRoute: typeof NewsletterConfermaRoute
   ApiPublicBrevoWebhookRoute: typeof ApiPublicBrevoWebhookRoute
@@ -521,6 +599,20 @@ declare module '@tanstack/react-router' {
       path: '/en'
       fullPath: '/en'
       preLoaderRoute: typeof EnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guida-sharm': {
+      id: '/guida-sharm'
+      path: '/guida-sharm'
+      fullPath: '/guida-sharm'
+      preLoaderRoute: typeof GuidaSharmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/investire': {
+      id: '/investire'
+      path: '/investire'
+      fullPath: '/investire'
+      preLoaderRoute: typeof InvestireRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -642,6 +734,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DeAbmeldenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/de_/investieren': {
+      id: '/de_/investieren'
+      path: '/de/investieren'
+      fullPath: '/de/investieren'
+      preLoaderRoute: typeof DeInvestierenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/de_/privacy': {
       id: '/de_/privacy'
       path: '/de/privacy'
@@ -656,6 +755,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DeRitualRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/de_/sharm-reisefuehrer': {
+      id: '/de_/sharm-reisefuehrer'
+      path: '/de/sharm-reisefuehrer'
+      fullPath: '/de/sharm-reisefuehrer'
+      preLoaderRoute: typeof DeSharmReisefuehrerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en_/invest': {
+      id: '/en_/invest'
+      path: '/en/invest'
+      fullPath: '/en/invest'
+      preLoaderRoute: typeof EnInvestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en_/privacy': {
       id: '/en_/privacy'
       path: '/en/privacy'
@@ -668,6 +781,13 @@ declare module '@tanstack/react-router' {
       path: '/en/ritual'
       fullPath: '/en/ritual'
       preLoaderRoute: typeof EnRitualRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en_/sharm-guide': {
+      id: '/en_/sharm-guide'
+      path: '/en/sharm-guide'
+      fullPath: '/en/sharm-guide'
+      preLoaderRoute: typeof EnSharmGuideRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/en_/unsubscribe': {
@@ -781,15 +901,21 @@ const rootRouteChildren: RootRouteChildren = {
   DeRoute: DeRoute,
   DisiscrizioneRoute: DisiscrizioneRoute,
   EnRoute: EnRoute,
+  GuidaSharmRoute: GuidaSharmRoute,
+  InvestireRoute: InvestireRoute,
   PrivacyRoute: PrivacyRoute,
   RitoRoute: RitoRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminResetPasswordRoute: AdminResetPasswordRoute,
   DeAbmeldenRoute: DeAbmeldenRoute,
+  DeInvestierenRoute: DeInvestierenRoute,
   DePrivacyRoute: DePrivacyRoute,
   DeRitualRoute: DeRitualRoute,
+  DeSharmReisefuehrerRoute: DeSharmReisefuehrerRoute,
+  EnInvestRoute: EnInvestRoute,
   EnPrivacyRoute: EnPrivacyRoute,
   EnRitualRoute: EnRitualRoute,
+  EnSharmGuideRoute: EnSharmGuideRoute,
   EnUnsubscribeRoute: EnUnsubscribeRoute,
   NewsletterConfermaRoute: NewsletterConfermaRoute,
   ApiPublicBrevoWebhookRoute: ApiPublicBrevoWebhookRoute,

@@ -1,6 +1,7 @@
 import { type ReactNode } from "react";
 import { APARTMENT_PHOTOS, HERO_PHOTOS, ROOM_AMENITIES, ROOMS } from "./site-data";
 import { translate, LOCALES, languages, publicPath, type Language, type PublicPage } from "./i18n";
+import { GUIDE_DESCRIPTION, GUIDE_TITLE, INVEST_DESCRIPTION, INVEST_TITLE } from "./page-texts";
 const TITLE = "Oasi del Faraone · Appartamento al Domina Coral Bay, Sharm el-Sheikh";
 const DESCRIPTION = "Appartamento privato fino a 4 ospiti al Domina Coral Bay, Sharm el-Sheikh. Balcone vista piscina, spiagge e piscine del resort incluse. Preventivo in 2 minuti.";
 const SITE_URL = "https://oasidelfaraone.it";
@@ -23,7 +24,7 @@ const JSONLD = [
     numberOfRooms: 1, occupancy: { "@type": "QuantitativeValue", maxValue: 4 },
     floorSize: { "@type": "QuantitativeValue", value: 60, unitCode: "MTK" },
     amenityFeature: [["Aria condizionata", true], ["TV satellitare", true], ["Cassaforte", true], ["Bollitore", true], ["Microonde", true], ["Vasca e doccia", true], ["Balcone vista piscina", true], ["Wi-Fi in camera", false]].map(([name, value]) => ({ "@type": "LocationFeatureSpecification", name, value })),
-    checkinTime: "15:00", checkoutTime: "11:00", telephone: "+393347328158", email: "prenotazionisharm@gmail.com" },
+    checkinTime: "15:00", checkoutTime: "11:00", telephone: "+393347328158", email: "prenotazioni@oasidelfaraone.it" },
   { "@context": "https://schema.org", "@type": ["Accommodation", "HotelRoom"], "@id": `${SITE_URL}/#elisir-d-oriente`,
     name: ROOMS[0]?.name, description: ROOMS[0]?.summary, url: `${SITE_URL}/#elisir-d-oriente`, image: OG_IMAGE,
     containedInPlace: { "@type": "Resort", name: "Domina Coral Bay", address: { "@type": "PostalAddress", addressLocality: "Sharm el-Sheikh", addressRegion: "South Sinai", addressCountry: "EG" } },
@@ -32,7 +33,7 @@ const JSONLD = [
     floorSize: { "@type": "QuantitativeValue", value: ROOMS[0]?.sizeSqm, unitCode: "MTK" },
     amenityFeature: [...ROOM_AMENITIES.map(name => [name, true] as const), ["Wi-Fi in camera", false] as const].map(([name, value]) => ({ "@type": "LocationFeatureSpecification", name, value })) },
   { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: FAQS.map(([q, a, t]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: t || a } })) },
-  { "@context": "https://schema.org", "@type": "Organization", name: "Oasi del Faraone", url: SITE_URL, email: "prenotazionisharm@gmail.com", telephone: "+393347328158", sameAs: ["https://www.instagram.com/oasidelfaraone/"] },
+  { "@context": "https://schema.org", "@type": "Organization", name: "Oasi del Faraone", url: SITE_URL, email: "prenotazioni@oasidelfaraone.it", telephone: "+393347328158", sameAs: ["https://www.instagram.com/oasidelfaraone/"] },
 ];
 
 function localize(value: unknown, language: Language): unknown {
@@ -56,4 +57,13 @@ export function ritualHead(language: Language) {
 export function publicHead(language: Language, page: "home" | "privacy" = "home") {
  const privacy=page==="privacy"; const title=translate(language,privacy?"Informativa privacy e cookie | Oasi del Faraone":TITLE); const description=translate(language,privacy?"Come Oasi del Faraone tratta i dati delle richieste di soggiorno e i cookie di misurazione.":DESCRIPTION);
  return {meta:[{title},{name:"description",content:description},{property:"og:title",content:title},{property:"og:description",content:description},{property:"og:type",content:privacy?"article":"website"},{property:"og:locale",content:LOCALES[language].og},{property:"og:site_name",content:"Oasi del Faraone"},{property:"og:url",content:SITE_URL+publicPath(language,page)},{name:"twitter:card",content:privacy?"summary":"summary_large_image"},{name:"twitter:title",content:title},{name:"twitter:description",content:description},...(!privacy?[{property:"og:image",content:OG_IMAGE},{name:"twitter:image",content:OG_IMAGE}]:[])],links:alternateLinks(language,page),scripts:privacy?[]:JSONLD.map(j=>({type:"application/ld+json",children:JSON.stringify({...localize(j,language) as object,inLanguage:LOCALES[language].format})}))};
+}
+
+/** Head for the secondary pages (guide, investments): localized title, description, canonical and hreflang. */
+export function pageHead(language: Language, page: "guide" | "invest") {
+ const title = `${translate(language, page === "guide" ? GUIDE_TITLE : INVEST_TITLE)} | Oasi del Faraone`;
+ const description = translate(language, page === "guide" ? GUIDE_DESCRIPTION : INVEST_DESCRIPTION);
+ const url = SITE_URL + publicPath(language, page);
+ return { meta: [{ title }, { name: "description", content: description }, { property: "og:title", content: title }, { property: "og:description", content: description }, { property: "og:type", content: "article" }, { property: "og:locale", content: LOCALES[language].og }, { property: "og:site_name", content: "Oasi del Faraone" }, { property: "og:url", content: url }, { property: "og:image", content: OG_IMAGE }, { name: "twitter:card", content: "summary_large_image" }, { name: "twitter:title", content: title }, { name: "twitter:description", content: description }],
+  links: alternateLinks(language, page) };
 }

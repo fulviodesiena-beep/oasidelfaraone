@@ -28,7 +28,7 @@ export const subscribeNewsletter = createServerFn({ method: "POST" })
     const url = `${SITE}/newsletter/conferma?t=${encodeURIComponent(await signToken("nl-confirm", id))}&l=${data.lang}`;
     const m = MESSAGES.NL_CONFIRM[data.lang];
     const day = new Date().toISOString().slice(0, 10);
-    const res = await sendTemplateEmail("oasi-message", data.email, { templateData: { subject: m.subject, body: m.body, cta: { label: LINK_LABELS["confirm"]?.[data.lang] ?? "OK", url } }, idempotencyKey: `nl-confirm-${id}-${day}`, replyTo: "prenotazionisharm@gmail.com" });
+    const res = await sendTemplateEmail("oasi-message", data.email, { templateData: { subject: m.subject, body: m.body, cta: { label: LINK_LABELS["confirm"]?.[data.lang] ?? "OK", url } }, idempotencyKey: `nl-confirm-${id}-${day}`, replyTo: "prenotazioni@oasidelfaraone.it" });
     await db.from("email_log").insert({ automation: "NL_CONFIRM", channel: "email", contact_id: id, recipient: data.email, subject: m.subject, language: data.lang, status: res.sent ? "sent" : "skipped", sent_at: res.sent ? new Date().toISOString() : null, reason: res.sent ? null : "indirizzo bloccato" });
     return { ok: true };
   });

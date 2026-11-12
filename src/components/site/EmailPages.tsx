@@ -15,7 +15,7 @@ function Unsubscribe() {
   return <main className="site-section"><div className="site-container max-w-xl space-y-5 text-center">
     <h1 className="font-display text-4xl">{t("Disiscrizione")}</h1>
     {state === "done" ? <p role="status">{t("Fatto: non riceverai più email promozionali da Oasi del Faraone. Le comunicazioni sul tuo eventuale soggiorno restano attive.")}</p>
-      : state === "invalid" ? <p role="alert" className="text-destructive">{t("Il link non è valido o è incompleto. Scrivici a prenotazionisharm@gmail.com e ti disiscriviamo noi.")}</p>
+      : state === "invalid" ? <p role="alert" className="text-destructive">{t("Il link non è valido o è incompleto. Scrivici a prenotazioni@oasidelfaraone.it e ti disiscriviamo noi.")}</p>
       : <><p>{t("Vuoi smettere di ricevere newsletter e offerte da Oasi del Faraone?")}</p><Button onClick={go} disabled={state === "busy"}>{t("Disiscrivimi")}</Button></>}
     <p><a className="text-gold-light" href={publicPath(language)}>{t("← Torna al sito")}</a></p>
   </div></main>;

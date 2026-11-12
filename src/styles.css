@@ -273,3 +273,9 @@ h2 em { color: var(--gold-light); font-weight: 400; }
 .room-tale { border: 1px solid color-mix(in oklab, var(--gold) 35%, transparent); background: var(--card); padding: 2rem; }
 .room-tale h3 { font-family: var(--font-display); font-size: 1.9rem; margin: .5rem 0 1rem; }
 .room-tale p:last-child { line-height: 1.8; color: var(--muted-foreground); }
+
+/* Public "from" price: hero and room card. */
+.hero-price { margin-top: 18px; font-size: 15px; letter-spacing: .02em; color: var(--gold-light, var(--foreground)); }
+.hero-price small { display: block; margin-top: 4px; font-size: 12px; color: var(--muted-foreground); }
+.room-price { margin-top: 6px; color: var(--gold-light, var(--foreground)); }
+.subpage { padding-top: 88px; }
