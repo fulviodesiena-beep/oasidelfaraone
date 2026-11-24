@@ -458,3 +458,115 @@ h1, h2, h3 { text-wrap: balance; }
   .hero-tagline { margin-top: 18px; }
   .hero-sub { font-size: 13px; }
 }
+
+/* ───── Immersive opening (November 2026): curtain → reef video → dive into the page ───── */
+@property --hole { syntax: "<percentage>"; inherits: false; initial-value: 0%; }
+.opening { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; pointer-events: none; background: radial-gradient(60% 60% at 50% 45%, #0b2a3a, #050f19 75%); color: var(--gold-light);
+  -webkit-mask-image: radial-gradient(circle at 50% 48%, transparent var(--hole), #000 calc(var(--hole) + .5%)); mask-image: radial-gradient(circle at 50% 48%, transparent var(--hole), #000 calc(var(--hole) + .5%));
+  animation: opening-iris 1.25s cubic-bezier(.75,0,.2,1) 1.45s forwards; }
+.opening-mark { display: grid; justify-items: center; gap: 14px; text-align: center; animation: opening-mark 1.9s ease both; }
+.opening-mark span { font: clamp(30px, 5vw, 56px)/1 var(--font-display); color: #fff6e6; letter-spacing: .01em; }
+.opening-mark small { font-size: 11px; letter-spacing: .32em; text-transform: uppercase; color: var(--gold-light); }
+@keyframes opening-iris { 0% { --hole: 0%; } 99% { --hole: 150%; opacity: 1; } 100% { --hole: 150%; opacity: 0; visibility: hidden; } }
+@keyframes opening-mark { 0% { opacity: 0; transform: translateY(14px); filter: blur(8px); } 30%, 70% { opacity: 1; transform: none; filter: none; } 100% { opacity: 0; transform: scale(1.06); filter: blur(4px); } }
+
+.hero.hero-dive { height: 185svh; min-height: 0; max-height: none; overflow: visible; }
+.hero-stage { position: sticky; top: 0; height: 100svh; min-height: 560px; overflow: hidden; }
+.hero-dive .hero-media { inset: 0; transform: scale(calc(1.04 + var(--dive, 0) * .22)); transform-origin: 50% 60%; will-change: transform; animation: hero-surface 2.6s cubic-bezier(.2,.7,.2,1) 1.2s both; }
+.hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #0b4a5c; filter: saturate(1.08) contrast(1.04) brightness(calc(1 - var(--dive, 0) * .45)); }
+.hero-dive .hero-veil { background: linear-gradient(90deg, rgba(5,15,25,.78), rgba(5,15,25,.18) 70%), linear-gradient(0deg, rgba(5,15,25,.9), transparent 38%); }
+.hero-depth { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(70% 65% at 50% 45%, transparent 10%, #06131f 78%); opacity: calc(var(--dive, 0) * 1.25); }
+.hero-dive .hero-content { height: 100%; opacity: calc(1 - var(--dive, 0) * 2.4); transform: translateY(calc(var(--dive, 0) * -90px)); filter: blur(calc(var(--dive, 0) * 6px)); }
+.hero-dive .hero-content > * { animation-name: rise-in; animation-duration: 1s; animation-fill-mode: both; animation-timing-function: cubic-bezier(.2,.7,.2,1); }
+.hero-dive .hero-content > :nth-child(1) { animation-delay: 2.05s; } .hero-dive .hero-content > :nth-child(2) { animation-delay: 2.15s; }
+.hero-dive .hero-content > :nth-child(3) { animation-delay: 2.3s; } .hero-dive .hero-content > :nth-child(4) { animation-delay: 2.42s; } .hero-dive .hero-content > :nth-child(5) { animation-delay: 2.55s; }
+.hero-dive h1 { animation: rise-in 1s cubic-bezier(.2,.7,.2,1) 2.15s both, sheen 9s ease-in-out 3.5s infinite; }
+.hero-dive-line { position: absolute; left: 0; right: 0; top: 50%; z-index: 2; margin: 0; padding-inline: 24px; text-align: center; font: clamp(32px, 5vw, 72px)/1.08 var(--font-display); color: #fff6e6; pointer-events: none;
+  opacity: clamp(0, calc((var(--dive, 0) - .38) * 3.2), 1); transform: translateY(calc(-50% + (1 - var(--dive, 0)) * 60px)) scale(calc(.94 + var(--dive, 0) * .06)); text-shadow: 0 8px 40px rgba(0,0,0,.45); }
+.hero-dive-line em { display: block; color: var(--gold-light); }
+.hero-dive .hero-bottom { opacity: calc(1 - var(--dive, 0) * 3); }
+.hero-scroll-cue { margin-left: auto; display: inline-flex; align-items: center; gap: 10px; color: #fff6e6; }
+.hero-scroll-cue::before { content: ""; width: 1px; height: 28px; background: linear-gradient(var(--gold-light), transparent); animation: cue 2.2s ease-in-out infinite; }
+.hero-scroll-cue + a { margin-left: 0; }
+.hero-dive .hero-waves { opacity: calc(1 - var(--dive, 0) * 1.5); }
+@keyframes hero-surface { from { opacity: 0; transform: scale(1.18); filter: blur(10px); } to { opacity: 1; filter: none; } }
+@keyframes cue { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+@media (max-width: 767px) {
+  .hero.hero-dive { height: 165svh; min-height: 0; }
+  .hero-dive .hero-content { min-height: 0; padding-block: 96px 120px; justify-content: flex-end; }
+  .hero-dive .hero-veil { background: linear-gradient(0deg, rgba(5,15,25,.92), rgba(5,15,25,.35) 60%, rgba(5,15,25,.5)); }
+  .hero-video { object-position: 40% center; }
+  .hero-scroll-cue { display: inline-flex !important; font-size: 10px; }
+}
+@media (orientation: landscape) and (max-height: 500px) { .hero.hero-dive { height: 150svh; } .hero-dive .hero-content { padding-block: 70px 60px; } }
+@media (min-width: 2200px) { .hero.hero-dive { height: calc(185svh / var(--z)); } .hero-stage { height: calc(100svh / var(--z)); } }
+
+/* Room: short legend instead of two long text boxes. */
+.room-legend { margin: 56px auto 0; max-width: 760px; text-align: center; border: 0; padding: 0; }
+.room-legend p:last-child { margin-top: 16px; font: italic clamp(21px, 2.2vw, 28px)/1.5 var(--font-display); color: var(--foreground); }
+.room-legend::before { content: "“"; display: block; font: 72px/0.6 var(--font-display); color: var(--gold-light); opacity: .6; }
+
+/* ───── The ritual teaser: hint, never tell ───── */
+.ritual-teaser { position: relative; isolation: isolate; overflow: hidden; text-align: center; border-bottom: 0; background: radial-gradient(60% 50% at 50% 30%, rgba(232,201,122,.12), transparent 70%), #070d16; color: #f4ecdc; }
+.ritual-teaser-backdrop { position: absolute; inset: 0; z-index: -2; }
+.ritual-teaser-backdrop img { width: 100%; height: 100%; object-fit: cover; opacity: .16; filter: grayscale(.4) sepia(.5) blur(2px); }
+.ritual-teaser::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, var(--background), transparent 30%, transparent 70%, #070d16); }
+.ritual-teaser-dust { position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: .5; background-image: radial-gradient(1.5px 1.5px at 20% 30%, var(--gold-light), transparent), radial-gradient(1px 1px at 70% 20%, #fff6e6, transparent), radial-gradient(1.5px 1.5px at 85% 65%, var(--gold-light), transparent), radial-gradient(1px 1px at 35% 80%, #fff6e6, transparent), radial-gradient(1px 1px at 55% 50%, var(--gold-light), transparent); background-size: 340px 340px; animation: dust 40s linear infinite; }
+.ritual-teaser-inner { max-width: 980px; display: flex; flex-direction: column; align-items: center; }
+.ritual-teaser-mark { position: relative; display: grid; place-items: center; width: 108px; height: 108px; margin-bottom: 26px; color: var(--gold-light); }
+.ritual-teaser-mark::before { content: ""; position: absolute; inset: -30px; border-radius: 50%; background: radial-gradient(circle, rgba(232,201,122,.35), transparent 65%); animation: glow-breathe 4s ease-in-out infinite alternate; }
+.ritual-scarab { position: relative; width: 76px; height: 76px; }
+.ritual-scarab * { stroke-dasharray: 120; stroke-dashoffset: 120; }
+.ritual-teaser-mark[data-revealed="true"] .ritual-scarab * { animation: draw 2.4s cubic-bezier(.6,0,.2,1) .2s forwards; }
+.ritual-teaser h2 { margin-top: 16px; color: #fff6e6; }
+.ritual-teaser h2 em { color: var(--gold-light); }
+.ritual-teaser-intro { margin-top: 22px; max-width: 600px; font-size: 16px; line-height: 1.8; color: rgba(244,236,220,.78); }
+.ritual-clues { list-style: none; padding: 0; margin: 52px 0 0; width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.ritual-clue { perspective: 1100px; }
+.ritual-clue-card { position: relative; display: block; width: 100%; min-height: 230px; padding: 0; border: 0; background: none; color: inherit; cursor: pointer; transform-style: preserve-3d; transition: transform .9s cubic-bezier(.2,.7,.2,1); font: inherit; }
+.ritual-clue-card:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 4px; }
+.ritual-clue-face { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 28px 24px; border: 1px solid rgba(232,201,122,.38); background: linear-gradient(160deg, rgba(232,201,122,.08), rgba(7,13,22,.6)); -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 3px; }
+.ritual-clue-numeral { font: 15px var(--font-display); letter-spacing: .3em; color: var(--gold-light); }
+.ritual-clue-title { font: clamp(26px, 2.4vw, 32px)/1.15 var(--font-display); color: #fff6e6; }
+.ritual-clue-hint { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: rgba(244,236,220,.55); }
+.ritual-clue-back { transform: rotateY(180deg); font: italic 19px/1.55 var(--font-display); color: #fff6e6; background: linear-gradient(160deg, rgba(232,201,122,.2), rgba(7,13,22,.85)); border-color: var(--gold-light); }
+.ritual-clue[data-open] .ritual-clue-card { transform: rotateY(180deg); }
+@media (hover: hover) and (pointer: fine) { .ritual-clue:hover .ritual-clue-card { transform: rotateY(180deg); } .ritual-clue-hint { visibility: hidden; } }
+.ritual-teaser-actions { margin-top: 48px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 28px; }
+.ritual-teaser-link { font-size: 13px; color: var(--gold-light); text-decoration: underline; text-underline-offset: 6px; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes dust { to { background-position: 340px -340px; } }
+@media (max-width: 767px) {
+  .ritual-clues { grid-template-columns: 1fr; gap: 12px; margin-top: 36px; }
+  .ritual-clue-card { min-height: 150px; }
+  .ritual-teaser-intro { font-size: 15px; }
+}
+
+/* Mina: the tours catalogue sits above the WhatsApp chat. */
+.mina-tours { width: 100%; min-height: 52px; white-space: normal; color: #1a1206; font-size: 13px; }
+
+/* Scroll experience: section titles and images arrive with a little weight. */
+.section-heading.reveal h2 { clip-path: inset(0 0 100% 0); transition: clip-path 1.1s cubic-bezier(.7,0,.2,1) .1s; }
+.section-heading.reveal[data-revealed="true"] h2 { clip-path: inset(0 0 -10% 0); }
+.carousel.reveal .carousel-slide { clip-path: inset(12% 0 0 0 round 4px); transition: clip-path 1.2s cubic-bezier(.7,0,.2,1); }
+.carousel.reveal[data-revealed="true"] .carousel-slide { clip-path: inset(0 round 4px); }
+.carousel.reveal[data-revealed="true"] .carousel-slide:nth-child(2) { transition-delay: .1s; }
+.carousel.reveal[data-revealed="true"] .carousel-slide:nth-child(3) { transition-delay: .2s; }
+.mina-photo.reveal img { transform: scale(1.15); transition: transform 1.6s cubic-bezier(.2,.7,.2,1); }
+.mina-photo.reveal[data-revealed="true"] img { transform: none; }
+
+/* Phones: the brand line under the logo wrapped onto two lines in the header. */
+@media (max-width: 639px) { .site-header .brand small { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .opening { display: none; }
+  .hero.hero-dive { height: auto; }
+  .hero-stage { position: relative; height: 100svh; }
+  .hero-dive .hero-media, .hero-dive .hero-content > *, .hero-dive h1 { animation: none; }
+  .hero-dive-line { display: none; }
+  .ritual-scarab * { stroke-dashoffset: 0; }
+  .ritual-teaser-dust, .ritual-teaser-mark::before, .hero-scroll-cue::before { animation: none; }
+  .ritual-clue-card { transition: none; }
+  .section-heading.reveal h2, .carousel.reveal .carousel-slide { clip-path: none; }
+  .mina-photo.reveal img { transform: none; }
+}
