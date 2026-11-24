@@ -37,7 +37,7 @@ export const RITUAL_TEXTS = [STORY, WHY, NOTE, ...RITUAL_STEPS.map(s => s.text),
   "Torna alla home dell’Oasi del Faraone", "Lettere dall’Oasi", "Privacy e cookie",
 ] as const;
 
-function Scarab({ className = "size-10" }: { className?: string }) {
+export function Scarab({ className = "size-10" }: { className?: string }) {
   return <svg viewBox="0 0 48 48" className={className} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">
     <circle cx="24" cy="7" r="4" /><path d="M24 11v29" /><ellipse cx="24" cy="27" rx="11" ry="14" />
     <path d="M13 22 5 17M13 28H4M14 34l-7 6M35 22l8-5M35 28h9M34 34l7 6M21 4l-3-3M27 4l3-3" />

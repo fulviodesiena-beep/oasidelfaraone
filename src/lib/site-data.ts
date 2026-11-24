@@ -52,6 +52,10 @@ export const OWNER_WHATSAPP = "393347328158";
 export const MINA_WHATSAPP = "393481804764";
 export const OWNER_EMAIL = "prenotazioni@oasidelfaraone.it";
 export const INSTAGRAM_URL = "https://www.instagram.com/oasidelfaraone";
+/** Mina's own catalogue: excursions, transfers and tours are booked there, not on this site. */
+export const MINA_TOURS_URL = "https://sharmina-tour-catalogo.youssefmina2025.chatgpt.site/";
+/** Opening video of the home page (owner-supplied reef footage, November 2026), served from /public/video. */
+export const HERO_VIDEO = { large: "/video/oasi-mare-1600.mp4", small: "/video/oasi-mare-540.mp4", poster: "/video/oasi-mare-poster.jpg" } as const;
 export const wa = (num: string, text: string) => `https://wa.me/${num}?text=${encodeURIComponent(text)}`;
 export type Extra = { id: string; name: string; desc: string; image: string; photo: string; focus?: string };
 export const EXTRAS: Extra[] = [

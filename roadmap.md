@@ -33,3 +33,4 @@
 - [ ] Sync Booking.com e Impostazioni per singola stanza (oggi una sola stanza: usa i valori attuali)
 
 - [x] Delega Domina: corretto salvataggio (non partiva per un valore non ammesso), errori chiari in gestionale, delega di test generata; casella offerte del modulo prenotazione avvia la doppia conferma newsletter
+- [x] Redesign esperienza home (novembre 2026): apertura con il video dei fondali e immersione allo scroll, rito raccontato a indizi per creare curiosità, testi accorciati (hero, stanze, villaggio, Mina), sezione esperienze rimossa con pulsante al catalogo escursioni di Mina sopra il suo WhatsApp; 157 test superati.
