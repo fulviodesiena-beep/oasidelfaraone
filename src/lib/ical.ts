@@ -41,6 +41,10 @@ export const SYNC_MIN_INTERVAL_MS = 60_000;
 export const isSyncStale = (lastAttempt: string | null | undefined, now: Date) =>
   !lastAttempt || now.getTime() - Date.parse(lastAttempt) >= SYNC_MIN_INTERVAL_MS;
 
-/** A confirmed direct booking must be closed manually on Booking.com until "Fatto" is pressed. */
-export const needsBookingClosure = (b: { status: string; channel: string; ota_closed_at: string | null; check_out: string; is_personal_use?: boolean }, today: string) =>
+/** Booking.com link switch. Off (owner's decision, 25/11/2026): no feed import, no "close dates on Booking" reminders,
+ *  no Booking card in settings. Set to true to reconnect; the code and the export link stay in place. */
+export const BOOKING_COM_LINKED = false;
+
+/** A confirmed direct booking must be closed manually on Booking.com until "Fatto" is pressed (only while linked). */
+export const needsBookingClosure = (b: { status: string; channel: string; ota_closed_at: string | null; check_out: string; is_personal_use?: boolean }, today: string, linked = BOOKING_COM_LINKED) => linked &&
   (b.status === "confirmed" || b.status === "option" || b.status === "host_collab" || b.status === "personal") && b.channel !== "booking" && !b.ota_closed_at && b.check_out >= today;

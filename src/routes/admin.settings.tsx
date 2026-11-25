@@ -13,6 +13,7 @@ import { syncBookingNow } from "@/lib/ical.functions";
 import { TemplateUploads } from "@/components/admin/TemplateUploads";
 import { AutomationSettings } from "@/components/admin/AutomationSettings";
 import type { TablesUpdate } from "@/integrations/supabase/types";
+import { BOOKING_COM_LINKED } from "@/lib/ical";
 
 export const Route = createFileRoute("/admin/settings")({ component: SettingsPage });
 
@@ -45,6 +46,7 @@ function SettingsPage() {
 
   return (
     <div className="grid max-w-3xl gap-6">
+      {BOOKING_COM_LINKED ? (
       <Card><CardHeader><CardTitle className="font-display text-2xl font-normal">Calendario Booking.com</CardTitle></CardHeader>
         <CardContent className="space-y-4">
           <Field label="URL iCal esportato da Booking.com"><Input placeholder="https://admin.booking.com/…/ical.ics" value={f.booking_ical_url} onChange={e => setF({ ...f, booking_ical_url: e.target.value })} /></Field>
@@ -60,6 +62,10 @@ function SettingsPage() {
           </Field>
           <Button variant="ghost" size="sm" onClick={() => { if (confirm("Il vecchio link smetterà di funzionare: dovrai incollare quello nuovo su Booking.com. Continuare?")) save.mutate({ ical_token: newToken() }); }}><RotateCw />Rigenera token</Button>
         </CardContent></Card>
+      ) : (
+      <Card><CardHeader><CardTitle className="font-display text-2xl font-normal">Calendario Booking.com</CardTitle></CardHeader>
+        <CardContent><p className="text-sm text-muted-foreground">Collegamento con Booking.com sospeso: il calendario non viene importato e non compaiono promemoria di chiusura date. Le prenotazioni arrivate da Booking.com si inseriscono a mano. Per riattivarlo: <code>BOOKING_COM_LINKED = true</code> in <code>src/lib/ical.ts</code>.</p></CardContent></Card>
+      )}
 
       <Card><CardHeader><CardTitle className="font-display text-2xl font-normal">Ripartizione ricavi</CardTitle></CardHeader>
         <CardContent className="space-y-4">

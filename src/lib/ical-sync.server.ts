@@ -1,11 +1,12 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
-import { parseIcal } from "@/lib/ical";
+import { BOOKING_COM_LINKED, parseIcal } from "@/lib/ical";
 
 export type SyncResult = { ok: boolean; imported: number; removed: number; error?: string };
 
 /** Imports the Booking.com iCal feed into availability_blocks (source='booking'). Never touches bookings. */
 export async function syncBookingIcal(db: SupabaseClient<Database>): Promise<SyncResult> {
+  if (!BOOKING_COM_LINKED) return { ok: true, imported: 0, removed: 0 };
   const now = new Date().toISOString();
   const { data: s, error: se } = await db.from("settings").select("booking_ical_url").eq("id", 1).maybeSingle();
   if (se) return { ok: false, imported: 0, removed: 0, error: se.message };
