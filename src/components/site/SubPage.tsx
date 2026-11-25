@@ -1,14 +1,13 @@
-import { useEffect, type ReactNode } from "react";
-import { ArrowUpRight, Instagram, MessageCircle } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { INSTAGRAM_URL, OWNER_EMAIL, OWNER_WHATSAPP } from "@/lib/site-data";
 import { captureAttribution } from "@/lib/tracking";
 import { publicPath, useLanguage, type PublicPage } from "@/lib/i18n";
 import { Cartouche } from "./Cartouche";
 import { CookieConsent } from "./CookieConsent";
 import { FloatingActions } from "./FloatingActions";
 import { LanguageSelector } from "./LanguageSelector";
-import { NewsletterSignup } from "./NewsletterSignup";
+import { SiteFooter } from "./SiteFooter";
 
 /** Reveal-on-scroll for `.reveal` blocks (same behaviour as the home page). */
 export function useReveal() {
@@ -42,6 +41,7 @@ export function SubPage({ page, children }: { page: PublicPage; children: ReactN
   }, []);
   useReveal();
   const home = publicPath(language);
+  const [menu, setMenu] = useState(false);
   const link = (target: PublicPage, label: string) => (
     <a
       href={publicPath(language, target)}
@@ -65,7 +65,7 @@ export function SubPage({ page, children }: { page: PublicPage; children: ReactN
           </a>
           <nav
             aria-label={t("Navigazione principale")}
-            className="hidden items-center gap-5 lg:flex"
+            className="hidden items-center gap-6 lg:flex"
           >
             {link("home", "Le stanze")}
             {link("guide", "Guida a Sharm")}
@@ -79,77 +79,29 @@ export function SubPage({ page, children }: { page: PublicPage; children: ReactN
                 <ArrowUpRight />
               </a>
             </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="lg:hidden"
+              aria-label={t(menu ? "Chiudi menu" : "Apri menu")}
+              aria-expanded={menu}
+              onClick={() => setMenu((v) => !v)}
+            >
+              {menu ? <X /> : <Menu />}
+            </Button>
           </div>
         </div>
+        {menu && (
+          <nav aria-label={t("Navigazione mobile")} className="mobile-menu site-container">
+            <a href={home}>{t("Le stanze")}</a>
+            <a href={publicPath(language, "guide")} aria-current={page === "guide" ? "page" : undefined}>{t("Guida a Sharm")}</a>
+            <a href={publicPath(language, "invest")} aria-current={page === "invest" ? "page" : undefined}>{t("Investire a Sharm")}</a>
+            <a href={`${home === "/" ? "" : home}/#contatti`}>{t("Contatti")}</a>
+          </nav>
+        )}
       </header>
       <main className="subpage">{children}</main>
-      <footer className="site-footer theme-night wave-top">
-        <div className="site-container footer-layout">
-          <div>
-            <a href={home} className="brand">
-              <Cartouche className="h-14 w-10" />
-              <span>
-                {t("Oasi del Faraone")}
-                <small>{t("ESPERIENZE SUL MAR ROSSO")}</small>
-              </span>
-            </a>
-            <p className="mt-5 font-display text-xl italic text-muted-foreground">
-              {t("Il tuo angolo d’Oriente sul Mar Rosso")}
-            </p>
-          </div>
-          <div>
-            <p className="eyebrow">{t("Parliamone")}</p>
-            <p className="mt-5 text-sm">{t("Fulvio De Siena")}</p>
-            <a
-              href={`https://wa.me/${OWNER_WHATSAPP}`}
-              className="mt-2 block text-sm text-gold-light"
-            >
-              {t("+39 334 732 8158")}
-            </a>
-            <a href={`mailto:${OWNER_EMAIL}`} className="mt-2 block text-sm text-gold-light">
-              {OWNER_EMAIL}
-            </a>
-          </div>
-          <div>
-            <p className="eyebrow">{t("Restiamo in contatto")}</p>
-            <div className="mt-4 flex gap-3">
-              <Button asChild variant="outline" size="icon">
-                <a
-                  href={INSTAGRAM_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={t("Instagram Oasi del Faraone")}
-                >
-                  <Instagram />
-                </a>
-              </Button>
-              <Button asChild variant="outline" size="icon">
-                <a href={`https://wa.me/${OWNER_WHATSAPP}`} aria-label={t("WhatsApp Fulvio")}>
-                  <MessageCircle />
-                </a>
-              </Button>
-            </div>
-            <div className="mt-6">
-              <p className="eyebrow mb-3">{t("Lettere dall’Oasi")}</p>
-              <NewsletterSignup compact />
-            </div>
-          </div>
-        </div>
-        <div className="site-container footer-bottom">
-          <span>
-            {t("©")} {new Date().getFullYear()} {t("Oasi del Faraone")}
-          </span>
-          <a href={home} className="text-xs text-muted-foreground hover:text-foreground">
-            {t("Torna alla home dell’Oasi del Faraone")}
-          </a>
-          <a
-            href={publicPath(language, "privacy")}
-            className="text-xs text-muted-foreground hover:text-foreground"
-          >
-            {t("Privacy e cookie")}
-          </a>
-        </div>
-      </footer>
+      <SiteFooter />
       <FloatingActions />
       <CookieConsent />
     </>
