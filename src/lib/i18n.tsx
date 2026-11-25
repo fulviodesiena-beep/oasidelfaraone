@@ -18,7 +18,7 @@ export function detectLanguage(values: readonly string[]): Language {
   for (const value of values) { const code = value.toLowerCase().split("-")[0]; if (isLanguage(code)) return code; }
   return "it";
 }
-export type PublicPage = "home" | "privacy" | "ritual" | "guide" | "invest";
+export type PublicPage = "home" | "privacy" | "guide" | "invest";
 /** Localized slugs of the secondary pages (Italian has no language prefix). */
 const PAGE_SLUGS: Record<"guide" | "invest", Record<Language, string>> = {
   guide: { it: "guida-sharm", en: "sharm-guide", de: "sharm-reisefuehrer" },
@@ -26,12 +26,11 @@ const PAGE_SLUGS: Record<"guide" | "invest", Record<Language, string>> = {
 };
 export function publicPath(language: Language, page: PublicPage = "home") {
   const prefix = language === "it" ? "" : `/${language}`;
-  if (page === "ritual") return language === "it" ? "/rito" : `${prefix}/ritual`;
   if (page === "guide" || page === "invest") return `${prefix}/${PAGE_SLUGS[page][language]}`;
   return page === "home" ? prefix || "/" : `${prefix}/privacy`;
 }
-/** Italian entry URLs where a first visit may follow the browser language (home and the in-room QR page). */
-const AUTO_LANGUAGE_PAGES: Record<string, PublicPage> = { "/": "home", "/rito": "ritual" };
+/** Italian entry URLs where a first visit may follow the browser language (the home; the old in-room QR URL /rito redirects there). */
+const AUTO_LANGUAGE_PAGES: Record<string, PublicPage> = { "/": "home" };
 export function translate(language: Language, key: string = "", values: Record<string, string | number> = {}) {
   let text = DICTIONARIES[language][key] ?? key;
   for (const [name, value] of Object.entries(values)) text = text.replaceAll(`{${name}}`, String(value));
@@ -51,7 +50,7 @@ function LanguageEffects({ language }: { language: Language }) {
     document.documentElement.dir = LOCALES[language].dir;
     try {
       const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-      // Explicit localized links win. Browser preference applies only to the Italian home and QR ritual entry URLs.
+      // Explicit localized links win. Browser preference applies only to the Italian home entry URL.
       // Query strings (e.g. utm_* from the room QR) are carried over unchanged.
       const autoPage = AUTO_LANGUAGE_PAGES[window.location.pathname];
       if (autoPage) {

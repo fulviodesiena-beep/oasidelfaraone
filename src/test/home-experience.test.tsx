@@ -4,11 +4,13 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { RITUAL_STEPS } from "@/components/site/PublicRitual";
 import { RITUAL_CLUES, RITUAL_TEASER_TEXTS } from "@/components/site/RitualTeaser";
 import { DICTIONARIES, languages } from "@/lib/i18n";
-import { HERO_VIDEO, MINA_TOURS_URL, MINA_WHATSAPP } from "@/lib/site-data";
+import { HERO_VIDEO, MINA_TOURS_URL, MINA_WHATSAPP, ROOMS } from "@/lib/site-data";
 import { Route } from "@/routes/index";
+import { Route as RitoRoute } from "@/routes/rito";
+import { Route as EnRitualRoute } from "@/routes/en_.ritual";
+import { ritualRedirectHref } from "@/lib/ritual-redirect";
 
 class FakeIntersectionObserver {
   observe() {}
@@ -59,7 +61,9 @@ describe("home experience", () => {
     const { container } = renderPage();
     const teaser = container.querySelector("#rito") as HTMLElement;
     expect(teaser).not.toBeNull();
-    for (const step of RITUAL_STEPS) expect(teaser.textContent).not.toContain(step.text);
+    // The full ritual text (scarab in the palm, three turns, the note under the statue) never reaches the home.
+    expect(container.textContent).not.toContain(ROOMS[0].ritual);
+    expect(teaser.textContent).not.toMatch(/tre volte|Scrigno|statua/);
     expect(screen.getByRole("link", { name: /Prenota e vivi il rito/ })).toHaveAttribute("href", "#book");
     const clue = screen.getAllByRole("button", { expanded: false }).find(b => b.textContent?.includes("Uno scarabeo"));
     expect(clue).toBeDefined();
@@ -70,5 +74,40 @@ describe("home experience", () => {
   it("translates every ritual teaser text", () => {
     expect(RITUAL_CLUES).toHaveLength(3);
     for (const language of languages) for (const key of RITUAL_TEASER_TEXTS) expect(DICTIONARIES[language]).toHaveProperty(key);
+  });
+
+  it("starts with the video alone: menu and texts wait for the intro to end", () => {
+    const { container } = renderPage();
+    // jsdom has no playing video: the intro is skipped at once (no autoplay), as on reduced motion.
+    expect(container.querySelector("main")?.className).toMatch(/intro-(playing|done)/);
+    expect(container.querySelector(".intro-progress")).not.toBeNull();
+  });
+
+  it("keeps the hero short and the menu essential", () => {
+    const { container } = renderPage();
+    const hero = container.querySelector("#top .hero-content") as HTMLElement;
+    expect(hero.querySelectorAll("p").length).toBeLessThanOrEqual(2);
+    const mainNav = screen.getByRole("navigation", { name: "Navigazione principale" });
+    expect(mainNav.querySelectorAll("a").length).toBeLessThanOrEqual(5);
+  });
+
+  it("no longer prints Mina's phone number under his WhatsApp button", () => {
+    const { container } = renderPage();
+    expect(container.querySelector("#mina")?.textContent).not.toContain("348 180 4764");
+  });
+});
+
+describe("old ritual page", () => {
+  it("redirects the in-room QR URLs to the ritual section of the home, keeping the QR parameters", () => {
+    const qr = "?utm_source=qr&utm_medium=room&utm_campaign=elisir";
+    expect(ritualRedirectHref("it", qr)).toBe(`/${qr}#rito`);
+    expect(ritualRedirectHref("en", qr)).toBe(`/en${qr}#rito`);
+    expect(ritualRedirectHref("de")).toBe("/de#rito");
+    const before = RitoRoute.options.beforeLoad as unknown as (ctx: { location: { searchStr: string } }) => void;
+    let thrown: unknown;
+    try { before({ location: { searchStr: qr } }); } catch (e) { thrown = e; }
+    expect(thrown).toBeDefined();
+    expect(JSON.stringify(thrown)).toContain(`/${qr}#rito`);
+    expect(EnRitualRoute.options.component).toBeUndefined();
   });
 });

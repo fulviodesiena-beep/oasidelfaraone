@@ -3,11 +3,10 @@ import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/lib/i18n";
 import { cdnSrcSet, HERO_WIDTHS } from "@/lib/images";
-import { Scarab } from "./PublicRitual";
 
 /**
- * Home teaser for the room ritual. It only hints: the full ritual is revealed in the room
- * (QR page /rito), so the home builds curiosity and leads to the booking form.
+ * Home teaser for the room ritual. It only hints: the full ritual is revealed only in the room,
+ * so the home builds curiosity and leads to the booking form.
  * Each clue opens on hover and through a real toggle button, so phones reach the same content.
  */
 export const RITUAL_CLUES = [
@@ -49,4 +48,11 @@ export function RitualTeaser({ backdrop }: { backdrop?: string | undefined }) {
       </div>
     </div>
   </section>;
+}
+
+function Scarab({ className = "size-10" }: { className?: string }) {
+  return <svg viewBox="0 0 48 48" className={className} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">
+    <circle cx="24" cy="7" r="4" /><path d="M24 11v29" /><ellipse cx="24" cy="27" rx="11" ry="14" />
+    <path d="M13 22 5 17M13 28H4M14 34l-7 6M35 22l8-5M35 28h9M34 34l7 6M21 4l-3-3M27 4l3-3" />
+  </svg>;
 }
