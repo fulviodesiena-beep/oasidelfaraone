@@ -4,7 +4,8 @@ export const SEASON_RATES: Record<Season, number> = { ...PRICING_CONFIG.rates };
 /** Lowest seasonal nightly rate for the whole apartment: the public "from" price. */
 export const FROM_PRICE = Math.min(...Object.values(PRICING_CONFIG.rates));
 export const MAX_GUESTS = PRICING_CONFIG.maxGuests;
-export const TRANSFER_PER_PERSON = PRICING_CONFIG.transferPerPerson;
+export type TransferTrip = "oneWay" | "roundTrip";
+export const TRANSFER_PRICES: Record<TransferTrip, number> = PRICING_CONFIG.transfer;
 export const CLEANING_FEE = PRICING_CONFIG.cleaningFee;
 const R = PRICING_CONFIG.rates;
 export const SEASONS = [
@@ -53,4 +54,5 @@ export function quote(checkIn: Date, checkOut: Date, extrasTotal = 0) {
   const minStayWarning = nightsCount > 0 && nightsCount < minNights ? minNights : null;
   return { nights, nightsCount, onRequest, accommodation, extrasTotal, total: accommodation === null ? null : accommodation + extrasTotal, cleaningFee: CLEANING_FEE, touchesPeak, minStayWarning };
 }
-export function transferTotal(guests: number) { return guests * TRANSFER_PER_PERSON; }
+/** Airport transfer for the whole booking: one way or round trip, nothing when not requested. */
+export function transferTotal(trip: TransferTrip | null) { return trip ? TRANSFER_PRICES[trip] : 0; }

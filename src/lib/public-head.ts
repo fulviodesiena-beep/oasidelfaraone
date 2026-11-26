@@ -8,13 +8,14 @@ const SITE_URL = "https://oasidelfaraone.it";
 const OG_IMAGE = `${SITE_URL}${HERO_PHOTOS[0]?.src ?? ""}`;
 const FAQS: [string, ReactNode, string][] = [
   ["Cosa è incluso nel soggiorno?", "Spiagge, piscine, padel, beach volley e animazione del resort Domina Coral Bay sono inclusi, senza costi aggiuntivi. Ristoranti e bar sono à la carte; spa e casinò sono a pagamento.", ""],
-  ["C’è il Wi‑Fi?", "In camera il Wi‑Fi non è disponibile. Consigliamo una eSIM o una SIM locale: ti diamo noi le indicazioni prima della partenza.", ""],
+  ["C’è il Wi‑Fi?", "In camera il Wi‑Fi non è disponibile, ma in reception è gratuito. Per la camera consigliamo una eSIM o una SIM locale: ti diamo noi le indicazioni prima della partenza.", ""],
   ["Quante persone può ospitare l’appartamento?", "Fino a 4 ospiti. Il prezzo è per appartamento, non per persona.", ""],
   ["Le pulizie sono incluse?", "La pulizia finale non è inclusa: si paga in reception al check-in, alla consegna delle chiavi, e l’importo è indicato nel preventivo. Pulizie extra si richiedono in reception, a pagamento.", ""],
   ["Quali sono gli orari di check-in e check-out?", "Check-in dalle 15:00, check-out entro le 11:00.", ""],
   ["Serve il visto per l’Egitto?", "Verifica sempre i requisiti aggiornati sul sito ufficiale viaggiaresicuri.it della Farnesina prima di partire.", ""],
-  ["Come si arriva dall’aeroporto di Sharm?", "Il transfer dall’aeroporto è organizzato dal nostro referente sul posto, Mina (+39 348 180 4764).", ""],
+  ["Come si arriva dall’aeroporto di Sharm?", "Il transfer lo organizza il nostro referente sul posto, Mina. Puoi aggiungerlo quando prenoti: 20 € solo andata, 40 € andata e ritorno, per tutta la prenotazione.", ""],
   ["Come prenoto?", "Scegli le date sul sito e invia la richiesta: Fulvio ti risponde di persona e conferma la prenotazione via WhatsApp o email.", ""],
+  ["Come si paga?", "Con bonifico bancario, solo dopo che Fulvio ti ha confermato date e prezzo. IBAN e intestatario li trovi nel riepilogo della prenotazione; importo e scadenza te li indica Fulvio nella conferma.", ""],
 ];
 const JSONLD = [
   { "@context": "https://schema.org", "@type": ["VacationRental", "LodgingBusiness"],
