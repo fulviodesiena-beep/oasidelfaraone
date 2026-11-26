@@ -1,7 +1,7 @@
 // Motore delle automazioni: funzioni pure (testabili) che decidono cosa è dovuto oggi.
 import { LANGS, MESSAGES, VISA_NOTE, type Lang, type MessageKey } from "./messages";
 
-export type AutomationId = "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "A7" | "A8" | "A9" | "A10";
+export type AutomationId = "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "A7" | "A8" | "A9" | "A10" | "A11";
 export const AUTOMATIONS: { id: AutomationId; name: string; rule: string; channels: string }[] = [
   { id: "A1", name: "Conferma prenotazione", rule: "alla conferma (confermata + pagata)", channels: "email + WhatsApp" },
   { id: "A2", name: "Info documenti e aeroporto", rule: "5 giorni prima del check-in", channels: "email + WhatsApp" },
@@ -13,6 +13,7 @@ export const AUTOMATIONS: { id: AutomationId; name: string; rule: string; channe
   { id: "A8", name: "Richiesta non convertita", rule: "richiesta +2 e +7 giorni senza prenotazione", channels: "email" },
   { id: "A9", name: "Un anno fa eri a Sharm", rule: "11 mesi dopo il soggiorno, soft opt-in", channels: "Brevo" },
   { id: "A10", name: "Newsletter Lettere dall'Oasi", rule: "ogni 2 settimane, solo doppia conferma", channels: "Brevo" },
+  { id: "A11", name: "Promemoria documenti per la delega", rule: "10 giorni prima del check-in, se mancano documenti", channels: "email + WhatsApp" },
 ];
 
 export type Toggles = Partial<Record<AutomationId, boolean>>;
@@ -60,6 +61,8 @@ export function nextOccurrence(today: string, day: number, month: number) {
 
 export function computeDue(input: {
   now: Date; toggles: Toggles; bookings: ABooking[]; contacts: AContact[]; inquiries: AInquiry[]; occasions: AOccasion[]; logs: ALog[];
+  /** Bookings still missing at least one traveler document (drives A11). */
+  missingDocs?: ReadonlySet<string>;
 }): DueItem[] {
   const today = isoDay(input.now);
   const on = (a: AutomationId) => input.toggles[a] === true;
@@ -80,6 +83,7 @@ export function computeDue(input: {
     const confirmedDay = b.confirmed_at?.slice(0, 10);
     if (on("A1") && confirmedDay && isPaid(b) && inWindow(today, confirmedDay, 3) && today <= b.check_in) both("A1", "", "A1", ["email", "whatsapp"]);
     if (on("A2") && inWindow(today, addDays(b.check_in, -5))) both("A2", "", "A2", ["email", "whatsapp"]);
+    if (on("A11") && isPaid(b) && input.missingDocs?.has(b.id) && inWindow(today, addDays(b.check_in, -10))) both("A11", "", "A11", ["email", "whatsapp"]);
     if (on("A3") && inWindow(today, b.check_in, 0)) both("A3", "", "A3", ["whatsapp"]);
     if (on("A4") && inWindow(today, addDays(b.check_in, 1), 0) && today < b.check_out) both("A4", "", "A4", ["whatsapp"]);
     if (on("A5") && inWindow(today, addDays(b.check_out, 1))) both("A5", "", "A5", ["email", "whatsapp"]);

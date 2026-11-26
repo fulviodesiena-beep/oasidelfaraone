@@ -7,7 +7,7 @@ async function hmac(secret: string, msg: string) {
   const key = await crypto.subtle.importKey("raw", enc.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
   return b64u(await crypto.subtle.sign("HMAC", key, enc.encode(msg)));
 }
-export type TokenPurpose = "unsub" | "nl-confirm" | "brevo-webhook" | "doc";
+export type TokenPurpose = "unsub" | "nl-confirm" | "brevo-webhook" | "doc" | "upload";
 
 export async function signToken(purpose: TokenPurpose, subject: string, secret = process.env["EMAIL_TOKEN_SECRET"] ?? "") {
   if (!secret) throw new Error("EMAIL_TOKEN_SECRET mancante");
@@ -37,3 +37,17 @@ export async function verifyDocumentToken(token: string, now = Date.now(), secre
   if (!id || !/^[0-9a-f-]{36}$/i.test(id) || !(Number(exp) > now)) return null;
   return id;
 }
+
+/** Guest upload page (/documenti/<token>): `upload` token with the booking id and an expiry (ms). */
+export async function signUploadToken(bookingId: string, expiresAt: number, secret?: string) {
+  return signToken("upload", `${bookingId}:${Math.floor(expiresAt)}`, secret);
+}
+export async function verifyUploadToken(token: string, now = Date.now(), secret?: string) {
+  const subject = await verifyToken("upload", token, secret);
+  if (!subject) return null;
+  const [id, exp] = subject.split(":");
+  if (!id || !/^[0-9a-f-]{36}$/i.test(id) || !(Number(exp) > now)) return null;
+  return id;
+}
+/** The upload link stays valid until two days after check-out (at least 7 days from now). */
+export const uploadExpiry = (checkOut: string, now = Date.now()) => Math.max(Date.parse(`${checkOut}T00:00:00Z`) + 2 * 86400_000, now + 7 * 86400_000);

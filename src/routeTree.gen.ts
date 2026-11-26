@@ -37,6 +37,7 @@ import { Route as DeInvestierenRouteImport } from './routes/de_.investieren'
 import { Route as DePrivacyRouteImport } from './routes/de_.privacy'
 import { Route as DeRitualRouteImport } from './routes/de_.ritual'
 import { Route as DeSharmReisefuehrerRouteImport } from './routes/de_.sharm-reisefuehrer'
+import { Route as DocumentiTokenRouteImport } from './routes/documenti.$token'
 import { Route as EnInvestRouteImport } from './routes/en_.invest'
 import { Route as EnPrivacyRouteImport } from './routes/en_.privacy'
 import { Route as EnRitualRouteImport } from './routes/en_.ritual'
@@ -193,6 +194,11 @@ const DeSharmReisefuehrerRoute = DeSharmReisefuehrerRouteImport.update({
   path: '/de/sharm-reisefuehrer',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DocumentiTokenRoute = DocumentiTokenRouteImport.update({
+  id: '/documenti/$token',
+  path: '/documenti/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnInvestRoute = EnInvestRouteImport.update({
   id: '/en_/invest',
   path: '/en/invest',
@@ -299,6 +305,7 @@ export interface FileRoutesByFullPath {
   '/de/privacy': typeof DePrivacyRoute
   '/de/ritual': typeof DeRitualRoute
   '/de/sharm-reisefuehrer': typeof DeSharmReisefuehrerRoute
+  '/documenti/$token': typeof DocumentiTokenRoute
   '/en/invest': typeof EnInvestRoute
   '/en/privacy': typeof EnPrivacyRoute
   '/en/ritual': typeof EnRitualRoute
@@ -343,6 +350,7 @@ export interface FileRoutesByTo {
   '/de/privacy': typeof DePrivacyRoute
   '/de/ritual': typeof DeRitualRoute
   '/de/sharm-reisefuehrer': typeof DeSharmReisefuehrerRoute
+  '/documenti/$token': typeof DocumentiTokenRoute
   '/en/invest': typeof EnInvestRoute
   '/en/privacy': typeof EnPrivacyRoute
   '/en/ritual': typeof EnRitualRoute
@@ -389,6 +397,7 @@ export interface FileRoutesById {
   '/de_/privacy': typeof DePrivacyRoute
   '/de_/ritual': typeof DeRitualRoute
   '/de_/sharm-reisefuehrer': typeof DeSharmReisefuehrerRoute
+  '/documenti/$token': typeof DocumentiTokenRoute
   '/en_/invest': typeof EnInvestRoute
   '/en_/privacy': typeof EnPrivacyRoute
   '/en_/ritual': typeof EnRitualRoute
@@ -436,6 +445,7 @@ export interface FileRouteTypes {
     | '/de/privacy'
     | '/de/ritual'
     | '/de/sharm-reisefuehrer'
+    | '/documenti/$token'
     | '/en/invest'
     | '/en/privacy'
     | '/en/ritual'
@@ -480,6 +490,7 @@ export interface FileRouteTypes {
     | '/de/privacy'
     | '/de/ritual'
     | '/de/sharm-reisefuehrer'
+    | '/documenti/$token'
     | '/en/invest'
     | '/en/privacy'
     | '/en/ritual'
@@ -525,6 +536,7 @@ export interface FileRouteTypes {
     | '/de_/privacy'
     | '/de_/ritual'
     | '/de_/sharm-reisefuehrer'
+    | '/documenti/$token'
     | '/en_/invest'
     | '/en_/privacy'
     | '/en_/ritual'
@@ -560,6 +572,7 @@ export interface RootRouteChildren {
   DePrivacyRoute: typeof DePrivacyRoute
   DeRitualRoute: typeof DeRitualRoute
   DeSharmReisefuehrerRoute: typeof DeSharmReisefuehrerRoute
+  DocumentiTokenRoute: typeof DocumentiTokenRoute
   EnInvestRoute: typeof EnInvestRoute
   EnPrivacyRoute: typeof EnPrivacyRoute
   EnRitualRoute: typeof EnRitualRoute
@@ -775,6 +788,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DeSharmReisefuehrerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/documenti/$token': {
+      id: '/documenti/$token'
+      path: '/documenti/$token'
+      fullPath: '/documenti/$token'
+      preLoaderRoute: typeof DocumentiTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en_/invest': {
       id: '/en_/invest'
       path: '/en/invest'
@@ -932,6 +952,7 @@ const rootRouteChildren: RootRouteChildren = {
   DePrivacyRoute: DePrivacyRoute,
   DeRitualRoute: DeRitualRoute,
   DeSharmReisefuehrerRoute: DeSharmReisefuehrerRoute,
+  DocumentiTokenRoute: DocumentiTokenRoute,
   EnInvestRoute: EnInvestRoute,
   EnPrivacyRoute: EnPrivacyRoute,
   EnRitualRoute: EnRitualRoute,

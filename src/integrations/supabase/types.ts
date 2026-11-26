@@ -326,34 +326,40 @@ export type Database = {
         Row: {
           booking_id: string
           created_at: string
+          extracted: Json | null
           file_type: string | null
           file_url: string
           fingerprint: string | null
           id: string
           kind: string | null
           name: string
+          traveler_id: string | null
           uploaded_by: string
         }
         Insert: {
           booking_id: string
           created_at?: string
+          extracted?: Json | null
           file_type?: string | null
           file_url: string
           fingerprint?: string | null
           id?: string
           kind?: string | null
           name: string
+          traveler_id?: string | null
           uploaded_by?: string
         }
         Update: {
           booking_id?: string
           created_at?: string
+          extracted?: Json | null
           file_type?: string | null
           file_url?: string
           fingerprint?: string | null
           id?: string
           kind?: string | null
           name?: string
+          traveler_id?: string | null
           uploaded_by?: string
         }
         Relationships: [
