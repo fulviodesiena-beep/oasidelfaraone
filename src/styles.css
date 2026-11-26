@@ -634,3 +634,31 @@ img, video { max-width: 100%; }
   .section-heading.reveal h2, .carousel.reveal .carousel-slide { clip-path: none; }
   .mina-photo.reveal img { transform: none; }
 }
+
+/* Guide photo cards: the text stays readable on every theme, a short description is always visible,
+   and hover/tap darkens the photo instead of washing it out. */
+.photo-card { --photo-overlay: linear-gradient(0deg, rgba(6,12,20,.92) 0%, rgba(6,12,20,.55) 42%, transparent 72%); --photo-hover: linear-gradient(0deg, rgba(6,12,20,.95) 0%, rgba(6,12,20,.78) 55%, rgba(6,12,20,.45)); }
+.photo-content { color: #fff6e6; text-shadow: 0 1px 12px rgba(0,0,0,.45); }
+.photo-content h3 { color: #fff6e6; }
+.photo-caption { font-size: 10px; color: #e8c97a; }
+.photo-desc { margin-top: 10px; font-size: 13px; line-height: 1.6; color: rgba(255,246,230,.9); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.photo-card:hover .photo-desc, .photo-card:focus-within .photo-desc, .photo-open .photo-desc { -webkit-line-clamp: unset; }
+.photo-card:hover .photo-shade, .photo-card:focus-within .photo-shade, .photo-open .photo-shade { background: var(--photo-hover); }
+@media (hover: none) { .photo-card:not(.photo-open):not(:focus-within) .photo-shade { background: var(--photo-overlay); } }
+.guide-download { margin-top: 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
+.guide-download p { max-width: 360px; font-size: 13px; line-height: 1.6; color: var(--muted-foreground); }
+
+/* Booking: transfer choice and payment details. */
+.transfer-options { display: grid; gap: 8px; margin: 4px 0 6px 28px; }
+.transfer-option { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); font-size: 13px; cursor: pointer; transition: border-color .2s, background .2s; }
+.transfer-option.is-on { border-color: var(--gold-light); background: color-mix(in srgb, var(--gold-light) 8%, transparent); }
+.transfer-option strong { margin-left: auto; font-weight: 600; color: var(--gold-light); white-space: nowrap; }
+.payment-box { margin-top: 8px; padding: 18px; border: 1px solid var(--border); background: color-mix(in srgb, var(--gold-light) 5%, transparent); }
+.payment-details { margin-top: 14px; display: grid; gap: 10px; font-size: 13px; }
+.payment-details div { display: grid; grid-template-columns: 92px 1fr; align-items: center; gap: 10px; }
+.payment-details dt { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted-foreground); }
+.payment-details dd { display: flex; align-items: center; gap: 4px; min-width: 0; word-break: break-word; }
+.payment-details dd .font-mono { font-size: 13px; letter-spacing: .02em; }
+@media (max-width: 380px) { .payment-details div { grid-template-columns: 1fr; gap: 2px; } .transfer-options { margin-left: 0; } }
+.room-detail { scroll-margin-top: 84px; }
+

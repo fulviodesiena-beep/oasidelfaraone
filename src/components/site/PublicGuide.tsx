@@ -1,5 +1,7 @@
 import { LanguageProvider, useLanguage, type Language } from "@/lib/i18n";
-import { RESTAURANTS, SPOTS } from "@/lib/site-data";
+import { Download } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { GUIDE_PDF, RESTAURANTS, SPOTS } from "@/lib/site-data";
 import { PhotoCard } from "./PhotoCard";
 import { Section } from "./PublicHome";
 import { SubPage } from "./SubPage";
@@ -14,7 +16,7 @@ export function PublicGuide({ language = "it" }: { language?: Language }) {
   );
 }
 function Guide() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   return (
     <SubPage page="guide">
       <section className="site-section pb-0">
@@ -26,11 +28,20 @@ function Guide() {
               "Gli indirizzi che condividiamo con chi viene a trovarci al Domina Coral Bay, scelti uno per uno.",
             )}
           </p>
+          <div className="guide-download">
+            <Button asChild className="luxury-cta">
+              <a href={GUIDE_PDF[language]} download>
+                <Download />
+                {t("Scarica la guida semiseria (PDF)")}
+              </a>
+            </Button>
+            <p>{t("Sharm senza bussola: dieci tappe imperdibili, dove mangiare e il kit di sopravvivenza, raccontati con un sorriso.")}</p>
+          </div>
         </div>
       </section>
       <Section
         id="explore"
-        className="theme-sand wave-top"
+        className="theme-sea wave-top"
         eyebrow={t("La Sharm che ci piace")}
         title={
           <>
@@ -55,7 +66,7 @@ function Guide() {
       </Section>
       <Section
         id="restaurants"
-        className="theme-sunset wave-top"
+        className="theme-dusk"
         eyebrow={t("I nostri consigli — dove mangiare")}
         title={t("Dove mangiare a Sharm: i più amati dai nostri ospiti")}
         intro={t(

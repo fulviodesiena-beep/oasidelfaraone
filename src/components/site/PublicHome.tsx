@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Booking } from "@/components/site/Booking";
 import { cdnSrcSet, CARD_WIDTHS } from "@/lib/images";
 import { FROM_PRICE } from "@/lib/pricing";
-import { APARTMENT_PHOTOS, HERO_PHOTOS, HERO_VIDEO, MINA_TOURS_URL, MINA_WHATSAPP, ROOM_AMENITIES, ROOMS, VILLAGE_PHOTOS } from "@/lib/site-data";
+import { APARTMENT_PHOTOS, HERO_PHOTOS, HERO_VIDEO, MINA_TOURS_URL, MINA_WHATSAPP, ROOM_AMENITIES, ROOMS, ROOMS_ANCHOR, VILLAGE_PHOTOS } from "@/lib/site-data";
 import { RitualTeaser } from "./RitualTeaser";
 import { CookieConsent } from "@/components/site/CookieConsent";
 import { captureAttribution } from "@/lib/tracking";
@@ -28,7 +28,7 @@ function Carousel({ slides, label, portrait = false }: { slides: Slide[]; label:
   const go = (d: number) => ref.current?.scrollBy({ left: d * ref.current.clientWidth * .8, behavior: "smooth" });
   return <div className={`reveal carousel ${portrait ? "carousel-portrait" : ""}`}><div ref={ref} className="carousel-track" role="region" aria-label={label} tabIndex={0}>{slides.map((s, i) => <figure key={i} className="carousel-slide"><img src={s.src} srcSet={cdnSrcSet(s.src, CARD_WIDTHS)} sizes="(min-width: 1024px) 440px, 80vw" alt={t(s.alt)} loading="lazy" decoding="async" width={portrait ? 1080 : 1200} height={portrait ? 1350 : 800} /></figure>)}</div><div className="carousel-controls"><Button variant="outline" size="icon" aria-label={t("Foto precedente")} onClick={() => go(-1)}><ChevronLeft /></Button><Button variant="outline" size="icon" aria-label={t("Foto successiva")} onClick={() => go(1)}><ChevronRight /></Button></div></div>;
 }
-const NAV = [["apartment", "Le stanze"], ["rito", "Il rito"], ["resort", "Villaggio"], ["mina", "Mina"]] as const;
+const NAV = [[ROOMS_ANCHOR, "Le stanze"], ["rito", "Il rito"], ["resort", "Villaggio"], ["mina", "Mina"]] as const;
 const FACILITIES = [
  { name: "Spiagge private", icon: Umbrella, description: "Le spiagge del resort sul Mar Rosso, incluse senza costi aggiuntivi.", note: "Accesso incluso" },
  { name: "Piscine", icon: Waves, description: "Più piscine nel villaggio, ognuna con il suo ritmo.", note: "Accesso incluso" },
@@ -120,7 +120,7 @@ function HomeContent() {
       <div id="elisir-d-oriente" className="room-detail"><div className="reveal section-heading"><p className="eyebrow">{t("Zona Elisir · Domina Coral Bay")}</p><h3 className="font-display text-4xl">{t("Elisir d’Oriente")}</h3><p className="section-intro">{t(ROOMS[0]?.summary ?? "")}</p></div>
       <Carousel slides={APARTMENT_PHOTOS} label={t("Foto dell’appartamento")} portrait />
       <div className="reveal apartment-details"><div className="room-stats">{[["60", "metri quadrati"], ["4", "ospiti massimi"], ["Balcone", "vista piscina"]].map(([v,l]) => <div key={l}><p>{t(v)}</p><span>{t(l)}</span></div>)}</div><ul>{ROOM_AMENITIES.map(a => <li key={a}><Check size={14} />{t(a)}</li>)}</ul></div>
-      <div className="reveal room-from"><p>{t("Da {price} a notte · appartamento intero fino a 4 ospiti", { price: money(FROM_PRICE) })}</p><small>{t("Tariffa in base alla stagione. Solo alloggio: pasti e formula all inclusive del resort non compresi.")}</small><small>{t("Wi-Fi non disponibile in camera. Spa a pagamento separato, bambini non ammessi. Ristoranti e bar si vivono à la carte.")}</small></div>
+      <div className="reveal room-from"><p>{t("Da {price} a notte · appartamento intero fino a 4 ospiti", { price: money(FROM_PRICE) })}</p><small>{t("Tariffa in base alla stagione. Solo alloggio: pasti e formula all inclusive del resort non compresi.")}</small><small>{t("Wi-Fi non disponibile in camera, gratuito in reception. Spa a pagamento separato, bambini non ammessi. Ristoranti e bar si vivono à la carte.")}</small></div>
       <div className="reveal room-actions"><Button asChild className="luxury-cta"><a href="#book">{t("Verifica disponibilità")}<ArrowUpRight /></a></Button></div>
       <blockquote className="reveal room-legend"><p className="eyebrow">{t("Un racconto dell’Oasi")}</p><p>{t("Si racconta che lungo le vie dei mercanti del Sinai viaggiasse un’ampolla che nessuno vendeva mai. Conteneva l’Elisir d’Oriente: non un profumo, ma un’abitudine. Chi la seguiva, dicevano, tornava sempre.")}</p></blockquote>
       </div>

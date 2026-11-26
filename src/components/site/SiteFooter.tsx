@@ -1,12 +1,12 @@
 import { Instagram, Mail, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { publicPath, useLanguage } from "@/lib/i18n";
-import { INSTAGRAM_URL, OWNER_EMAIL, OWNER_WHATSAPP } from "@/lib/site-data";
+import { INSTAGRAM_URL, OWNER_EMAIL, OWNER_WHATSAPP, ROOMS_ANCHOR } from "@/lib/site-data";
 import { Cartouche } from "./Cartouche";
 import { NewsletterSignup } from "./NewsletterSignup";
 
 /** Sections of the home reachable from the footer (and from the menus). */
-export const HOME_SECTIONS = [["apartment", "Le stanze"], ["rito", "Il rito"], ["resort", "Villaggio"], ["mina", "Mina"], ["book", "Disponibilità"], ["faq", "Domande frequenti"]] as const;
+export const HOME_SECTIONS = [[ROOMS_ANCHOR, "Le stanze"], ["rito", "Il rito"], ["resort", "Villaggio"], ["mina", "Mina"], ["book", "Disponibilità"], ["faq", "Domande frequenti"]] as const;
 
 /**
  * One footer for every public page: a contact call-to-action (WhatsApp / email, section #contatti),

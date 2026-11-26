@@ -1,6 +1,7 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { Booking, PHONE_PREFIX, uniformNightPrice } from "@/components/site/Booking";
+import { formatIban, PAYMENT } from "@/lib/site-data";
 
 describe("booking flow", () => {
   const label = (d: Date) => d.toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" });
@@ -46,5 +47,33 @@ describe("booking flow", () => {
     fireEvent.click(screen.getByLabelText("Meno Adulti"));
     for (let i = 0; i < 5; i++) fireEvent.click(screen.getByLabelText("Più Bambini"));
     expect(screen.getByLabelText("Numero Bambini").textContent).toBe("3");
+  });
+  it("adds the airport transfer to the total: 20 € one way, 40 € round trip", () => {
+    render(<Booking extras={[]} toggleExtra={() => {}} />);
+    pickNextMonthRange(10, 13);
+    fireEvent.click(screen.getByRole("button", { name: /Vedi disponibilità/ }));
+    const total = () => Number((document.querySelector(".font-display.text-3xl")?.textContent ?? "").replace(/[^0-9]/g, ""));
+    const base = total();
+    fireEvent.click(screen.getByRole("checkbox", { name: /Transfer aeroporto/ }));
+    expect(screen.getByRole("radio", { name: /Solo andata/ })).toBeChecked();
+    expect(total() - base).toBe(2000); // 20,00 €
+    expect(screen.getByTestId("transfer-line").textContent).toMatch(/Solo andata/);
+    fireEvent.click(screen.getByRole("radio", { name: /Andata e ritorno/ }));
+    expect(total() - base).toBe(4000); // 40,00 €
+    fireEvent.click(screen.getByRole("checkbox", { name: /Transfer aeroporto/ }));
+    expect(total()).toBe(base);
+  });
+  it("shows how to pay: bank transfer after confirmation, with a valid IBAN and the account holder", () => {
+    render(<Booking extras={[]} toggleExtra={() => {}} />);
+    pickNextMonthRange(10, 13);
+    fireEvent.click(screen.getByRole("button", { name: /Vedi disponibilità/ }));
+    expect(screen.getByText(/solo dopo che Fulvio ti ha confermato date e prezzo/)).toBeTruthy();
+    expect(screen.getByTestId("iban").textContent).toBe(formatIban(PAYMENT.iban));
+    expect(screen.getByText(PAYMENT.holder)).toBeTruthy();
+    // IBAN check digits (ISO 13616, mod 97): catches a typo in the configured account.
+    const iban = PAYMENT.iban; const moved = iban.slice(4) + iban.slice(0, 4);
+    const digits = moved.split("").map(c => (/[A-Z]/.test(c) ? String(c.charCodeAt(0) - 55) : c)).join("");
+    expect(digits.split("").reduce((r, d) => (r * 10 + Number(d)) % 97, 0)).toBe(1);
+    expect(iban).toHaveLength(27);
   });
 });

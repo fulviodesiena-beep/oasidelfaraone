@@ -25,5 +25,5 @@ describe("seasonal price list", () => {
  it("cleaning fee is 40 and not in the total", () => { const q = quote(new Date(2027,4,10),new Date(2027,4,13)); expect(CLEANING_FEE).toBe(40); expect(q.cleaningFee).toBe(40); expect(q.total).toBe(240); });
  it("recommends 3 nights minimum, without blocking", () => { const q = quote(new Date(2027,4,10),new Date(2027,4,12)); expect(q.minStayWarning).toBe(3); expect(q.total).toBe(160); expect(quote(new Date(2027,4,10),new Date(2027,4,13)).minStayWarning).toBeNull(); });
  it("recommends 5 nights when the stay touches peak", () => { expect(quote(new Date(2027,7,8),new Date(2027,7,12)).minStayWarning).toBe(5); expect(quote(new Date(2027,7,8),new Date(2027,7,13)).minStayWarning).toBeNull(); });
- it("airport transfer costs 15 per person, added separately", () => { expect(transferTotal(4)).toBe(60); const q=quote(new Date(2027,4,10),new Date(2027,4,13),transferTotal(4)); expect(q.accommodation).toBe(240); expect(q.total).toBe(300); });
+ it("airport transfer costs 20 one way or 40 round trip, added to the total", () => { expect(transferTotal("oneWay")).toBe(20); expect(transferTotal("roundTrip")).toBe(40); expect(transferTotal(null)).toBe(0); const q=quote(new Date(2027,4,10),new Date(2027,4,13),transferTotal("roundTrip")); expect(q.accommodation).toBe(240); expect(q.total).toBe(280); });
 });
