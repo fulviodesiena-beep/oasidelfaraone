@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { authenticateCronRequest } from "@/integrations/supabase/cron-auth";
 
-// Scheduled every 5 minutes: imports the Booking.com iCal feed into availability blocks.
+// Booking.com iCal import. Its 5-minute schedule was paused on 25/11/2026 (link suspended, BOOKING_COM_LINKED = false):
+// to reconnect, set the constant to true and reactivate the paused cron job (see docs/db/2026-11-25-booking-off.sql).
 export const Route = createFileRoute("/api/public/jobs/ical-sync")({
   server: {
     handlers: {
