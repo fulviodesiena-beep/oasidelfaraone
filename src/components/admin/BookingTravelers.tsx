@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { FileDown, Mail, Plus, RefreshCw, Trash2 } from "lucide-react";
+import { Check, Copy, FileDown, Mail, Plus, RefreshCw, Send, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,8 @@ import { fmtDate, type Booking } from "@/lib/admin";
 import { isMinor } from "@/lib/contacts";
 import { delegaState, dominaMailto } from "@/lib/delega";
 import { ensureDelega } from "@/lib/delega.functions";
+import { guestUploadLink, sendDelegaToDomina } from "@/lib/delega-send.functions";
+import { DELEGA_LOG, GUEST_DOC_KIND, normaliseExtracted } from "@/lib/delega-flow";
 
 const blank = { first_name: "", last_name: "", birth_date: "", document_type: "passaporto", document_number: "", nationality: "" };
 
@@ -68,6 +70,43 @@ export function BookingTravelers({ booking }: { booking: Booking }) {
     regen.mutate(false);
   }, [state.kind, delegaDoc, regen]);
   const full = booking.adults + booking.children;
+  // Guest uploads (page /documenti/<token>) with the data read by AI, waiting for one-click confirmation.
+  const { data: guestDocs = [] } = useQuery({
+    queryKey: ["admin", "documents", GUEST_DOC_KIND, booking.id],
+    queryFn: async () => { const { data, error } = await supabase.from("documents").select("*").eq("booking_id", booking.id).eq("kind", GUEST_DOC_KIND).order("name"); if (error) throw error; return data; },
+  });
+  const { data: sentLog } = useQuery({
+    queryKey: ["admin", "delega-sent", booking.id],
+    queryFn: async () => { const { data } = await supabase.from("email_log").select("sent_at, recipient, body").eq("booking_id", booking.id).eq("automation", DELEGA_LOG).eq("status", "sent").order("sent_at", { ascending: false }).limit(1).maybeSingle(); return data; },
+  });
+  const confirmDoc = useMutation({
+    mutationFn: async (doc: (typeof guestDocs)[number]) => {
+      const x = normaliseExtracted(doc.extracted);
+      if (!x) throw new Error("Dati non leggibili: inseriscili a mano qui sotto.");
+      const { data: tr, error } = await supabase.from("travelers").insert({
+        booking_id: booking.id, first_name: x.first_name, last_name: x.last_name, birth_date: x.birth_date, document_type: x.document_type,
+        document_number: x.document_number, nationality: x.nationality, position: travelers.length, contact_id: travelers.length === 0 ? booking.contact_id : null,
+      }).select("id").single();
+      if (error) throw error;
+      const link = await supabase.from("documents").update({ traveler_id: tr.id }).eq("id", doc.id);
+      if (link.error) throw link.error;
+    },
+    onSuccess: () => { toast.success("Viaggiatore aggiunto dal documento"); refresh(); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+  const linkFn = useServerFn(guestUploadLink);
+  const [uploadUrl, setUploadUrl] = useState<string | null>(null);
+  const makeLink = useMutation({
+    mutationFn: () => linkFn({ data: { bookingId: booking.id } }),
+    onSuccess: r => { setUploadUrl(r.url); navigator.clipboard?.writeText(r.url).then(() => toast.success("Link copiato"), () => {}); },
+    onError: (e: unknown) => toast.error(delegaErrorMessage(e)),
+  });
+  const sendFn = useServerFn(sendDelegaToDomina);
+  const send = useMutation({
+    mutationFn: (force: boolean) => sendFn({ data: { bookingId: booking.id, force } }),
+    onSuccess: r => { toast.success(`Delega inviata a ${r.to} (CC ${r.cc.join(", ")}) con ${r.attachments.length} allegati`); refresh(); },
+    onError: (e: unknown) => toast.error(delegaErrorMessage(e)),
+  });
 
   return (
     <section className="space-y-3">
@@ -92,14 +131,35 @@ export function BookingTravelers({ booking }: { booking: Booking }) {
         </form>)}
 
       <div className="space-y-2 border-t border-border pt-3">
+        <h3 className="font-display text-xl">Documenti dall'ospite ({guestDocs.length}/{full})</h3>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button size="sm" variant="outline" disabled={makeLink.isPending} onClick={() => makeLink.mutate()}><Upload />Link caricamento documenti</Button>
+          {uploadUrl && <>
+            <Button size="sm" variant="ghost" onClick={() => navigator.clipboard?.writeText(uploadUrl).then(() => toast.success("Link copiato"), () => {})}><Copy />Copia</Button>
+            {booking.guest_phone && <Button size="sm" variant="ghost" asChild><a href={`https://wa.me/${booking.guest_phone.replace(/\D/g, "")}?text=${encodeURIComponent(`Ciao! Per preparare la delega d'ingresso al Domina carica qui la foto del documento di ogni viaggiatore: ${uploadUrl}`)}`} target="_blank" rel="noreferrer">Invia su WhatsApp</a></Button>}
+          </>}
+        </div>
+        {guestDocs.length > 0 && <ul className="divide-y divide-border text-sm">{guestDocs.map(d => { const x = normaliseExtracted(d.extracted); return (
+          <li key={d.id} className="flex flex-wrap items-center gap-2 py-2">
+            <span className="flex-1">{d.name}
+              <span className="text-xs text-muted-foreground"> · {x ? `${x.first_name} ${x.last_name.toUpperCase()} · ${x.document_type} ${x.document_number}${x.birth_date ? ` · ${fmtDate(x.birth_date)}` : ""} · lettura ${x.confidence}` : "dati da inserire a mano"}</span></span>
+            <Button size="sm" variant="ghost" onClick={() => openDocument(d)}>Apri</Button>
+            {d.traveler_id ? <span className="flex items-center gap-1 text-xs text-success"><Check size={14} />confermato</span>
+              : x && travelers.length < Math.max(full, 4) && <Button size="sm" variant="outline" disabled={confirmDoc.isPending} onClick={() => confirmDoc.mutate(d)}><Check />Conferma dati</Button>}
+          </li>); })}</ul>}
+      </div>
+
+      <div className="space-y-2 border-t border-border pt-3">
         <h3 className="font-display text-xl">Delega Domina</h3>
         <DelegaStatusLine state={state} hasDoc={!!delegaDoc} error={genError} pending={regen.isPending} />
         <div className="flex flex-wrap gap-2">
           {delegaDoc && <Button size="sm" variant="outline" onClick={() => openDocument(delegaDoc)}><FileDown />Scarica</Button>}
-          {delegaDoc && settings && <Button size="sm" variant="outline" asChild><a href={dominaMailto(settings, delegaDoc.name)}><Mail />Prepara email al Domina</a></Button>}
+          {delegaDoc && <Button size="sm" disabled={send.isPending} onClick={() => send.mutate(!!sentLog)}><Send />{sentLog ? "Invia di nuovo al Domina" : "Invia al Domina"}</Button>}
+          {delegaDoc && settings && <Button size="sm" variant="ghost" asChild><a href={dominaMailto(settings, delegaDoc.name)}><Mail />Email manuale</a></Button>}
           {state.kind === "ready" && <Button size="sm" variant="ghost" disabled={regen.isPending} onClick={() => regen.mutate(true)}><RefreshCw />{delegaDoc ? "Rigenera" : "Genera ora"}</Button>}
         </div>
-        {delegaDoc && <p className="text-xs text-muted-foreground">Ricorda di allegare il PDF scaricato all'email.</p>}
+        {sentLog?.sent_at ? <p className="text-sm text-success">Delega inviata il {new Date(sentLog.sent_at).toLocaleString("it-IT", { dateStyle: "medium", timeStyle: "short" })} a {sentLog.recipient}</p>
+          : delegaDoc && <p className="text-xs text-muted-foreground">«Invia al Domina» parte da prenotazionisharm@gmail.com con delega e foto dei documenti. Non parte se manca un documento o il pagamento.</p>}
       </div>
     </section>
   );

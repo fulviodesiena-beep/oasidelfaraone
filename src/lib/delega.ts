@@ -11,7 +11,8 @@ export type DelegaBooking = {
 };
 export type DelegaTraveler = { first_name: string; last_name: string; document_number: string | null; position?: number };
 
-export const DELEGA_SUBJECT = (unit: string) => `Delega ${unit} - Elisir d'Oriente`;
+/** Subject the Domina expects (as in the old app): "Delega 65135". */
+export const DELEGA_SUBJECT = (unit: string) => `Delega ${unit}`;
 export const DOMINA_CC = "ca.espo88@gmail.com";
 
 const dmy = (k: string, sep = "/") => { const [y, m, d] = k.slice(0, 10).split("-"); return `${d}${sep}${m}${sep}${y}`; };

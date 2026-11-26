@@ -5,7 +5,8 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 import { computeDue, bookingVars, messageText, whatsappUrl, type DueItem, type Toggles, type ABooking } from "./engine";
 import { LINK_LABELS, MARKETING_FOOTER, UNSUBSCRIBE_LABEL, type Lang, type MessageKey } from "./messages";
-import { signDocumentToken, signToken } from "./tokens";
+import { signDocumentToken, signToken, signUploadToken, uploadExpiry } from "./tokens";
+import { GUEST_DOC_KIND, missingDocuments } from "@/lib/delega-flow";
 import { OasiMessage, type OasiMessageProps } from "@/lib/email-templates/oasi-message";
 import { MINA_WHATSAPP, ELISIR_ROOM_ID } from "@/lib/site-data";
 
@@ -45,6 +46,11 @@ export async function renderItem(db: DB, item: Pick<DueItem, "msgKey" | "lang" |
   const L = (k: string) => LINK_LABELS[k]?.[lang] ?? k;
   const links: { label: string; url: string }[] = [];
   const site = `${SITE}${langPath(lang)}/#book`;
+  // A1 and A11 carry the private page where the guest uploads the travelers' documents.
+  if ((item.msgKey === "A1" || item.msgKey === "A11") && item.bookingId) {
+    const { data: stay } = await db.from("bookings").select("check_out").eq("id", item.bookingId).maybeSingle();
+    if (stay?.check_out) links.push({ label: L("upload"), url: `${SITE}/documenti/${await signUploadToken(item.bookingId, uploadExpiry(stay.check_out))}${lang === "it" ? "" : `?l=${lang}`}` });
+  }
   switch (item.msgKey) {
     case "A1": links.push({ label: L("mina"), url: `https://wa.me/${MINA_WHATSAPP}` }); break;
     case "A2": {
@@ -85,18 +91,25 @@ export async function renderItem(db: DB, item: Pick<DueItem, "msgKey" | "lang" |
 
 export async function loadAutomationContext(db: DB, now: Date) {
   const since = new Date(now.getTime() - 400 * 86400_000).toISOString().slice(0, 10);
-  const [s, b, c, q, o, l] = await Promise.all([
+  const [s, b, c, q, o, l, tr, gd] = await Promise.all([
     db.from("settings").select("*").eq("id", 1).single(),
-    db.from("bookings").select("id,status,check_in,check_out,total_nights,extras,guest_name,guest_email,guest_phone,contact_id,confirmed_at,payment_verified_at,deposit_paid,total_price,is_personal_use").gte("check_out", since),
+    db.from("bookings").select("id,status,check_in,check_out,total_nights,extras,guest_name,guest_email,guest_phone,contact_id,confirmed_at,payment_verified_at,deposit_paid,total_price,is_personal_use,adults,children").gte("check_out", since),
     db.from("contacts").select("id,first_name,email,phone,language,status,consent_occasions,consent_marketing,unsubscribed_at,newsletter_status"),
     db.from("inquiries").select("id,created_at,guest_name,guest_email,contact_id,status,language").gte("created_at", new Date(now.getTime() - 10 * 86400_000).toISOString()),
     db.from("occasions").select("id,contact_id,kind,day,month"),
     db.from("email_log").select("dedup_key,automation,booking_id,step,channel,status,clicked_at").not("dedup_key", "is", null),
+    db.from("travelers").select("booking_id, document_number"),
+    db.from("documents").select("booking_id").eq("kind", GUEST_DOC_KIND),
   ]);
-  const err = s.error ?? b.error ?? c.error ?? q.error ?? o.error ?? l.error;
+  const err = s.error ?? b.error ?? c.error ?? q.error ?? o.error ?? l.error ?? tr.error ?? gd.error;
   if (err) throw new Error(err.message);
   if (!s.data) throw new Error("Impostazioni mancanti");
-  return { settings: s.data, bookings: (b.data ?? []) as ABooking[], contacts: c.data ?? [], inquiries: q.data ?? [], occasions: o.data ?? [], logs: l.data ?? [] };
+  const bookings = (b.data ?? []) as (ABooking & { adults?: number; children?: number })[];
+  const count = (rows: { booking_id: string }[]) => rows.reduce((m, r) => m.set(r.booking_id, (m.get(r.booking_id) ?? 0) + 1), new Map<string, number>());
+  const withDoc = count((tr.data ?? []).filter(x => (x.document_number ?? "").trim()));
+  const uploads = count(gd.data ?? []);
+  const missingDocs = new Set(bookings.filter(x => missingDocuments({ adults: x.adults ?? 0, children: x.children ?? 0 }, withDoc.get(x.id) ?? 0, uploads.get(x.id) ?? 0) > 0).map(x => x.id));
+  return { settings: s.data, bookings, contacts: c.data ?? [], inquiries: q.data ?? [], occasions: o.data ?? [], logs: l.data ?? [], missingDocs };
 }
 
 export type RunSummary = { due: number; sent: number; tasks: number; skipped: number; errors: number; details: string[] };

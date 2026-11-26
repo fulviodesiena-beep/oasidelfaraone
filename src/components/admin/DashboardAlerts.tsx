@@ -12,6 +12,7 @@ import { DelegaStatusLine, delegaErrorMessage } from "@/components/admin/Booking
 import { fmtDate, todayKey } from "@/lib/admin";
 import { delegaFingerprint, delegaState, dominaMailto } from "@/lib/delega";
 import { ensureDelega } from "@/lib/delega.functions";
+import { DELEGA_LOG, delegaWarning } from "@/lib/delega-flow";
 
 export function BookingClosureList() {
   const { data = [] } = useBookingsToClose();
@@ -34,16 +35,18 @@ export function DelegaPanel() {
   const { data } = useQuery({
     queryKey: ["admin", "delega-panel"],
     queryFn: async () => {
-      const [b, t, d, s] = await Promise.all([
+      const [b, t, d, s, sent] = await Promise.all([
         supabase.from("bookings").select("*").in("status", ["confirmed", "host_collab"]).gte("check_out", todayKey()).order("check_in"),
         supabase.from("travelers").select("*"),
         supabase.from("documents").select("*").eq("kind", "delega"),
         supabase.from("settings").select("*").eq("id", 1).single(),
+        supabase.from("email_log").select("booking_id, sent_at").eq("automation", DELEGA_LOG).eq("status", "sent"),
       ]);
       if (b.error || t.error || d.error || s.error) throw b.error ?? t.error ?? d.error ?? s.error;
       return b.data.map(bk => {
         const travelers = t.data.filter(x => x.booking_id === bk.id);
-        return { booking: bk, state: delegaState(bk, travelers), fp: delegaFingerprint(bk, travelers, s.data), doc: d.data.find(x => x.booking_id === bk.id) ?? null, settings: s.data };
+        const sentAt = (sent.data ?? []).filter(x => x.booking_id === bk.id).map(x => x.sent_at ?? "").sort().pop() || null;
+        return { booking: bk, state: delegaState(bk, travelers), fp: delegaFingerprint(bk, travelers, s.data), doc: d.data.find(x => x.booking_id === bk.id) ?? null, settings: s.data, sentAt, warnDays: delegaWarning(bk, !!sentAt, todayKey()) };
       });
     },
   });
@@ -61,7 +64,12 @@ export function DelegaPanel() {
     }
   }, [data, gen, qc]);
   if (!data?.length) return null;
+  const late = data.filter(r => r.warnDays !== null);
   return (
+    <>
+    {late.length > 0 && <div role="alert" className="rounded-md border border-destructive bg-destructive/10 px-4 py-3 text-sm text-destructive">
+      ⚠️ Delega non ancora inviata al Domina per arrivi entro 7 giorni: {late.map(r => `${r.booking.guest_name} (${r.warnDays === 0 ? "oggi" : `tra ${r.warnDays} gg`})`).join(", ")}.
+    </div>}
     <Card>
       <CardHeader><CardTitle className="font-display text-2xl font-normal">Deleghe Domina</CardTitle></CardHeader>
       <CardContent><ul className="divide-y divide-border">{data.map(r => (
@@ -69,8 +77,11 @@ export function DelegaPanel() {
           <span className="min-w-40">{r.booking.guest_name} <span className="text-xs text-muted-foreground">{fmtDate(r.booking.check_in)}</span></span>
           <span className="flex-1"><DelegaStatusLine state={r.state} hasDoc={!!r.doc && r.doc.fingerprint === r.fp} error={errors[r.booking.id]} pending={pending[r.booking.id]} /></span>
           {r.doc && <Button size="sm" variant="outline" onClick={() => openDocument(r.doc!)}><FileDown />Scarica</Button>}
-          {r.doc && <Button size="sm" variant="outline" asChild><a href={dominaMailto(r.settings, r.doc.name)}><Mail />Prepara email al Domina</a></Button>}
-        </li>))}</ul></CardContent>
+          {r.sentAt ? <span className="text-xs text-success">Inviata il {fmtDate(r.sentAt.slice(0, 10))}</span>
+            : r.doc && <Button size="sm" variant="ghost" asChild><a href={dominaMailto(r.settings, r.doc.name)}><Mail />Email manuale</a></Button>}
+        </li>))}</ul>
+        <p className="mt-2 text-xs text-muted-foreground">Per inviarla da prenotazionisharm con i documenti allegati apri la prenotazione → «Invia al Domina».</p></CardContent>
     </Card>
+    </>
   );
 }

@@ -39,7 +39,7 @@ describe("delega Domina — campi", () => {
     expect(delegaFileName(travelers, booking.check_in)).toBe("Delega 65135 - Elisir d'Oriente - ROSSI - 01-12-2026.pdf");
     const m = dominaMailto(settings, "x.pdf");
     expect(m.startsWith("mailto:reservation-ks@dominacoralbay.com?")).toBe(true);
-    expect(decodeURIComponent(m)).toContain("subject=Delega 65135 - Elisir d'Oriente");
+    expect(decodeURIComponent(m)).toContain("subject=Delega 65135&");
   });
   it("builds a fillable A4 PDF", async () => {
     const pdf = await PDFDocument.load(await buildDelegaPdf(d));

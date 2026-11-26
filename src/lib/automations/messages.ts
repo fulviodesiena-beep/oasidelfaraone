@@ -1,7 +1,7 @@
 // Testi delle automazioni (IT/EN/DE). Browser-safe: niente prezzi, segnaposto {{...}} riempiti dal motore.
 export type Lang = "it" | "en" | "de";
 export const LANGS: Lang[] = ["it", "en", "de"];
-export type MessageKey = "A1" | "A2" | "A3" | "A4" | "A5" | "A5r" | "A6a" | "A6b" | "A7" | "A8a" | "A8b" | "A9" | "NL_CONFIRM";
+export type MessageKey = "A1" | "A2" | "A3" | "A4" | "A5" | "A5r" | "A6a" | "A6b" | "A7" | "A8a" | "A8b" | "A9" | "A11" | "NL_CONFIRM";
 export type Msg = { subject: string; body: string };
 
 const SIGN = { it: "Fulvio\nOasi del Faraone — {{camera}}, Domina Coral Bay, Sharm el Sheikh", en: "Fulvio\nOasi del Faraone — {{camera}}, Domina Coral Bay, Sharm el Sheikh", de: "Fulvio\nOasi del Faraone — {{camera}}, Domina Coral Bay, Sharm el Sheikh" };
@@ -485,6 +485,44 @@ ${SIGN.de}` },
     en: { subject: "A special date is coming up 🎉", body: "Hi {{nome_ospite}}! In a few months there's an important date for you or someone you travel with ({{occasione}}). If you'd like to celebrate it in Sharm, on the balcony at sunrise or with dinner by the sea, write to us: we'll plan something special together and tell you which dates are free.\n\nFulvio — Oasi del Faraone" },
     de: { subject: "Ein besonderes Datum rückt näher 🎉", body: "Hallo {{nome_ospite}}! In ein paar Monaten steht ein wichtiges Datum für dich oder deine Reisebegleitung an ({{occasione}}). Wenn du es in Sharm feiern möchtest, auf dem Balkon bei Sonnenaufgang oder mit einem Abendessen am Meer, schreib uns: Wir planen gemeinsam etwas Besonderes und sagen dir, welche Termine frei sind.\n\nFulvio — Oasi del Faraone" },
   },
+  A11: {
+    it: { subject: "Ci mancano i documenti per il tuo arrivo — {{camera}}", body: `Ciao {{nome_ospite}}!
+
+Mancano 10 giorni al tuo arrivo al Domina Coral Bay e stiamo preparando la delega d'ingresso: senza, il villaggio non ci consegna le chiavi della stanza.
+
+Ci manca ancora la foto del passaporto o della carta d'identità di almeno un viaggiatore. Bastano due minuti: apri il link qui sotto, carica una foto nitida per ogni persona (bambini compresi) e, se li sai già, gli orari di arrivo e partenza.
+
+I documenti restano privati e servono solo per la delega.
+
+A presto!
+
+Fulvio
+Oasi del Faraone — {{camera}}, Domina Coral Bay` },
+    en: { subject: "We still need your documents for check-in — {{camera}}", body: `Hi {{nome_ospite}}!
+
+You arrive at Domina Coral Bay in 10 days and we're preparing the entry authorisation: without it, the resort won't hand over the room keys.
+
+We still need a photo of the passport or ID card of at least one traveller. It takes two minutes: open the link below, upload a clear photo for each person (children included) and, if you already know them, your arrival and departure times.
+
+Your documents stay private and are used only for the authorisation.
+
+See you soon!
+
+Fulvio
+Oasi del Faraone — {{camera}}, Domina Coral Bay` },
+    de: { subject: "Uns fehlen noch deine Dokumente für die Anreise — {{camera}}", body: `Hallo {{nome_ospite}}!
+
+In 10 Tagen kommst du im Domina Coral Bay an und wir bereiten die Einreisevollmacht vor: Ohne sie gibt das Resort die Zimmerschlüssel nicht heraus.
+
+Uns fehlt noch ein Foto des Reisepasses oder Personalausweises von mindestens einem Reisenden. Es dauert zwei Minuten: Öffne den Link unten, lade für jede Person (auch Kinder) ein scharfes Foto hoch und, falls du sie schon kennst, die An- und Abreisezeiten.
+
+Deine Dokumente bleiben privat und dienen nur der Vollmacht.
+
+Bis bald!
+
+Fulvio
+Oasi del Faraone — {{camera}}, Domina Coral Bay` },
+  },
   A8a: {
     it: { subject: "La tua richiesta per Sharm el-Sheikh", body: "Ciao {{nome_ospite}}, grazie per averci scritto per un soggiorno a Sharm. Volevo sapere se hai ricevuto la nostra risposta e se hai domande su date, transfer o sul Domina Coral Bay: rispondi pure a questa email o scrivimi su WhatsApp.\n\nFulvio — Oasi del Faraone" },
     en: { subject: "Your request for Sharm el-Sheikh", body: "Hi {{nome_ospite}}, thank you for getting in touch about a stay in Sharm. I wanted to check you received our reply and whether you have any questions about dates, transfers or Domina Coral Bay: just reply to this email or message me on WhatsApp.\n\nFulvio — Oasi del Faraone" },
@@ -515,6 +553,7 @@ export const LINK_LABELS: Record<string, Record<Lang, string>> = {
   mina: { it: "Scrivi a Mina su WhatsApp", en: "Message Mina on WhatsApp", de: "Mina auf WhatsApp schreiben" },
   confirm: { it: "Confermo l'iscrizione", en: "Confirm subscription", de: "Abo bestätigen" },
   delega: { it: "Delega Domina (PDF)", en: "Domina authorisation (PDF)", de: "Domina-Vollmacht (PDF)" },
+  upload: { it: "Carica i documenti dei viaggiatori", en: "Upload the travellers' documents", de: "Dokumente der Reisenden hochladen" },
   "scheda-gialla-it.pdf": { it: "Scheda gialla — italiano", en: "Yellow card — Italian", de: "Gelbe Karte — Italienisch" },
   "scheda-gialla-ar.pdf": { it: "Scheda gialla — arabo", en: "Yellow card — Arabic", de: "Gelbe Karte — Arabisch" },
   "modulo-rosa-it.pdf": { it: "Modulo rosa — italiano", en: "Pink form — Italian", de: "Rosa Formular — Italienisch" },
