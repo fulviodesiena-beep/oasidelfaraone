@@ -53,6 +53,19 @@ export const MINA_WHATSAPP = "393481804764";
 export const OWNER_EMAIL = "prenotazioni@oasidelfaraone.it";
 export const INSTAGRAM_URL = "https://www.instagram.com/oasidelfaraone";
 /** Mina's own catalogue: excursions, transfers and tours are booked there, not on this site. */
+/**
+ * Payment: bank transfer to the account below, only after Fulvio has confirmed dates and price.
+ * Amount and deadline are given in the confirmation; nothing is paid online on this site.
+ */
+/** Downloadable half-serious Sharm road map (PDF, 5 pages); sources in scripts/guida-sharm. */
+export const GUIDE_PDF: Record<"it" | "en" | "de", string> = {
+  it: "/guida/guida-sharm-oasi-del-faraone-it.pdf",
+  en: "/guida/sharm-guide-oasi-del-faraone-en.pdf",
+  de: "/guida/sharm-reisefuehrer-oasi-del-faraone-de.pdf",
+};
+export const PAYMENT = { method: "bonifico", iban: "IT67R3253203200006571640449", holder: "Virginia Ambrosino" } as const;
+/** IBAN in groups of four, as printed on bank documents. */
+export const formatIban = (iban: string) => iban.replace(/\s+/g, "").replace(/(.{4})/g, "$1 ").trim();
 export const MINA_TOURS_URL = "https://sharmina-tour-catalogo.youssefmina2025.chatgpt.site/";
 /** Opening video of the home page (owner-supplied reef footage, November 2026), served from /public/video. */
 export const HERO_VIDEO = { large: "/video/oasi-mare-1600.mp4", small: "/video/oasi-mare-540.mp4", poster: "/video/oasi-mare-poster.jpg" } as const;
@@ -137,3 +150,5 @@ export const ROOMS = [{
   story: "Si racconta che lungo le vie dei mercanti che attraversavano il Sinai, tra le spezie, l’incenso e le stoffe, viaggiasse un’ampolla che nessuno vendeva mai. Conteneva l’Elisir d’Oriente: non un profumo, ma un’abitudine. Fermarsi. Guardare il mare all’alba. Esprimere un desiderio prima che il sole fosse del tutto sorto. Chi lo faceva, dicevano, tornava sempre. Noi l’ampolla non l’abbiamo trovata. Ma abbiamo trovato il posto in cui l’abitudine ha senso: un balcone sulla piscina, a pochi passi dal Mar Rosso, nella zona del villaggio che porta il suo nome.",
   ritual: "Nell’antico Egitto lo scarabeo era il simbolo di Khepri, il sole che sorge, e della rinascita. All’arrivo troverai in camera un piccolo scarabeo, la storia della stanza su papiro e una cartolina per il tuo desiderio. Alla prima alba esci sul balcone, tieni lo scarabeo controluce, giralo tre volte ed esprimi un desiderio. Scrivilo sul papiro e lascialo nello Scrigno dell’Elisir: lo ritroverai se tornerai. Lo scarabeo è tuo. Condividi il momento con #RisveglioDelloScarabeo e @oasidelfaraone.",
 }] as const;
+/** With a single room, "Le stanze" in menus goes straight to its photos (#elisir-d-oriente) instead of the section intro. */
+export const ROOMS_ANCHOR = ROOMS.length > 1 ? "apartment" : (ROOMS[0]?.slug ?? "apartment");

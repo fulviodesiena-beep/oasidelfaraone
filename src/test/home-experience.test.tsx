@@ -111,3 +111,27 @@ describe("old ritual page", () => {
     expect(EnRitualRoute.options.component).toBeUndefined();
   });
 });
+
+describe("November 26 requests", () => {
+  it("sends 'Le stanze' straight to the room photos while there is one room", () => {
+    renderPage();
+    const nav = screen.getByRole("navigation", { name: "Navigazione principale" });
+    const rooms = Array.from(nav.querySelectorAll("a")).find(a => a.textContent === "Le stanze");
+    expect(rooms?.getAttribute("href")).toBe("#elisir-d-oriente");
+    expect(document.getElementById("elisir-d-oriente")?.querySelector(".carousel")).not.toBeNull();
+  });
+
+  it("says the Wi-Fi is free at reception", () => {
+    const { container } = renderPage();
+    expect(container.querySelector("#faq")?.textContent).toMatch(/in reception è gratuito/);
+  });
+
+  it("ships the downloadable guide in every language", async () => {
+    const { GUIDE_PDF } = await import("@/lib/site-data");
+    for (const file of Object.values(GUIDE_PDF)) {
+      const path = resolve(__dirname, "../../public", `.${file}`);
+      expect(existsSync(path)).toBe(true);
+      expect(statSync(path).size).toBeLessThan(1024 * 1024);
+    }
+  });
+});

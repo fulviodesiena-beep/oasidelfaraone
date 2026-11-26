@@ -8,5 +8,6 @@ export const PRICING_CONFIG = {
   minNights: 3,
   minNightsPeak: 5,
   maxGuests: 4,
-  transferPerPerson: 15,
+  /** Transfer aeroporto ↔ Domina, prezzo per l'intera prenotazione (non per persona): aggiunto al totale. */
+  transfer: { oneWay: 20, roundTrip: 40 },
 } as const;

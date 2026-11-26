@@ -67,7 +67,7 @@ export function SubPage({ page, children }: { page: PublicPage; children: ReactN
             aria-label={t("Navigazione principale")}
             className="hidden items-center gap-6 lg:flex"
           >
-            {link("home", "Le stanze")}
+            {link("home", "Torna all’Oasi")}
             {link("guide", "Guida a Sharm")}
             {link("invest", "Investire")}
           </nav>
@@ -93,7 +93,7 @@ export function SubPage({ page, children }: { page: PublicPage; children: ReactN
         </div>
         {menu && (
           <nav aria-label={t("Navigazione mobile")} className="mobile-menu site-container">
-            <a href={home}>{t("Le stanze")}</a>
+            <a href={home}>{t("Torna all’Oasi")}</a>
             <a href={publicPath(language, "guide")} aria-current={page === "guide" ? "page" : undefined}>{t("Guida a Sharm")}</a>
             <a href={publicPath(language, "invest")} aria-current={page === "invest" ? "page" : undefined}>{t("Investire a Sharm")}</a>
             <a href={`${home === "/" ? "" : home}/#contatti`}>{t("Contatti")}</a>
