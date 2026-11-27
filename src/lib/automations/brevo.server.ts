@@ -1,7 +1,7 @@
 // Brevo API v3 (email marketing). Server-only: legge BREVO_API_KEY. Nessun invio di campagne senza azione esplicita.
 const BASE = "https://api.brevo.com/v3";
 export const BREVO_SENDER = { name: "Oasi del Faraone", email: "prenotazioni@oasidelfaraone.it" };
-export const REPLY_TO = "prenotazioni@oasidelfaraone.it";
+export const REPLY_TO = "prenotazionisharm@gmail.com";
 export const NEWSLETTER_LIST = "Newsletter Oasi";
 
 export const hasBrevo = () => !!process.env["BREVO_API_KEY"];

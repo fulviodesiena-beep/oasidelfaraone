@@ -50,7 +50,8 @@ import heroCoastAerial from "@/assets/hero-1.jpg.asset.json";
 import heroOrientalSuite from "@/assets/hero-3.jpg.asset.json";
 export const OWNER_WHATSAPP = "393347328158";
 export const MINA_WHATSAPP = "393481804764";
-export const OWNER_EMAIL = "prenotazioni@oasidelfaraone.it";
+/** Mailbox Fulvio actually reads: every "write to us" link and every reply-to points here. */
+export const OWNER_EMAIL = "prenotazionisharm@gmail.com";
 export const INSTAGRAM_URL = "https://www.instagram.com/oasidelfaraone";
 /** Mina's own catalogue: excursions, transfers and tours are booked there, not on this site. */
 /**
@@ -100,7 +101,7 @@ export const SPOTS = [
  { name: "Blue Hole, Dahab", desc: "Un celebre sito sul mare. Escursioni e immersioni da organizzare con guide qualificate.", image: dahab.url, photo: "Fondali di Dahab · foto illustrativa" },
  { name: "Old Sharm", desc: "Il cuore autentico di Old Sharm: il vecchio porto dei pescatori, i vicoli bianchi, i ristoranti di pesce fresco e l’anima vera di questa città.", image: ownOldSharm.url, photo: "Old Sharm" },
 ];
-export const ROOM_AMENITIES = ["Aria condizionata", "TV satellitare", "Balcone vista piscina", "Microonde", "Cassaforte", "Bollitore", "Asciugacapelli", "Spiagge e piscine del resort incluse"];
+export const ROOM_AMENITIES = ["Aria condizionata", "TV satellitare", "Balcone vista piscina", "Cassaforte", "Asciugacapelli", "Spiagge e piscine del resort incluse"];
 export const HERO_PHOTOS: { src: string; alt: string }[] = [
   { src: heroPoolSunset.url, alt: "Piscina a sfioro al tramonto, con il Mar Rosso davanti" },
   { src: heroCoastAerial.url, alt: "Veduta aerea del villaggio, della spiaggia e della barriera corallina" },

@@ -1,4 +1,5 @@
-import { Instagram, Mail, MessageCircle } from "lucide-react";
+import { useState } from "react";
+import { Check, Copy, Instagram, Mail, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { publicPath, useLanguage } from "@/lib/i18n";
 import { INSTAGRAM_URL, OWNER_EMAIL, OWNER_WHATSAPP, ROOMS_ANCHOR } from "@/lib/site-data";
@@ -15,6 +16,7 @@ export const HOME_SECTIONS = [[ROOMS_ANCHOR, "Le stanze"], ["rito", "Il rito"], 
 export function SiteFooter({ onHome = false }: { onHome?: boolean }) {
   const { t, language } = useLanguage();
   const home = publicPath(language);
+  const [copied, setCopied] = useState(false);
   const anchor = (id: string) => (onHome ? `#${id}` : `${home === "/" ? "" : home}/#${id}`);
   return <footer className="site-footer">
     <section id="contatti" className="site-container footer-cta" aria-labelledby="footer-cta-title">
@@ -25,7 +27,9 @@ export function SiteFooter({ onHome = false }: { onHome?: boolean }) {
       </div>
       <div className="reveal contact-buttons">
         <Button asChild className="contact-btn contact-whatsapp"><a href={`https://wa.me/${OWNER_WHATSAPP}`} target="_blank" rel="noreferrer"><MessageCircle />{t("Scrivici su WhatsApp")}</a></Button>
-        <Button asChild variant="outline" className="contact-btn contact-email"><a href={`mailto:${OWNER_EMAIL}`}><Mail />{t("Scrivici via email")}</a></Button>
+        <Button asChild variant="outline" className="contact-btn contact-email"><a href={`mailto:${OWNER_EMAIL}?subject=${encodeURIComponent(t("Richiesta informazioni · Oasi del Faraone"))}`}><Mail />{t("Scrivici via email")}</a></Button>
+        {/* mailto opens the device's mail app: with none configured nothing happens, so the address is also shown and copyable. */}
+        <p className="footer-mail"><span>{OWNER_EMAIL}</span><button type="button" onClick={() => navigator.clipboard?.writeText(OWNER_EMAIL).then(() => { setCopied(true); window.setTimeout(() => setCopied(false), 2000); }, () => {})} aria-label={t(copied ? "Indirizzo copiato" : "Copia indirizzo email")}>{copied ? <Check size={14} /> : <Copy size={14} />}{t(copied ? "Copiato" : "Copia")}</button></p>
       </div>
     </section>
     <div className="site-container footer-grid">

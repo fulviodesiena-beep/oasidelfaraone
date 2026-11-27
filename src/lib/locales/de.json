@@ -388,7 +388,7 @@
   "Voglio ricevere Lettere dall’Oasi via email. Posso disiscrivermi in ogni momento.": "Ich möchte die Briefe aus der Oase per E-Mail erhalten. Ich kann mich jederzeit abmelden.",
   "Non siamo riusciti a registrare l’iscrizione. Controlla l’indirizzo e riprova.": "Die Anmeldung hat nicht geklappt. Bitte prüfe die Adresse und versuche es erneut.",
   "Fatto: non riceverai più email promozionali da Oasi del Faraone. Le comunicazioni sul tuo eventuale soggiorno restano attive.": "Erledigt: Du erhältst keine Werbe-E-Mails mehr von Oasi del Faraone. Nachrichten zu einem gebuchten Aufenthalt bekommst du weiterhin.",
-  "Il link non è valido o è incompleto. Scrivici a prenotazioni@oasidelfaraone.it e ti disiscriviamo noi.": "Der Link ist ungültig oder unvollständig. Schreib an prenotazioni@oasidelfaraone.it und wir melden dich ab.",
+  "Il link non è valido o è incompleto. Scrivici a prenotazionisharm@gmail.com e ti disiscriviamo noi.": "Der Link ist ungültig oder unvollständig. Schreib an prenotazionisharm@gmail.com und wir melden dich ab.",
   "Vuoi smettere di ricevere newsletter e offerte da Oasi del Faraone?": "Möchtest du keine Newsletter und Angebote von Oasi del Faraone mehr erhalten?",
   "Disiscrivimi": "Abmelden",
   "Conferma in corso…": "Wird bestätigt…",
@@ -507,5 +507,10 @@
   "Fatto! Abbiamo tutti i documenti: Fulvio ti scrive se serve altro.": "Fertig! Wir haben alle Dokumente: Fulvio meldet sich, falls noch etwas fehlt.",
   "Il link non è valido o è scaduto. Chiedi un nuovo link a Fulvio: +39 334 732 8158.": "Der Link ist ungültig oder abgelaufen. Bitte Fulvio um einen neuen: +39 334 732 8158.",
   "Caricamento non riuscito: riprova.": "Hochladen fehlgeschlagen: bitte erneut versuchen.",
-  "Soggiorno dal {from} al {to}": "Aufenthalt vom {from} bis {to}"
+  "Soggiorno dal {from} al {to}": "Aufenthalt vom {from} bis {to}",
+  "Richiesta informazioni · Oasi del Faraone": "Anfrage · Oasi del Faraone",
+  "Indirizzo copiato": "Adresse kopiert",
+  "Copia indirizzo email": "E-Mail-Adresse kopieren",
+  "Copiato": "Kopiert",
+  "Copia": "Kopieren"
 }
