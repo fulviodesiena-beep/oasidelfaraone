@@ -66,7 +66,7 @@ export function AutomationSettings({ s }: { s: Tables<"settings"> }) {
           <Button variant="outline" disabled={!b.data?.ok} onClick={() => act(sync(), "Contatti sincronizzati")}>Sincronizza contatti consenzienti</Button>
           <Button variant="outline" disabled={!b.data?.ok} onClick={() => act(hook(), "Collegamento disiscrizioni attivo")}>Attiva ricezione disiscrizioni</Button>
         </div>
-        <p className="text-xs text-muted-foreground">Mittente Brevo: prenotazioni@oasidelfaraone.it (va verificato su Brevo). Ricevono newsletter solo gli iscritti con doppia conferma.</p>
+        <p className="text-xs text-muted-foreground">Mittente Brevo: prenotazioni@oasidelfaraone.it (va verificato su Brevo); le risposte arrivano a prenotazionisharm@gmail.com. Ricevono newsletter solo gli iscritti con doppia conferma.</p>
       </div>
     </div>
   );

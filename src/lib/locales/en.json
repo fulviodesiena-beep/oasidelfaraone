@@ -388,7 +388,7 @@
   "Voglio ricevere Lettere dall’Oasi via email. Posso disiscrivermi in ogni momento.": "I'd like to receive Letters from the Oasis by email. I can unsubscribe at any time.",
   "Non siamo riusciti a registrare l’iscrizione. Controlla l’indirizzo e riprova.": "We couldn't register your subscription. Please check the address and try again.",
   "Fatto: non riceverai più email promozionali da Oasi del Faraone. Le comunicazioni sul tuo eventuale soggiorno restano attive.": "Done: you won't receive any more promotional emails from Oasi del Faraone. Messages about any stay you've booked will still reach you.",
-  "Il link non è valido o è incompleto. Scrivici a prenotazioni@oasidelfaraone.it e ti disiscriviamo noi.": "This link is invalid or incomplete. Write to prenotazioni@oasidelfaraone.it and we'll unsubscribe you.",
+  "Il link non è valido o è incompleto. Scrivici a prenotazionisharm@gmail.com e ti disiscriviamo noi.": "This link is invalid or incomplete. Write to prenotazionisharm@gmail.com and we'll unsubscribe you.",
   "Vuoi smettere di ricevere newsletter e offerte da Oasi del Faraone?": "Want to stop receiving newsletters and offers from Oasi del Faraone?",
   "Disiscrivimi": "Unsubscribe me",
   "Conferma in corso…": "Confirming…",
@@ -507,5 +507,10 @@
   "Fatto! Abbiamo tutti i documenti: Fulvio ti scrive se serve altro.": "Done! We have all the documents: Fulvio will write if anything else is needed.",
   "Il link non è valido o è scaduto. Chiedi un nuovo link a Fulvio: +39 334 732 8158.": "This link is invalid or has expired. Ask Fulvio for a new one: +39 334 732 8158.",
   "Caricamento non riuscito: riprova.": "Upload failed: please try again.",
-  "Soggiorno dal {from} al {to}": "Stay from {from} to {to}"
+  "Soggiorno dal {from} al {to}": "Stay from {from} to {to}",
+  "Richiesta informazioni · Oasi del Faraone": "Information request · Oasi del Faraone",
+  "Indirizzo copiato": "Address copied",
+  "Copia indirizzo email": "Copy email address",
+  "Copiato": "Copied",
+  "Copia": "Copy"
 }

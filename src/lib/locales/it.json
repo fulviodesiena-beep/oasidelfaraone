@@ -388,7 +388,7 @@
   "Voglio ricevere Lettere dall’Oasi via email. Posso disiscrivermi in ogni momento.": "Voglio ricevere Lettere dall’Oasi via email. Posso disiscrivermi in ogni momento.",
   "Non siamo riusciti a registrare l’iscrizione. Controlla l’indirizzo e riprova.": "Non siamo riusciti a registrare l’iscrizione. Controlla l’indirizzo e riprova.",
   "Fatto: non riceverai più email promozionali da Oasi del Faraone. Le comunicazioni sul tuo eventuale soggiorno restano attive.": "Fatto: non riceverai più email promozionali da Oasi del Faraone. Le comunicazioni sul tuo eventuale soggiorno restano attive.",
-  "Il link non è valido o è incompleto. Scrivici a prenotazioni@oasidelfaraone.it e ti disiscriviamo noi.": "Il link non è valido o è incompleto. Scrivici a prenotazioni@oasidelfaraone.it e ti disiscriviamo noi.",
+  "Il link non è valido o è incompleto. Scrivici a prenotazionisharm@gmail.com e ti disiscriviamo noi.": "Il link non è valido o è incompleto. Scrivici a prenotazionisharm@gmail.com e ti disiscriviamo noi.",
   "Vuoi smettere di ricevere newsletter e offerte da Oasi del Faraone?": "Vuoi smettere di ricevere newsletter e offerte da Oasi del Faraone?",
   "Disiscrivimi": "Disiscrivimi",
   "Conferma in corso…": "Conferma in corso…",
@@ -507,5 +507,10 @@
   "Fatto! Abbiamo tutti i documenti: Fulvio ti scrive se serve altro.": "Fatto! Abbiamo tutti i documenti: Fulvio ti scrive se serve altro.",
   "Il link non è valido o è scaduto. Chiedi un nuovo link a Fulvio: +39 334 732 8158.": "Il link non è valido o è scaduto. Chiedi un nuovo link a Fulvio: +39 334 732 8158.",
   "Caricamento non riuscito: riprova.": "Caricamento non riuscito: riprova.",
-  "Soggiorno dal {from} al {to}": "Soggiorno dal {from} al {to}"
+  "Soggiorno dal {from} al {to}": "Soggiorno dal {from} al {to}",
+  "Richiesta informazioni · Oasi del Faraone": "Richiesta informazioni · Oasi del Faraone",
+  "Indirizzo copiato": "Indirizzo copiato",
+  "Copia indirizzo email": "Copia indirizzo email",
+  "Copiato": "Copiato",
+  "Copia": "Copia"
 }

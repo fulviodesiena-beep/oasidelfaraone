@@ -44,8 +44,11 @@ describe("contact links", () => {
     const whatsapp = screen.getByRole("link", { name: /Scrivici su WhatsApp/i });
     const email = screen.getByRole("link", { name: /Scrivici via email/i });
     expect(whatsapp).toHaveAttribute("href", "https://wa.me/393347328158");
-    expect(email).toHaveAttribute("href", `mailto:${OWNER_EMAIL}`);
-    expect(email).toHaveAttribute("href", "mailto:prenotazioni@oasidelfaraone.it");
+    expect(email.getAttribute("href")).toMatch(new RegExp(`^mailto:${OWNER_EMAIL}\\?subject=`));
+    expect(OWNER_EMAIL).toBe("prenotazionisharm@gmail.com");
+    // The address is also visible and copyable, for devices without a mail app.
+    expect(email.closest("section")?.textContent).toContain("prenotazionisharm@gmail.com");
+    expect(screen.getByRole("button", { name: "Copia indirizzo email" })).toBeTruthy();
     expect(whatsapp.closest("section")).toHaveAttribute("id", "contatti");
     expect(email.closest("section")).toHaveAttribute("id", "contatti");
     expect(whatsapp.closest(".contact-buttons")).toBe(email.closest(".contact-buttons"));

@@ -662,3 +662,9 @@ img, video { max-width: 100%; }
 @media (max-width: 380px) { .payment-details div { grid-template-columns: 1fr; gap: 2px; } .transfer-options { margin-left: 0; } }
 .room-detail { scroll-margin-top: 84px; }
 
+
+/* Footer: visible, copyable email address next to the mailto button. */
+.footer-mail { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 13px; color: var(--muted-foreground); }
+.footer-mail span { color: var(--gold-light); word-break: break-all; }
+.footer-mail button { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 1px solid var(--border); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--foreground); }
+.footer-mail button:hover { border-color: var(--gold-light); }

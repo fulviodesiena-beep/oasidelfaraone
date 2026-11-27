@@ -1,8 +1,8 @@
 import { useLanguage, publicPath } from "@/lib/i18n";
 import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, Minus, Plus, ArrowRight, Car, Fish, Heart, Copy, Check, Landmark } from "lucide-react";
+import { ChevronLeft, ChevronRight, Minus, Plus, ArrowRight, Car, Copy, Check, Landmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { EXTRAS, formatIban, OWNER_WHATSAPP, PAYMENT, ROOMS, wa } from "@/lib/site-data";
+import { formatIban, OWNER_WHATSAPP, PAYMENT, ROOMS, wa } from "@/lib/site-data";
 import { dateKey, MAX_GUESTS, quote, TRANSFER_PRICES, transferTotal, type TransferTrip } from "@/lib/pricing";
 import { requestNewsletterIfConsented, saveInquiryWithin, type InquiryInput } from "@/lib/inquiries";
 import { useServerFn } from "@tanstack/react-start";
@@ -12,10 +12,6 @@ import { isOccupied, rangeHitsOccupied, type Range } from "@/lib/availability";
 import { supabase } from "@/integrations/supabase/client";
 
 export const MAX_CHILDREN = 3;
-const QUICK_EXTRAS = [
-  { id: "rasmo", name: "Escursione snorkeling", icon: Fish },
-  { id: "cena", name: "Cena romantica", icon: Heart },
-] as const;
 /** Transfer options, with the price added to the total (whole booking, not per person). */
 export const TRANSFER_OPTIONS: { id: TransferTrip; label: string }[] = [
   { id: "oneWay", label: "Solo andata · aeroporto → Domina" },
@@ -38,7 +34,6 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
   const [children, setChildren] = useState(0);
   const [step, setStep] = useState<"dates" | "details">("dates");
   const [opened, setOpened] = useState(false);
-  const [dinner, setDinner] = useState(false);
   const [showNote, setShowNote] = useState(false);
   const [occupied, setOccupied] = useState<Range[]>([]);
   const [transfer, setTransfer] = useState<TransferTrip | null>(null);
@@ -96,7 +91,7 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
         <Button disabled={!valid} className="mt-6 h-12 w-full" onClick={() => setStep("details")}>{t("Vedi disponibilità")}<ArrowRight /></Button>
       </> : <form className="space-y-4" onSubmit={async e => {
         e.preventDefault(); const form = new FormData(e.currentTarget);
-        const extraNames = [...(transfer ? [transferLabel] : []), ...EXTRAS.filter(x => x.id !== "transfer" && extras.includes(x.id)).map(x => t(x.name)), ...(dinner ? [t("Cena romantica")] : [])];
+        const extraNames = [...(transfer ? [transferLabel] : [])];
         const note = String(form.get("Note") ?? "").trim();
         const special = String(form.get("special_dates") ?? "").trim().slice(0, 500);
         const message = `${t("Richiesta soggiorno — Oasi del Faraone")}\n${t("Nome")}: ${form.get("Nome")}\n${t("Email")}: ${form.get("Email")}\n${t("Telefono")}: ${form.get("Telefono")}\n${t("Date")}: ${fmt(checkIn)} → ${fmt(checkOut)}\n${q.nightsCount} ${t("notti")}\n${t("Ospiti")}: ${adults} ${t("Adulti")}, ${children} ${t("Bambini")}\n${t("Extra")}: ${extraNames.join(", ") || t("nessuno")}${note ? `\n${t("Note")}: ${note}` : ""}${special ? `\n${t("Date speciali")}: ${special}` : ""}\n${t("Totale indicativo alloggio")}: ${q.accommodation === null ? t("da confermare") : money(q.accommodation)}${transfer ? `\n${transferLabel}\n${t("Totale indicativo")}: ${q.total === null ? t("da confermare") : money(q.total)}` : ""}\n${t("Pulizia finale")} ${money(q.cleaningFee)} ${t("in reception al check-in")}\n${t("Disponibilità e prezzi da confermare.")}`;
@@ -126,7 +121,6 @@ export function Booking({ extras, toggleExtra }: { extras: string[]; toggleExtra
         <fieldset className="space-y-2"><legend className="mb-2 text-xs text-muted-foreground">{t("Extra")}</legend>
           <label className="flex cursor-pointer items-center gap-3 text-sm"><input type="checkbox" className="accent-primary" checked={transfer !== null} onChange={() => setTransfer(v => v ? null : "oneWay")} /><Car className="size-4 text-gold-light" />{t("Transfer aeroporto")}<span className="ml-auto text-xs text-muted-foreground">{t("da {price}", { price: money(TRANSFER_PRICES.oneWay) })}</span></label>
           {transfer && <div role="radiogroup" aria-label={t("Tipo di transfer")} className="transfer-options">{TRANSFER_OPTIONS.map(o => <label key={o.id} className={`transfer-option ${transfer === o.id ? "is-on" : ""}`}><input type="radio" name="transfer_trip" value={o.id} checked={transfer === o.id} onChange={() => setTransfer(o.id)} className="accent-primary" /><span>{t(o.label)}</span><strong>+{money(TRANSFER_PRICES[o.id])}</strong></label>)}</div>}
-          {QUICK_EXTRAS.map(x => { const on = x.id === "cena" ? dinner : extras.includes(x.id); return <label key={x.id} className="flex cursor-pointer items-center gap-3 text-sm"><input type="checkbox" className="accent-primary" checked={on} onChange={() => x.id === "cena" ? setDinner(!dinner) : toggleExtra(x.id)} /><x.icon className="size-4 text-gold-light" />{t(x.name)}<span className="ml-auto text-xs text-muted-foreground">{t("da concordare")}</span></label>; })}
         </fieldset>
         <textarea name="special_dates" aria-label={t("Date speciali da festeggiare a Sharm")} rows={2} maxLength={500} placeholder={t("Compleanni o anniversari durante il soggiorno? (facoltativo)")} className="field" />
         {showNote ? <textarea name="Note" aria-label={t("Note")} rows={3} maxLength={1000} className="field" placeholder={t("Note per Fulvio")} /> : <Button type="button" variant="link" className="h-auto p-0" onClick={() => setShowNote(true)}>{t("Aggiungi una nota")}</Button>}

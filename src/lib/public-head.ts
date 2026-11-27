@@ -25,7 +25,7 @@ const JSONLD = [
     numberOfRooms: 1, occupancy: { "@type": "QuantitativeValue", maxValue: 4 },
     floorSize: { "@type": "QuantitativeValue", value: 60, unitCode: "MTK" },
     amenityFeature: [["Aria condizionata", true], ["TV satellitare", true], ["Cassaforte", true], ["Bollitore", true], ["Microonde", true], ["Vasca e doccia", true], ["Balcone vista piscina", true], ["Wi-Fi in camera", false]].map(([name, value]) => ({ "@type": "LocationFeatureSpecification", name, value })),
-    checkinTime: "15:00", checkoutTime: "11:00", telephone: "+393347328158", email: "prenotazioni@oasidelfaraone.it" },
+    checkinTime: "15:00", checkoutTime: "11:00", telephone: "+393347328158", email: "prenotazionisharm@gmail.com" },
   { "@context": "https://schema.org", "@type": ["Accommodation", "HotelRoom"], "@id": `${SITE_URL}/#elisir-d-oriente`,
     name: ROOMS[0]?.name, description: ROOMS[0]?.summary, url: `${SITE_URL}/#elisir-d-oriente`, image: OG_IMAGE,
     containedInPlace: { "@type": "Resort", name: "Domina Coral Bay", address: { "@type": "PostalAddress", addressLocality: "Sharm el-Sheikh", addressRegion: "South Sinai", addressCountry: "EG" } },
@@ -34,7 +34,7 @@ const JSONLD = [
     floorSize: { "@type": "QuantitativeValue", value: ROOMS[0]?.sizeSqm, unitCode: "MTK" },
     amenityFeature: [...ROOM_AMENITIES.map(name => [name, true] as const), ["Wi-Fi in camera", false] as const].map(([name, value]) => ({ "@type": "LocationFeatureSpecification", name, value })) },
   { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: FAQS.map(([q, a, t]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: t || a } })) },
-  { "@context": "https://schema.org", "@type": "Organization", name: "Oasi del Faraone", url: SITE_URL, email: "prenotazioni@oasidelfaraone.it", telephone: "+393347328158", sameAs: ["https://www.instagram.com/oasidelfaraone/"] },
+  { "@context": "https://schema.org", "@type": "Organization", name: "Oasi del Faraone", url: SITE_URL, email: "prenotazionisharm@gmail.com", telephone: "+393347328158", sameAs: ["https://www.instagram.com/oasidelfaraone/"] },
 ];
 
 function localize(value: unknown, language: Language): unknown {

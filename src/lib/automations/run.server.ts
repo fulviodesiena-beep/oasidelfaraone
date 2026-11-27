@@ -14,7 +14,7 @@ type DB = SupabaseClient<Database>;
 export const SITE = "https://oasidelfaraone.it";
 export const OWNER_INBOX = "prenotazionisharm@gmail.com";
 /** Address guests see and reply to: the domain alias, forwarded to OWNER_INBOX by Register.it. */
-export const GUEST_REPLY_TO = "prenotazioni@oasidelfaraone.it";
+export const GUEST_REPLY_TO = "prenotazionisharm@gmail.com";
 const ATTACHMENTS = ["scheda-gialla-it.pdf", "scheda-gialla-ar.pdf", "modulo-rosa-it.pdf", "modulo-rosa-ar.pdf"];
 const THIRTY_DAYS = 30 * 86400;
 const langPath = (l: Lang) => (l === "it" ? "" : `/${l}`);

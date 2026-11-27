@@ -39,7 +39,7 @@ function layout(title: string, body: string) {
 </td></tr>
 <tr><td style="padding:28px 32px;font-size:15px;line-height:1.7">${body}</td></tr>
 <tr><td style="padding:20px 32px;border-top:1px solid ${GOLD}33;font-size:12px;color:${MUTED};text-align:center">
-Fulvio · +39 334 732 8158 · prenotazioni@oasidelfaraone.it
+Fulvio · +39 334 732 8158 · prenotazionisharm@gmail.com
 </td></tr>
 </table></td></tr></table></body></html>`;
 }

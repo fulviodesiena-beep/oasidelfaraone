@@ -48,6 +48,19 @@ describe("booking flow", () => {
     for (let i = 0; i < 5; i++) fireEvent.click(screen.getByLabelText("Più Bambini"));
     expect(screen.getByLabelText("Numero Bambini").textContent).toBe("3");
   });
+  it("offers only the airport transfer as an extra", () => {
+    render(<Booking extras={[]} toggleExtra={() => {}} />);
+    pickNextMonthRange(10, 13);
+    fireEvent.click(screen.getByRole("button", { name: /Vedi disponibilità/ }));
+    expect(screen.queryByText(/Escursione snorkeling/)).toBeNull();
+    expect(screen.queryByText(/Cena romantica/)).toBeNull();
+    expect(screen.getByRole("checkbox", { name: /Transfer aeroporto/ })).toBeTruthy();
+  });
+  it("does not list a microwave or a kettle in the room", async () => {
+    const { ROOM_AMENITIES } = await import("@/lib/site-data");
+    expect(ROOM_AMENITIES).not.toContain("Microonde");
+    expect(ROOM_AMENITIES).not.toContain("Bollitore");
+  });
   it("adds the airport transfer to the total: 20 € one way, 40 € round trip", () => {
     render(<Booking extras={[]} toggleExtra={() => {}} />);
     pickNextMonthRange(10, 13);
@@ -77,3 +90,4 @@ describe("booking flow", () => {
     expect(iban).toHaveLength(27);
   });
 });
+
